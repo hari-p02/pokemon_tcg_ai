@@ -102,52 +102,16 @@ class Referee:
             
             # Process and collect streaming chunks
             full_response = ""
-            in_json_block = False
-            json_content = ""
-            visible_response = ""
-            
-            # Process each chunk as it comes in
+            # Print each chunk as it comes in for real-time display
             for chunk in response_chunks:
                 # AIMessageChunk objects have a .content attribute to get the text
                 chunk_text = chunk.content if hasattr(chunk, 'content') else str(chunk)
+                print(chunk_text, end="", flush=True)
                 full_response += chunk_text
-                
-                # Check if we're entering a JSON block
-                if "```json" in chunk_text and not in_json_block:
-                    parts = chunk_text.split("```json", 1)
-                    # Print the content before the JSON block
-                    if parts[0]:
-                        print(parts[0], end="", flush=True)
-                        visible_response += parts[0]
-                    # Start collecting JSON content
-                    in_json_block = True
-                    json_content += parts[1] if len(parts) > 1 else ""
-                    continue
-                
-                # Check if we're exiting a JSON block
-                if in_json_block and "```" in chunk_text:
-                    parts = chunk_text.split("```", 1)
-                    # Add the first part to JSON content
-                    json_content += parts[0]
-                    # Mark that we're no longer in a JSON block
-                    in_json_block = False
-                    # Print the content after the JSON block
-                    if len(parts) > 1 and parts[1]:
-                        print(parts[1], end="", flush=True)
-                        visible_response += parts[1]
-                    continue
-                
-                # If we're in a JSON block, add to JSON content, otherwise print normally
-                if in_json_block:
-                    json_content += chunk_text
-                else:
-                    print(chunk_text, end="", flush=True)
-                    visible_response += chunk_text
-            
             print()  # Add a newline after the streaming response
             
             # Process the full response after streaming is complete
-            return self.process_response(full_response, game_state, visible_response)
+            return self.process_response(full_response, game_state)
             
         except Exception as e:
             print(f"Error in referee invoke method: {e}")
@@ -159,13 +123,13 @@ class Referee:
                 "raw_response": "Error"
             }
     
-    def process_response(self, result, game_state, visible_text=""):
+    def process_response(self, result, game_state):
         """Process the response from the LLM to extract the necessary information"""
         try:
             print(f"Processing referee response of length: {len(result)}")
             
             # Parse the result to extract the JSON game state
-            is_illegal = result.startswith("ILLEGAL ACTION:") or (visible_text and visible_text.startswith("ILLEGAL ACTION:"))
+            is_illegal = result.startswith("ILLEGAL ACTION:")
             
             # Extract the updated game state JSON
             json_match = re.search(r'```json\n(.*?)\n```', result, re.DOTALL)
@@ -183,22 +147,17 @@ class Referee:
             else:
                 print("No JSON block found in referee response")
             
-            # Use visible_text for the explanation if provided, otherwise use the full response
-            explanation_text = visible_text if visible_text else result
-            
             explanation = ""
-            if "Explanation:" in explanation_text:
+            if "Explanation:" in result:
                 explanation_pattern = r'Explanation:\s*(.*?)(?=\n\n|$)'
-                explanation_match = re.search(explanation_pattern, explanation_text, re.DOTALL)
+                explanation_match = re.search(explanation_pattern, result, re.DOTALL)
                 if explanation_match:
                     explanation = explanation_match.group(1).strip()
                     print(f"Found explanation: {explanation[:50]}...")
                 else:
                     print("Explanation pattern matched but couldn't extract content")
-                    explanation = explanation_text  # Fallback to using the whole visible text
             else:
                 print("No Explanation section found in response")
-                explanation = explanation_text  # Use the whole visible text as explanation
             
             return {
                 "is_legal": not is_illegal,
