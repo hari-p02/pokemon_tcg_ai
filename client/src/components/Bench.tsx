@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Image } from '@chakra-ui/react';
 import McFlex from '../McFlex/McFlex';
 import { Pokemon } from '../boardState';
 
@@ -7,8 +9,16 @@ interface BenchProps {
 
 const Bench = ({ bench }: BenchProps) => {
   return (
-    <McFlex border="1px solid black" p={2}>
-      Bench
+    <McFlex gap={1}>
+      {bench?.map((pokemon, index) => (
+        <Image
+          key={index}
+          src={pokemon.info.images.large}
+          alt={pokemon.info.name}
+          height="100px"
+          width="auto"
+        />
+      ))}
     </McFlex>
   );
 };

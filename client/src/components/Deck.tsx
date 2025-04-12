@@ -1,5 +1,7 @@
+import { Image } from '@chakra-ui/react';
 import McFlex from '../McFlex/McFlex';
 import { Card } from '../boardState';
+import sleeveImage from '../assets/sleeve.png';
 
 interface DeckProps {
   deck: Card[] | null;
@@ -7,8 +9,14 @@ interface DeckProps {
 
 const Deck = ({ deck }: DeckProps) => {
   return (
-    <McFlex border="1px solid black" p={2}>
-      Deck
+    <McFlex p={2}>
+      <Image
+        borderRadius="md"
+        src={sleeveImage}
+        alt="Deck"
+        height="100px"
+        width="auto"
+      />
     </McFlex>
   );
 };

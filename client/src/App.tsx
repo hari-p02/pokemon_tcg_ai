@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { fetchGameState, BoardState } from './services/api';
 import PlayerState from './components/PlayerState';
+import McFlex from './McFlex/McFlex';
 
 function App() {
   const [gameState, setGameState] = useState<BoardState | null>(null);
@@ -19,7 +20,6 @@ function App() {
     loadGameState();
   }, []);
 
-  console.log(gameState);
   return (
     <Box
       id="AppWrapper"
@@ -29,12 +29,17 @@ function App() {
       position="relative"
       bg="gray.100"
     >
-      {gameState && (
-        <>
-          <PlayerState playerState={gameState.playerOne} />
-          <PlayerState playerState={gameState.playerTwo} />
-        </>
-      )}
+      <McFlex col>
+        {gameState && (
+          <>
+            <PlayerState
+              playerState={gameState.playerTwo}
+              style={{ transform: 'rotate(180deg)' }}
+            />
+            <PlayerState playerState={gameState.playerOne} />
+          </>
+        )}
+      </McFlex>
     </Box>
   );
 }
