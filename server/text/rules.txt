@@ -1,0 +1,169 @@
+# Pokémon Trading Card Game Official Rulebook
+
+## Pokémon TCG Basic Concepts
+
+The Pokémon Trading Card Game (TCG) is a two-player strategy card game where players assume the role of Pokémon Trainers. Using a deck of 60 cards containing Pokémon, Energy, and Trainer cards, players battle by placing Pokémon on the field and attacking their opponent's Pokémon. The game simulates Pokémon battles from the video games and anime series.
+
+## How to Win
+
+There are three ways to win a Pokémon TCG game:
+1. Take all of your Prize cards (typically 6).
+2. Knock Out all of your opponent's Pokémon in play.
+3. If your opponent has no cards left in their deck at the beginning of their turn.
+
+## Energy Types
+
+Energy cards power your Pokémon's attacks. There are 11 Energy types:
+- Grass: Plant/Insect Pokémon (green)
+- Fire: Fire/Volcanic Pokémon (red)
+- Water: Aquatic/Marine Pokémon (blue)
+- Lightning: Electric Pokémon (yellow)
+- Psychic: Psychic/Ghost Pokémon (purple)
+- Fighting: Combat/Rock Pokémon (orange/brown)
+- Darkness: Dark/Evil Pokémon (black)
+- Metal: Steel/Machine Pokémon (gray)
+- Fairy: Fairy/Mythical Pokémon (pink)
+- Dragon: Dragon Pokémon (gold/multicolored)
+- Colorless: Normal/Flying Pokémon (white/clear)
+
+Most Energy cards provide one Energy of their type. Special Energy cards may provide different types or multiple Energy at once.
+
+## Parts of a Pokémon Card
+
+1. **Card Name**: Top-left corner
+2. **HP (Hit Points)**: Top-right corner; shows how much damage a Pokémon can take
+3. **Stage**: Indicates evolution stage (Basic, Stage 1, or Stage 2)
+4. **Type**: Energy type icon showing the Pokémon's type
+5. **Attacks**: Moves the Pokémon can use, their Energy cost, damage, and special effects
+6. **Weakness**: Takes double damage from this type
+7. **Resistance**: Takes less damage from this type
+8. **Retreat Cost**: Energy needed to retreat this Pokémon
+9. **Card Text/Ability**: Special powers or rules for this card
+10. **Collector Number**: Card's number in the set
+11. **Rarity Symbol**: Indicates card rarity (Common, Uncommon, Rare, etc.)
+
+## 3 Card Types
+
+1. **Pokémon Cards**: The main characters you battle with
+   - Basic Pokémon: Can be played directly to the field
+   - Stage 1: Evolves from a Basic Pokémon
+   - Stage 2: Evolves from a Stage 1 Pokémon
+   - Pokémon V, VMAX, VSTAR, ex, etc.: Special powerful Pokémon with unique rules
+
+2. **Energy Cards**: Power Pokémon attacks
+   - Basic Energy: Provides one Energy of its type
+   - Special Energy: Has unique effects or provides multiple/different types of Energy
+
+3. **Trainer Cards**: Support cards with various effects
+   - Item: Use and discard; can play multiple per turn
+   - Supporter: Powerful effects; limited to one per turn
+   - Stadium: Affects both players; only one can be in play at a time
+
+## Zones of the Pokémon TCG
+
+1. **Deck**: Where your undrawn cards are stored; face-down and shuffled
+2. **Hand**: Cards you have drawn but not yet played
+3. **Active Spot**: Your main Pokémon currently battling
+4. **Bench**: Up to 5 Pokémon waiting to battle
+5. **Discard Pile**: Cards that have been used or knocked out; face-up
+6. **Prize Cards**: 6 cards set aside at game start; take one when you knock out an opponent's Pokémon
+7. **Lost Zone**: A special zone where cards are permanently removed from play
+8. **Play Area**: Contains Active Pokémon, Bench, and Stadium card
+
+## Playing the Game
+
+### How to Win the Game
+As described earlier, win by taking all Prize cards, knocking out all opponent's Pokémon, or if your opponent cannot draw a card at the start of their turn.
+
+### Setting Up to Play
+1. Shuffle your 60-card deck.
+2. Place 6 cards face-down as Prize cards.
+3. Each player draws 7 cards.
+4. Each player must have at least one Basic Pokémon in their opening hand.
+   - If not, reveal your hand, shuffle it back, and draw 7 new cards.
+   - Your opponent may draw an extra card for each time you do this.
+5. Place one Basic Pokémon face-down as your Active Pokémon.
+6. Place up to 5 Basic Pokémon face-down on your Bench.
+7. Both players flip over all their face-down Pokémon.
+8. Flip a coin to decide who goes first (winner chooses).
+   - The player going first cannot attack on their first turn.
+
+### Parts of a Turn
+Players take alternating turns, with each turn having these parts:
+1. **Draw a card** from your deck.
+2. **Do any of the following in any order**:
+   - Put Basic Pokémon from your hand onto your Bench (up to 5 total).
+   - Evolve your Pokémon (except on your first turn or a Pokémon played that turn).
+   - Attach ONE Energy card from your hand to a Pokémon.
+   - Play Trainer cards.
+   - Retreat your Active Pokémon (once per turn).
+   - Use Abilities.
+3. **Attack** with your Active Pokémon (ending your turn).
+4. **Check if any Pokémon are Knocked Out**.
+5. **Take Prize cards** if you knocked out your opponent's Pokémon.
+
+### Turn Actions
+
+#### Playing Basic Pokémon
+- Play directly from your hand to your Bench.
+- You can have a maximum of 5 Pokémon on your Bench.
+
+#### Evolution
+- Can only evolve a Pokémon that has been in play for one full turn.
+- Place the evolved form on top of the existing Pokémon.
+- Keeps all attached cards, damage counters, and Special Conditions.
+- Cannot evolve a Pokémon more than once per turn.
+
+#### Attaching Energy
+- Limited to ONE Energy card attachment per turn.
+- Energy stays with a Pokémon when it evolves.
+
+#### Trainer Cards
+- Follow the instructions on the card.
+- Item: Play as many as you want, then discard.
+- Supporter: Limited to one per turn, then discard.
+- Stadium: Only one can be in play; a new one replaces the old one.
+
+#### Retreat
+- Pay the retreat cost (discard Energy cards equal to the cost).
+- Move your Active Pokémon to the Bench.
+- Choose a Benched Pokémon to become Active.
+- Limited to once per turn.
+
+#### Attacking
+- Check Energy requirements for the attack.
+- Apply Weakness and Resistance.
+- Place damage counters on the defending Pokémon.
+- Check if the defending Pokémon is Knocked Out.
+- Your turn ends after attacking.
+
+## Special Conditions
+
+Special Conditions affect Pokémon and last until the Pokémon is removed from play or recovers.
+
+1. **Asleep**
+   - Turn the affected Pokémon sideways.
+   - Cannot attack or retreat.
+   - Flip a coin between turns; on heads, the Pokémon wakes up.
+
+2. **Burned**
+   - Place a Burn marker on the Pokémon.
+   - Place 2 damage counters between turns.
+   - Flip a coin; on heads, the Pokémon is no longer burned.
+
+3. **Confused**
+   - Turn the affected Pokémon upside down.
+   - To attack, flip a coin:
+     - Heads: Attack normally
+     - Tails: Place 3 damage counters on the Confused Pokémon
+
+4. **Paralyzed**
+   - Turn the affected Pokémon clockwise 90 degrees.
+   - Cannot attack or retreat.
+   - Condition ends after the player's next turn.
+
+5. **Poisoned**
+   - Place a Poison marker on the Pokémon.
+   - Place damage counters between turns (amount depends on poison severity).
+
+A Pokémon can have only one Special Condition at a time. When a Pokémon evolves or moves to the Bench, all Special Conditions are removed.
