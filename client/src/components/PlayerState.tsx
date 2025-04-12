@@ -32,7 +32,7 @@ const PlayerState = ({
       pb="5px"
       bg={isPlayerTwo ? 'rgba(186, 186, 118, 0.3)' : 'rgba(112, 75, 112, 0.3)'}
       borderRadius="md"
-      mb={isOpponent ? '0px' : '20px'}
+      mb={isOpponent ? '10px' : '20px'}
     >
       {/* First column - Prize Cards */}
       <PrizeCards

@@ -243,8 +243,8 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
 
   return (
     <McFlex position="relative" mx="20px" orient="bottom" w="300px" col>
-      <VStack spacing={4} width="100%">
-        <McFlex gap={3}>
+      <VStack spacing={4} width="100%" h="100%" pt="10px">
+        <McFlex gap={3} orient="top">
           <Button
             bg="purple.500"
             color="white"
