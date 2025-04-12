@@ -11,7 +11,7 @@ class Referee:
         You are a Referee for a Pokemon Trading Card Game match. Your job is to:
         1. Determine if a player's proposed action is legal according to the Pokemon TCG rules
         2. Update the game state based on the action if it is legal
-        3. Reject illegal actions and explain why they are not allowed
+        3. Include a brief explanation of what happened
 
         Here is the current game state as a JSON object:
         {game_state}
@@ -31,6 +31,9 @@ class Referee:
 
         Then, if the action is legal:
         1. Update the game state JSON to reflect the changes caused by the action
+            - For example if the opponent pokemon has 100 hp and the player attacks for 50, the opponent pokemon should have 50 hp left
+            - If a prize card is taken, update the game state to reflect the prize card being taken.
+            - And so on....
         2. Return the new game state as a valid JSON object
         3. Include a brief explanation of what happened
 
@@ -54,65 +57,9 @@ class Referee:
         """)
     
     def make_chain(self):
-        # We don't include StrOutputParser() here anymore since we need the AIMessage objects
+        # Use streaming like Player and Mentor classes
         referee_chain = self.prompt | ANTHROPIC_LLM.with_config({"callbacks": None, "streaming": True})
         return referee_chain
-    
-    def make_non_streaming_chain(self):
-        # Non-streaming version for reliable JSON parsing
-        referee_chain = self.prompt | ANTHROPIC_LLM.with_config({"callbacks": None, "streaming": False})
-        return referee_chain
-    
-    def process_response(self, result, game_state):
-        """Process the response from the LLM to extract the necessary information"""
-        try:
-            print(f"Processing referee response of length: {len(result)}")
-            
-            # Parse the result to extract the JSON game state
-            is_illegal = result.startswith("ILLEGAL ACTION:")
-            
-            # Extract the updated game state JSON
-            json_match = re.search(r'```json\n(.*?)\n```', result, re.DOTALL)
-            updated_state = None
-            
-            if json_match:
-                try:
-                    updated_state = json.loads(json_match.group(1))
-                    print("Successfully parsed JSON from referee response")
-                except json.JSONDecodeError as e:
-                    print(f"JSON parsing error: {e}")
-                    print(f"JSON content that failed to parse: {json_match.group(1)[:100]}...")
-                    # If there's an error parsing the JSON, return the original state
-                    updated_state = game_state if isinstance(game_state, dict) else json.loads(game_state)
-            else:
-                print("No JSON block found in referee response")
-            
-            explanation = ""
-            if "Explanation:" in result:
-                explanation_pattern = r'Explanation:\s*(.*?)(?=\n\n|$)'
-                explanation_match = re.search(explanation_pattern, result, re.DOTALL)
-                if explanation_match:
-                    explanation = explanation_match.group(1).strip()
-                    print(f"Found explanation: {explanation[:50]}...")
-                else:
-                    print("Explanation pattern matched but couldn't extract content")
-            else:
-                print("No Explanation section found in response")
-            
-            return {
-                "is_legal": not is_illegal,
-                "explanation": explanation,
-                "updated_state": updated_state or game_state,
-                "raw_response": result
-            }
-        except Exception as e:
-            print(f"Error in process_response: {e}")
-            return {
-                "is_legal": False,
-                "explanation": f"Error processing response: {str(e)}",
-                "updated_state": game_state,
-                "raw_response": result if isinstance(result, str) else str(result)
-            }
     
     def invoke(self, inputs):
         """
@@ -139,33 +86,68 @@ class Referee:
         else:
             card_id_to_card_mapping_str = card_id_to_card_mapping
         
-        # Always use non-streaming for reliable JSON parsing
-        full_chain = self.make_non_streaming_chain()
+        # Use streaming chain like other classes
+        chain = self.make_chain()
         
         # Print info about the referee's analysis
         print("--------------REFEREE ANALYZING ACTION-----------------")
         
         try:
-            # First get the complete response
-            full_response = full_chain.invoke({
+            # Get the streaming response
+            response_chunks = chain.stream({
                 "game_state": game_state_str, 
                 "player_action": player_action, 
                 "card_id_to_card_mapping": card_id_to_card_mapping_str
             })
             
-            # If it's an AIMessage object, extract the content
-            full_response_text = full_response.content if hasattr(full_response, 'content') else str(full_response)
+            # Process and collect streaming chunks
+            full_response = ""
+            in_json_block = False
+            json_content = ""
+            visible_response = ""
             
-            # Print the response incrementally for user experience
-            for i in range(0, len(full_response_text), 10):
-                print(full_response_text[i:i+10], end="", flush=True)
-            print()  # Add newline after printing
+            # Process each chunk as it comes in
+            for chunk in response_chunks:
+                # AIMessageChunk objects have a .content attribute to get the text
+                chunk_text = chunk.content if hasattr(chunk, 'content') else str(chunk)
+                full_response += chunk_text
+                
+                # Check if we're entering a JSON block
+                if "```json" in chunk_text and not in_json_block:
+                    parts = chunk_text.split("```json", 1)
+                    # Print the content before the JSON block
+                    if parts[0]:
+                        print(parts[0], end="", flush=True)
+                        visible_response += parts[0]
+                    # Start collecting JSON content
+                    in_json_block = True
+                    json_content += parts[1] if len(parts) > 1 else ""
+                    continue
+                
+                # Check if we're exiting a JSON block
+                if in_json_block and "```" in chunk_text:
+                    parts = chunk_text.split("```", 1)
+                    # Add the first part to JSON content
+                    json_content += parts[0]
+                    # Mark that we're no longer in a JSON block
+                    in_json_block = False
+                    # Print the content after the JSON block
+                    if len(parts) > 1 and parts[1]:
+                        print(parts[1], end="", flush=True)
+                        visible_response += parts[1]
+                    continue
+                
+                # If we're in a JSON block, add to JSON content, otherwise print normally
+                if in_json_block:
+                    json_content += chunk_text
+                else:
+                    print(chunk_text, end="", flush=True)
+                    visible_response += chunk_text
             
-            # Debugging output
-            print(f"Referee response type: {type(full_response)}")
+            print()  # Add a newline after the streaming response
             
-            # Process the result and return the dictionary
-            return self.process_response(full_response_text, game_state)
+            # Process the full response after streaming is complete
+            return self.process_response(full_response, game_state, visible_response)
             
         except Exception as e:
             print(f"Error in referee invoke method: {e}")
@@ -175,4 +157,60 @@ class Referee:
                 "explanation": f"Error processing referee response: {str(e)}",
                 "updated_state": game_state,
                 "raw_response": "Error"
+            }
+    
+    def process_response(self, result, game_state, visible_text=""):
+        """Process the response from the LLM to extract the necessary information"""
+        try:
+            print(f"Processing referee response of length: {len(result)}")
+            
+            # Parse the result to extract the JSON game state
+            is_illegal = result.startswith("ILLEGAL ACTION:") or (visible_text and visible_text.startswith("ILLEGAL ACTION:"))
+            
+            # Extract the updated game state JSON
+            json_match = re.search(r'```json\n(.*?)\n```', result, re.DOTALL)
+            updated_state = None
+            
+            if json_match:
+                try:
+                    updated_state = json.loads(json_match.group(1))
+                    print("Successfully parsed JSON from referee response")
+                except json.JSONDecodeError as e:
+                    print(f"JSON parsing error: {e}")
+                    print(f"JSON content that failed to parse: {json_match.group(1)[:100]}...")
+                    # If there's an error parsing the JSON, return the original state
+                    updated_state = game_state if isinstance(game_state, dict) else json.loads(game_state)
+            else:
+                print("No JSON block found in referee response")
+            
+            # Use visible_text for the explanation if provided, otherwise use the full response
+            explanation_text = visible_text if visible_text else result
+            
+            explanation = ""
+            if "Explanation:" in explanation_text:
+                explanation_pattern = r'Explanation:\s*(.*?)(?=\n\n|$)'
+                explanation_match = re.search(explanation_pattern, explanation_text, re.DOTALL)
+                if explanation_match:
+                    explanation = explanation_match.group(1).strip()
+                    print(f"Found explanation: {explanation[:50]}...")
+                else:
+                    print("Explanation pattern matched but couldn't extract content")
+                    explanation = explanation_text  # Fallback to using the whole visible text
+            else:
+                print("No Explanation section found in response")
+                explanation = explanation_text  # Use the whole visible text as explanation
+            
+            return {
+                "is_legal": not is_illegal,
+                "explanation": explanation,
+                "updated_state": updated_state or game_state,
+                "raw_response": result
+            }
+        except Exception as e:
+            print(f"Error in process_response: {e}")
+            return {
+                "is_legal": False,
+                "explanation": f"Error processing response: {str(e)}",
+                "updated_state": game_state,
+                "raw_response": result if isinstance(result, str) else str(result)
             }
