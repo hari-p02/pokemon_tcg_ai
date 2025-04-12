@@ -1,9 +1,9 @@
 interface Card {
-  info: any;
+  id: number;
 }
 
 interface PokemonInPlay {
-  info: any;
+  id: number;
   hp: number;
   attachedCards?: Card[];
 }
@@ -22,6 +22,7 @@ interface PlayerState {
 interface BoardState {
   playerOne: PlayerState;
   playerTwo: PlayerState;
+  cardMap: Record<number, any>;
 }
 
 export type { BoardState, PlayerState, PokemonInPlay as Pokemon, Card };

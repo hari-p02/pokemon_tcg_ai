@@ -8,11 +8,12 @@ const MotionImage = motion(Image);
 
 interface DeckProps {
   deck: Card[] | null;
+  isOpponent?: boolean;
 }
 
-const Deck = ({ deck }: DeckProps) => {
+const Deck = ({ deck, isOpponent = false }: DeckProps) => {
   return (
-    <McFlex p={2}>
+    <McFlex p={2} autoH>
       <MotionImage
         borderRadius="md"
         src={sleeveImage}

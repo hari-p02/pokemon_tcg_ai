@@ -9,34 +9,40 @@ import Hand from './Hand';
 import LostZone from './LostZone';
 import PrizeCards from './PrizeCards';
 import Stadium from './Stadium';
+import McFlex from '../McFlex/McFlex';
 
 interface PlayerStateProps {
   playerState: PlayerStateType;
   style?: CSSProperties;
+  isOpponent?: boolean;
 }
 
-const PlayerState = ({ playerState, style }: PlayerStateProps) => {
+const PlayerState = ({
+  playerState,
+  style,
+  isOpponent = false,
+}: PlayerStateProps) => {
   return (
-    <McGrid templateColumns="1fr 2fr 1fr" gap={4} style={style}>
+    <McGrid templateColumns="0.5fr 2fr 1fr" gap={4} style={style} pb="5px">
       {/* First column - Prize Cards */}
-      <PrizeCards prizeCards={playerState.prizeCards} />
+      <PrizeCards prizeCards={playerState.prizeCards} isOpponent={isOpponent} />
 
       {/* Second column - Nested grid with 3 rows */}
       <McGrid templateRows="1fr auto auto" gap={2}>
         <McGrid templateColumns="1fr 1fr 1fr">
-          <Stadium stadium={playerState.stadium} />
-          <Active active={playerState.active} />
-          <LostZone lostZone={playerState.lostZone} />
+          <Stadium stadium={playerState.stadium} isOpponent={isOpponent} />
+          <Active active={playerState.active} isOpponent={isOpponent} />
+          <LostZone lostZone={playerState.lostZone} isOpponent={isOpponent} />
         </McGrid>
-        <Bench bench={playerState.bench} />
-        <Hand hand={playerState.hand} />
+        <Bench bench={playerState.bench} isOpponent={isOpponent} />
+        <Hand hand={playerState.hand} isOpponent={isOpponent} />
       </McGrid>
 
       {/* Third column - Nested grid with 2 rows */}
-      <McGrid templateRows="1fr 1fr" gap={4}>
-        <Deck deck={playerState.deck} />
-        <Discard discard={playerState.discard} />
-      </McGrid>
+      <McFlex col orient="top">
+        <Deck deck={playerState.deck} isOpponent={isOpponent} />
+        <Discard discard={playerState.discard} isOpponent={isOpponent} />
+      </McFlex>
     </McGrid>
   );
 };

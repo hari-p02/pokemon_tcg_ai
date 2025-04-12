@@ -3,11 +3,11 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:8000';
 
 export interface Card {
-  info: any;
+  id: number;
 }
 
 export interface PokemonInPlay {
-  info: any;
+  id: number;
   hp: number;
   attachedCards?: Card[];
 }
@@ -27,6 +27,7 @@ export interface BoardState {
   playerOne: PlayerState;
   playerTwo: PlayerState;
   cardMap: Record<number, any>;
+  highlightedCard?: number | null;
 }
 
 export const fetchGameState = async (): Promise<BoardState> => {
