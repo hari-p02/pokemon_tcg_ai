@@ -50,7 +50,7 @@ class Referee:
         
         Updated Game State:
         ```json
-        {{Updated game state JSON if and only if the action is legal}}
+        {{Updated game state JSON if the action is legal or the original game state if the action is illegal}}
         ```
         
         Conclude by thanking the player for their action.
