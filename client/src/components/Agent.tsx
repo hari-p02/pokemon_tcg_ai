@@ -2,6 +2,7 @@ import { Box, Image, Text, Button, VStack, useToast } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import axios from 'axios';
 import { FC, useEffect, useRef, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ashImage from '../assets/ash.png';
 import brockImage from '../assets/brock.png';
 import oakImage from '../assets/oak.png';
@@ -275,17 +276,11 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
           ref={textBoxRef}
           css={{
             '&::-webkit-scrollbar': {
-              width: '4px',
+              display: 'none',
             },
-            '&::-webkit-scrollbar-track': {
-              background: 'transparent',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: 'rgba(0, 0, 0, 0.2)',
-              borderRadius: '4px',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: 'rgba(0, 0, 0, 0.3)',
+            '&': {
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
             },
           }}
           _after={{
@@ -322,7 +317,17 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
         </Box>
 
         <McFlex width="300px" autoH>
-          <Image src={getAgentImage()} w="100%" alt={currentAgent} />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${currentAgent}-${activePlayer}`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <Image src={getAgentImage()} w="100%" alt={currentAgent} />
+            </motion.div>
+          </AnimatePresence>
         </McFlex>
       </VStack>
     </McFlex>

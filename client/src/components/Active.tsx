@@ -42,9 +42,33 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
               alt={cardInfo.name}
               height="150px"
               width="auto"
+              borderRadius="md"
+              filter="drop-shadow(0 12px 16px rgba(0,0,0,0.45)) drop-shadow(0 24px 32px rgba(0,0,0,0.3)) drop-shadow(0 -2px 8px rgba(255,255,255,0.15))"
+              style={{
+                transform: 'perspective(800px) rotateX(12deg)',
+                transformStyle: 'preserve-3d',
+              }}
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background:
+                  'linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 100%)',
+                pointerEvents: 'none',
+                borderRadius: 'md',
+                backdropFilter: 'brightness(1.1)',
+              }}
               whileHover={{
-                scale: 1.05,
-                boxShadow: '0px 0px 8px rgba(255,215,0,0.6)',
+                scale: 1.12,
+                rotateY: 8,
+                rotateX: 5,
+                filter:
+                  'drop-shadow(0 24px 48px rgba(0,0,0,0.5)) drop-shadow(0 32px 64px rgba(0,0,0,0.35)) drop-shadow(0 -4px 12px rgba(255,255,255,0.2))',
+                boxShadow: '0px 0px 30px rgba(255,215,0,0.8)',
+                transition: { duration: 0.3 },
               }}
             />
           </SpotlightableCard>
