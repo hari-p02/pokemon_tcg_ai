@@ -139,7 +139,7 @@ function App() {
                       left="-150"
                       right="0"
                       bottom="-300"
-                      bg="rgba(0, 0, 0, 0.7)"
+                      bg="rgba(0, 0, 0, 0.3)"
                       zIndex="10"
                       display="flex"
                       alignItems="center"

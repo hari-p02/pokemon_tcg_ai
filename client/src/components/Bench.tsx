@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Image, Box, Flex } from '@chakra-ui/react';
+import { Image, Box, Flex, Text } from '@chakra-ui/react';
 import McFlex from '../McFlex/McFlex';
 import { Pokemon } from '../boardState';
 import { motion } from 'framer-motion';
@@ -38,6 +38,32 @@ const Bench = ({ bench, isOpponent = false }: BenchProps) => {
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
             <SpotlightableCard cardId={pokemon.id} cardImage={pokemonImage}>
+              {pokemon.hp > 0 && (
+                <Box
+                  position="absolute"
+                  top="-8px"
+                  right="-8px"
+                  zIndex={1}
+                  width="24px"
+                  height="24px"
+                  borderRadius="50%"
+                  backgroundColor="blue.500"
+                  border="1px solid white"
+                  boxShadow="0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text
+                    color="white"
+                    fontWeight="bold"
+                    fontSize="9px"
+                    textShadow="0 1px 2px rgba(0,0,0,0.5)"
+                  >
+                    {pokemon.hp}
+                  </Text>
+                </Box>
+              )}
               <MotionImage
                 src={pokemonImage}
                 alt={pokemonInfo.name}
@@ -73,42 +99,41 @@ const Bench = ({ bench, isOpponent = false }: BenchProps) => {
                   transition: { duration: 0.2 },
                 }}
               />
+              {pokemon.attachedCards && pokemon.attachedCards.length > 0 && (
+                <Flex position="absolute" top="0" left="0" direction="column">
+                  {pokemon.attachedCards.map((card, cardIndex) => {
+                    const attachedCardInfo = cardMap[card.id];
+                    const attachedCardImage = attachedCardInfo.images.large;
+
+                    return (
+                      <SpotlightableCard
+                        key={cardIndex}
+                        cardId={card.id}
+                        cardImage={attachedCardImage}
+                      >
+                        <MotionImage
+                          src={attachedCardImage}
+                          alt={attachedCardInfo.name || 'Attached card'}
+                          height="30px"
+                          width="auto"
+                          transform="rotate(15deg)"
+                          border="1px solid white"
+                          borderRadius="2px"
+                          boxShadow="0px 0px 3px rgba(0,0,0,0.3)"
+                          marginTop="-5px"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{
+                            duration: 0.2,
+                            delay: 0.3 + cardIndex * 0.1,
+                          }}
+                        />
+                      </SpotlightableCard>
+                    );
+                  })}
+                </Flex>
+              )}
             </SpotlightableCard>
-
-            {pokemon.attachedCards && pokemon.attachedCards.length > 0 && (
-              <Flex position="absolute" top="0" right="0" direction="column">
-                {pokemon.attachedCards.map((card, cardIndex) => {
-                  const attachedCardInfo = cardMap[card.id];
-                  const attachedCardImage = attachedCardInfo.images.large;
-
-                  return (
-                    <SpotlightableCard
-                      key={cardIndex}
-                      cardId={card.id}
-                      cardImage={attachedCardImage}
-                    >
-                      <MotionImage
-                        src={attachedCardImage}
-                        alt={attachedCardInfo.name || 'Attached card'}
-                        height="30px"
-                        width="auto"
-                        transform="rotate(15deg)"
-                        border="1px solid white"
-                        borderRadius="2px"
-                        boxShadow="0px 0px 3px rgba(0,0,0,0.3)"
-                        marginTop="-5px"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{
-                          duration: 0.2,
-                          delay: 0.3 + cardIndex * 0.1,
-                        }}
-                      />
-                    </SpotlightableCard>
-                  );
-                })}
-              </Flex>
-            )}
           </MotionBox>
         );
       })}

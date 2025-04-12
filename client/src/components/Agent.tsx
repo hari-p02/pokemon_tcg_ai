@@ -243,8 +243,8 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
 
   return (
     <McFlex position="relative" mx="20px" orient="bottom" w="300px" col>
-      <VStack spacing={4} width="100%">
-        <McFlex gap={3}>
+      <VStack spacing={4} width="100%" h="100%" pt="10px">
+        <McFlex gap={3} orient="top">
           <Button
             bg="purple.500"
             color="white"
@@ -253,21 +253,31 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
             width="35%"
             size="lg"
             fontWeight="bold"
-            _hover={{ transform: 'scale(1.02)', bg: 'purple.600' }}
             transition="all 0.2s"
+            boxShadow="0 4px 8px rgba(0, 0, 0, 0.2)"
+            _hover={{
+              transform: 'scale(1.02)',
+              bg: 'purple.600',
+              boxShadow: '0 8px 12px rgba(0, 0, 0, 0.25)',
+            }}
           >
             Ash
           </Button>
           <Button
-            bg="yellow.400"
+            bg="red.400"
             color="black"
             onClick={() => handlePlayerTurn(2)}
             isDisabled={isLoading}
             width="50%"
             size="lg"
             fontWeight="bold"
-            _hover={{ transform: 'scale(1.02)', bg: 'yellow.500' }}
             transition="all 0.2s"
+            boxShadow="0 4px 8px rgba(0, 0, 0, 0.2)"
+            _hover={{
+              transform: 'scale(1.02)',
+              bg: 'red.500',
+              boxShadow: '0 8px 12px rgba(0, 0, 0, 0.25)',
+            }}
           >
             Team Rocket
           </Button>
@@ -279,7 +289,7 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
             padding="15px"
             boxShadow="md"
             width="250px"
-            maxHeight="200px"
+            maxHeight="240px"
             overflowY="auto"
             ref={textBoxRef}
             css={{
@@ -315,7 +325,8 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
           {displayedText && (
             <Box
               position="absolute"
-              bottom="-20px"
+              zIndex="10"
+              bottom="-15px"
               left="50%"
               transform="translateX(-50%)"
               width="0"
