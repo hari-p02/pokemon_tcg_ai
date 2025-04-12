@@ -1,0 +1,825 @@
+{
+  "gardevoir-deck": [
+    {
+      "name": "Ralts",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "70",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Teleportation Burst",
+          "cost": ["Psychic"],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": "Switch this Pokémon with 1 of your Benched Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh10/60_hires.png"
+      }
+    },
+    {
+      "name": "Ralts",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "70",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Teleportation Burst",
+          "cost": ["Psychic"],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": "Switch this Pokémon with 1 of your Benched Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh10/60_hires.png"
+      }
+    },
+    {
+      "name": "Ralts",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "70",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Teleportation Burst",
+          "cost": ["Psychic"],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": "Switch this Pokémon with 1 of your Benched Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh10/60_hires.png"
+      }
+    },
+    {
+      "name": "Ralts",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "60",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Memory Skip",
+          "cost": ["Psychic"],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": "Choose 1 of your opponent's Active Pokémon's attacks. During your opponent's next turn, that Pokémon can't use that attack."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12/67_hires.png"
+      }
+    },
+    {
+      "name": "Kirlia",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 1"],
+      "hp": "80",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Slap",
+          "cost": ["Psychic", "Colorless"],
+          "convertedEnergyCost": 2,
+          "damage": "30",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12/68_hires.png"
+      }
+    },
+    {
+      "name": "Kirlia",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 1"],
+      "hp": "80",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Slap",
+          "cost": ["Psychic", "Colorless"],
+          "convertedEnergyCost": 2,
+          "damage": "30",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12/68_hires.png"
+      }
+    },
+    {
+      "name": "Kirlia",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 1"],
+      "hp": "80",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Slap",
+          "cost": ["Psychic", "Colorless"],
+          "convertedEnergyCost": 2,
+          "damage": "30",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12/68_hires.png"
+      }
+    },
+    {
+      "name": "Kirlia",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 1"],
+      "hp": "80",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Mirage Step",
+          "cost": ["Psychic"],
+          "convertedEnergyCost": 1,
+          "damage": "",
+          "text": "Search your deck for up to 3 Kirlia and put them onto your Bench. Then, shuffle your deck."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh6/60_hires.png"
+      }
+    },
+    {
+      "name": "Gardevoir ex",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 2", "ex"],
+      "hp": "310",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Miracle Force",
+          "cost": ["Psychic", "Psychic", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "190",
+          "text": "This Pokémon recovers from all Special Conditions."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/29_hires.png"
+      }
+    },
+    {
+      "name": "Gardevoir ex",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 2", "ex"],
+      "hp": "310",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Miracle Force",
+          "cost": ["Psychic", "Psychic", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "190",
+          "text": "This Pokémon recovers from all Special Conditions."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/29_hires.png"
+      }
+    },
+    {
+      "name": "Gardevoir",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 2"],
+      "hp": "140",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Brainwave",
+          "cost": ["Colorless", "Colorless", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "60+",
+          "text": "This attack does 30 more damage for each Psychic Energy attached to this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh6/61_hires.png"
+      }
+    },
+    {
+      "name": "Gardevoir",
+      "supertype": "Pokémon",
+      "subtypes": ["Stage 2"],
+      "hp": "140",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Brainwave",
+          "cost": ["Colorless", "Colorless", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "60+",
+          "text": "This attack does 30 more damage for each Psychic Energy attached to this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh6/61_hires.png"
+      }
+    },
+    {
+      "name": "Zacian V",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic", "V"],
+      "hp": "220",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "cost": ["Colorless", "Colorless", "Colorless"],
+          "name": "Storm Slash",
+          "damage": "60+",
+          "text": "This attack does 30 more damage for each Psychic Energy attached to this Pokémon.",
+          "convertedEnergyCost": 3
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Metal",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless", "Colorless"],
+      "convertedRetreatCost": 2,
+      "images": {
+        "large": "https://images.pokemontcg.io/cel25/16_hires.png"
+      }
+    },
+    {
+      "name": "Cresselia",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "120",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "name": "Moonglow Reverse",
+          "cost": ["Psychic"],
+          "convertedEnergyCost": 1,
+          "damage": "",
+          "text": "Move 2 damage counters from each of your Pokémon to 1 of your opponent's Pokémon."
+        },
+        {
+          "name": "Lunar Blast",
+          "cost": ["Psychic", "Psychic", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "110",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh11/74_hires.png"
+      }
+    },
+    {
+      "name": "Mew",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "60",
+      "types": ["Psychic"],
+      "attacks": [
+        {
+          "cost": ["Psychic", "Colorless"],
+          "name": "Psyshot",
+          "damage": "30",
+          "text": "",
+          "convertedEnergyCost": 2
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Darkness",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/cel25/11_hires.png"
+      }
+    },
+    {
+      "name": "Radiant Greninja",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic", "Radiant"],
+      "hp": "130",
+      "types": ["Water"],
+      "attacks": [
+        {
+          "name": "Moonlight Shuriken",
+          "cost": ["Water", "Water", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "",
+          "text": "Discard 2 Energy from this Pokémon. This attack does 90 damage to 2 of your opponent's Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)"
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Lightning",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh10/46_hires.png"
+      }
+    },
+    {
+      "name": "Manaphy",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic"],
+      "hp": "70",
+      "types": ["Water"],
+      "attacks": [
+        {
+          "name": "Rain Splash",
+          "cost": ["Water"],
+          "convertedEnergyCost": 1,
+          "damage": "20",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Lightning",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh9/41_hires.png"
+      }
+    },
+    {
+      "name": "Lumineon V",
+      "supertype": "Pokémon",
+      "subtypes": ["Basic", "V"],
+      "hp": "170",
+      "types": ["Water"],
+      "attacks": [
+        {
+          "name": "Aqua Return",
+          "cost": ["Water", "Colorless", "Colorless"],
+          "convertedEnergyCost": 3,
+          "damage": "120",
+          "text": "Shuffle this Pokémon and all attached cards into your deck."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Lightning",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": ["Colorless"],
+      "convertedRetreatCost": 1,
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh9/40_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Basic Psychic Energy",
+      "supertype": "Energy",
+      "subtypes": ["Basic"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sve/5_hires.png"
+      }
+    },
+    {
+      "name": "Reversal Energy",
+      "supertype": "Energy",
+      "subtypes": ["Special"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/192_hires.png"
+      }
+    },
+    {
+      "name": "Reversal Energy",
+      "supertype": "Energy",
+      "subtypes": ["Special"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/192_hires.png"
+      }
+    },
+    {
+      "name": "Iono",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/80_hires.png"
+      }
+    },
+    {
+      "name": "Iono",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/80_hires.png"
+      }
+    },
+    {
+      "name": "Iono",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/80_hires.png"
+      }
+    },
+    {
+      "name": "Professor's Research",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/87_hires.png"
+      }
+    },
+    {
+      "name": "Professor's Research",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/87_hires.png"
+      }
+    },
+    {
+      "name": "Boss's Orders (Ghetsis)",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/172_hires.png"
+      }
+    },
+    {
+      "name": "Boss's Orders (Ghetsis)",
+      "supertype": "Trainer",
+      "subtypes": ["Supporter"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/172_hires.png"
+      }
+    },
+    {
+      "name": "Battle VIP Pass",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh8/225_hires.png"
+      }
+    },
+    {
+      "name": "Battle VIP Pass",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh8/225_hires.png"
+      }
+    },
+    {
+      "name": "Battle VIP Pass",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh8/225_hires.png"
+      }
+    },
+    {
+      "name": "Battle VIP Pass",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh8/225_hires.png"
+      }
+    },
+    {
+      "name": "Level Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh5/129_hires.png"
+      }
+    },
+    {
+      "name": "Level Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh5/129_hires.png"
+      }
+    },
+    {
+      "name": "Level Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh5/129_hires.png"
+      }
+    },
+    {
+      "name": "Level Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh5/129_hires.png"
+      }
+    },
+    {
+      "name": "Ultra Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/196_hires.png"
+      }
+    },
+    {
+      "name": "Ultra Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/196_hires.png"
+      }
+    },
+    {
+      "name": "Ultra Ball",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/196_hires.png"
+      }
+    },
+    {
+      "name": "Rare Candy",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/89_hires.png"
+      }
+    },
+    {
+      "name": "Rare Candy",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/89_hires.png"
+      }
+    },
+    {
+      "name": "Rare Candy",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/89_hires.png"
+      }
+    },
+    {
+      "name": "Fog Crystal",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh6/140_hires.png"
+      }
+    },
+    {
+      "name": "Fog Crystal",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh6/140_hires.png"
+      }
+    },
+    {
+      "name": "Super Rod",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/188_hires.png"
+      }
+    },
+    {
+      "name": "Super Rod",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/188_hires.png"
+      }
+    },
+    {
+      "name": "Lost Vacuum",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh11/162_hires.png"
+      }
+    },
+    {
+      "name": "Pal Pad",
+      "supertype": "Trainer",
+      "subtypes": ["Item"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/182_hires.png"
+      }
+    },
+    {
+      "name": "Forest Seal Stone",
+      "supertype": "Trainer",
+      "subtypes": ["Item", "Pokémon Tool"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12/156_hires.png"
+      }
+    },
+    {
+      "name": "Artazon",
+      "supertype": "Trainer",
+      "subtypes": ["Stadium"],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv2/171_hires.png"
+      }
+    },
+    {
+      "name": "Collapsed Stadium",
+      "supertype": "Trainer",
+      "subtypes": ["Stadium"],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh9/137_hires.png"
+      }
+    }
+  ]
+} 
