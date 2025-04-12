@@ -1,18 +1,16 @@
-import { Box, Image, Text, Button, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Image, Text, VStack, useToast } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
-import axios from 'axios';
-import { FC, useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { FC, useEffect, useRef, useState } from 'react';
+import { useSetActivePlayer } from '../App';
 import ashImage from '../assets/ash.png';
 import brockImage from '../assets/brock.png';
+import jessieImage from '../assets/jessie.png';
+import meowthImage from '../assets/meowth.png';
 import oakImage from '../assets/oak.png';
 import rocketImage from '../assets/rocket.png';
-import meowthImage from '../assets/meowth.png';
-import jessieImage from '../assets/jessie.png';
 import McFlex from '../McFlex/McFlex';
-import mistImage from '../assets/misty.png';
 import { fetchGameState } from '../services/api';
-import { useSetActivePlayer } from '../App';
 
 interface AgentProps {
   onGameStateUpdated: () => void;
@@ -31,6 +29,51 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   const textBoxRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
   const setActivePlayer = useSetActivePlayer();
+  const [messageQueue, setMessageQueue] = useState<
+    {
+      agent: string;
+      message: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (messageQueue.length <= 0) {
+      return;
+    }
+    if (messageQueue[0].agent === 'close') {
+      const handleClose = async () => {
+        try {
+          await fetchGameState();
+          onGameStateUpdated();
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Error fetching final state:', error);
+          setIsLoading(false);
+        }
+      };
+      handleClose();
+      return;
+    }
+    setCurrentAgent(messageQueue[0].agent);
+    setFullText(messageQueue[0].message);
+  }, [messageQueue]);
+
+  useEffect(() => {
+    setDisplayedText('');
+    setCurrentIndex(0);
+  }, [currentAgent]);
+
+  useEffect(() => {
+    if (messageQueue.length <= 1) {
+      return;
+    }
+    if (displayedText === messageQueue[0].message && displayedText !== '') {
+      console.log('message finished. starting next message in 5 seconds');
+      setTimeout(() => {
+        setMessageQueue((prev) => prev.slice(1));
+      }, 5000);
+    }
+  }, [displayedText]);
 
   // Auto-scroll to bottom when text changes
   useEffect(() => {
@@ -42,15 +85,15 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   // Typewriter animation effect
   useEffect(() => {
     if (currentIndex < fullText.length) {
-      animationRef.current = window.requestAnimationFrame(() => {
+      animationRef.current = window.setTimeout(() => {
         setDisplayedText(fullText.substring(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
-      });
+      }, 20);
     }
 
     return () => {
       if (animationRef.current) {
-        window.cancelAnimationFrame(animationRef.current);
+        window.clearTimeout(animationRef.current);
       }
     };
   }, [currentIndex, fullText]);
@@ -69,7 +112,7 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
     }
-
+    setMessageQueue([]);
     setIsLoading(true);
     setFullText('');
     setDisplayedText('');
@@ -114,68 +157,54 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
             const data = dataMatch[1];
 
             if (message.includes('event: close')) {
-              try {
-                setFullText(
-                  (prev) => prev + 'Fetching updated game state...\n'
-                );
-                await fetchGameState();
-                onGameStateUpdated();
-                setIsLoading(false);
-                setFullText((prev) => prev + 'State updated successfully\n');
-              } catch (error) {
-                console.error('Error fetching final state:', error);
-                setFullText(
-                  (prev) => prev + `Error fetching state: ${error}\n`
-                );
-                setIsLoading(false);
-              }
+              setMessageQueue((prev) => [
+                ...prev,
+                { agent: 'close', message: '' },
+              ]);
             } else {
-              const displayText = data.startsWith('[DEBUG]')
-                ? data.substring(7).trim()
-                : data;
+              const displayText = data;
 
-              // Check for node patterns and switch agent accordingly
               if (
                 displayText.includes(
                   '-------------MASTER NODE STARTED-------------------'
                 )
               ) {
-                setCurrentAgent('Oak');
-                setFullText('');
-                setDisplayedText('');
-                setCurrentIndex(0);
-                if (animationRef.current) {
-                  window.cancelAnimationFrame(animationRef.current);
-                  animationRef.current = null;
-                }
+                setMessageQueue((prev) => [
+                  ...prev,
+                  { agent: 'Oak', message: '' },
+                ]);
               } else if (
                 displayText.includes(
                   '-------------PLAYER NODE STARTED-------------------'
                 )
               ) {
-                setCurrentAgent('Ash');
-                setFullText('');
-                setDisplayedText('');
-                setCurrentIndex(0);
-                if (animationRef.current) {
-                  window.cancelAnimationFrame(animationRef.current);
-                  animationRef.current = null;
-                }
+                setMessageQueue((prev) => [
+                  ...prev,
+                  { agent: 'Ash', message: '' },
+                ]);
               } else if (
                 displayText.includes(
                   '-------------REFEREE NODE STARTED-------------------'
                 )
               ) {
-                setCurrentAgent('Brock');
-                setFullText('');
-                setDisplayedText('');
-                setCurrentIndex(0);
-                if (animationRef.current) {
-                  window.cancelAnimationFrame(animationRef.current);
-                  animationRef.current = null;
-                }
+                setMessageQueue((prev) => [
+                  ...prev,
+                  { agent: 'Brock', message: '' },
+                ]);
               } else if (displayText) {
-                setFullText((prev) => prev + displayText + '\n');
+                setMessageQueue((prev) => {
+                  if (prev.length === 0) {
+                    return prev;
+                  }
+                  const lastMessage = prev[prev.length - 1];
+                  return [
+                    ...prev.slice(0, -1),
+                    {
+                      ...lastMessage,
+                      message: lastMessage.message + displayText,
+                    },
+                  ];
+                });
               }
             }
           }
@@ -196,7 +225,6 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
       });
     } catch (error) {
       console.error('Error during turn:', error);
-      setFullText((prev) => prev + `Error: ${error}\n`);
       setIsLoading(false);
 
       toast({
