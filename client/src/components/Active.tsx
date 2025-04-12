@@ -1,4 +1,4 @@
-import { Image, Box, Flex } from '@chakra-ui/react';
+import { Image, Box, Flex, Text } from '@chakra-ui/react';
 import McFlex from '../McFlex/McFlex';
 import { Pokemon } from '../boardState';
 import { motion } from 'framer-motion';
@@ -37,6 +37,32 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
           }}
         >
           <SpotlightableCard cardId={active.id} cardImage={cardImage}>
+            {active.hp > 0 && (
+              <Box
+                position="absolute"
+                top="-8px"
+                right="-8px"
+                zIndex={1}
+                width="30px"
+                height="30px"
+                borderRadius="50%"
+                backgroundColor="blue.500"
+                border="2px solid white"
+                boxShadow="0 2px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text
+                  color="white"
+                  fontWeight="bold"
+                  fontSize="12px"
+                  textShadow="0 1px 2px rgba(0,0,0,0.5)"
+                >
+                  {active.hp}
+                </Text>
+              </Box>
+            )}
             <MotionImage
               src={cardImage}
               alt={cardInfo.name}
@@ -71,42 +97,41 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
                 transition: { duration: 0.3 },
               }}
             />
+            {active.attachedCards && active.attachedCards.length > 0 && (
+              <Flex position="absolute" top="0" left="0" direction="column">
+                {active.attachedCards.map((card, cardIndex) => {
+                  const attachedCardInfo = cardMap[card.id];
+                  const attachedCardImage = attachedCardInfo.images.large;
+
+                  return (
+                    <SpotlightableCard
+                      key={cardIndex}
+                      cardId={card.id}
+                      cardImage={attachedCardImage}
+                    >
+                      <MotionImage
+                        src={attachedCardImage}
+                        alt={attachedCardInfo.name || 'Attached card'}
+                        height="30px"
+                        width="auto"
+                        transform="rotate(15deg)"
+                        border="1px solid white"
+                        borderRadius="2px"
+                        boxShadow="0px 0px 3px rgba(0,0,0,0.3)"
+                        marginTop="-5px"
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{
+                          duration: 0.2,
+                          delay: 0.3 + cardIndex * 0.1,
+                        }}
+                      />
+                    </SpotlightableCard>
+                  );
+                })}
+              </Flex>
+            )}
           </SpotlightableCard>
-
-          {active.attachedCards && active.attachedCards.length > 0 && (
-            <Flex position="absolute" top="0" right="0" direction="column">
-              {active.attachedCards.map((card, cardIndex) => {
-                const attachedCardInfo = cardMap[card.id];
-                const attachedCardImage = attachedCardInfo.images.large;
-
-                return (
-                  <SpotlightableCard
-                    key={cardIndex}
-                    cardId={card.id}
-                    cardImage={attachedCardImage}
-                  >
-                    <MotionImage
-                      src={attachedCardImage}
-                      alt={attachedCardInfo.name || 'Attached card'}
-                      height="30px"
-                      width="auto"
-                      transform="rotate(15deg)"
-                      border="1px solid white"
-                      borderRadius="2px"
-                      boxShadow="0px 0px 3px rgba(0,0,0,0.3)"
-                      marginTop="-5px"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{
-                        duration: 0.2,
-                        delay: 0.3 + cardIndex * 0.1,
-                      }}
-                    />
-                  </SpotlightableCard>
-                );
-              })}
-            </Flex>
-          )}
         </MotionBox>
       )}
     </McFlex>
