@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Response
+from ..state import get_initial_state
 
 router = APIRouter()
 
-GARDIVOR_DECK = [
+GARDEVOIR_DECK = [
   {
     "name": "Ralts",
     "supertype": "Pokémon",
@@ -1372,7 +1373,5 @@ GARDIVOR_DECK = [
 
 @router.get("/state")
 async def get_state():
-    state = {
-        
-    }
+    state = get_initial_state(GARDEVOIR_DECK)
     return state

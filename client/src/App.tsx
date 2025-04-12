@@ -1,7 +1,25 @@
 import { Box } from '@chakra-ui/react';
-import McFlex from './McFlex/McFlex';
+import { useEffect, useState } from 'react';
+import { fetchGameState, BoardState } from './services/api';
+import PlayerState from './components/PlayerState';
 
 function App() {
+  const [gameState, setGameState] = useState<BoardState | null>(null);
+
+  useEffect(() => {
+    const loadGameState = async () => {
+      try {
+        const state = await fetchGameState();
+        setGameState(state);
+      } catch (error) {
+        console.error('Failed to load game state:', error);
+      }
+    };
+
+    loadGameState();
+  }, []);
+
+  console.log(gameState);
   return (
     <Box
       id="AppWrapper"
@@ -11,7 +29,12 @@ function App() {
       position="relative"
       bg="gray.100"
     >
-      <McFlex>Test</McFlex>
+      {gameState && (
+        <>
+          <PlayerState playerState={gameState.playerOne} />
+          <PlayerState playerState={gameState.playerTwo} />
+        </>
+      )}
     </Box>
   );
 }
