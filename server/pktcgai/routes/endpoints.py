@@ -3184,7 +3184,7 @@ async def process_player_turn(player_number: int):
                 
             # Send the message as SSE
             if isinstance(message, str) and message.strip():
-                yield f"data: [DEBUG] {message.strip()}\n\n"
+                yield f"data: [DEBUG] {message}\n\n"
         except queue.Empty:
             # No messages in queue, continue waiting
             await asyncio.sleep(0.01)

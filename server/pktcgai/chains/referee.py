@@ -124,9 +124,9 @@ class Referee:
                     parts = chunk_text.split("```json", 1)
                     
                     # Print any text before the JSON marker
-                    if parts[0]:
-                        print(parts[0], end="", flush=True)
-                        visible_response += parts[0]
+                    # if parts[0]:
+                    #     print(parts[0], end="", flush=True)
+                    #     visible_response += parts[0]
                     
                     # Start accumulating for JSON content
                     accumulated_text = "```json" + (parts[1] if len(parts) > 1 else "")
