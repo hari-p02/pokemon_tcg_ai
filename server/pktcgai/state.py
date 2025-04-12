@@ -35,16 +35,60 @@ def get_initial_state(deck: List[dict]) -> BoardState:
     import random
     random.shuffle(cards)
     
-    # Initialize player state
+    # Find a basic Pokemon for active
+    active_card = None
+    for card in cards:
+        if card.info.get('supertype') == 'Pokémon' and 'Basic' in card.info.get('subtypes', []):
+            active_card = card
+            cards.remove(card)
+            break
+    
+    # Find basic Pokemon for bench
+    bench_cards = []
+    for card in cards[:]:
+        if card.info.get('supertype') == 'Pokémon' and 'Basic' in card.info.get('subtypes', []):
+            bench_cards.append(card)
+            cards.remove(card)
+            if len(bench_cards) == 3:  # We want 3 Pokemon on bench
+                break
+    
+    # Find energy cards to attach to bench Pokemon
+    energy_cards = []
+    for card in cards[:]:
+        if card.info.get('supertype') == 'Energy':
+            energy_cards.append(card)
+            cards.remove(card)
+            if len(energy_cards) == 3:  # One energy per bench Pokemon
+                break
+    
+    # Attach energy to bench Pokemon
+    bench_pokemon = []
+    for i, pokemon in enumerate(bench_cards):
+        attached_energy = [energy_cards[i]] if i < len(energy_cards) else []
+        bench_pokemon.append(PokemonInPlay(
+            info=pokemon.info,
+            hp=int(pokemon.info.get('hp', 0)),
+            attachedCards=attached_energy
+        ))
+    
+    # Find a stadium card
+    stadium_card = None
+    for card in cards[:]:
+        if card.info.get('supertype') == 'Trainer' and 'Stadium' in card.info.get('subtypes', []):
+            stadium_card = card
+            cards.remove(card)
+            break
+    
+    # Initialize player state with the organized cards
     player_state = PlayerState(
         hand=cards[:7],  # First 7 cards in hand
-        active=PokemonInPlay(info=cards[7].info, hp=int(cards[7].info.get('hp', 0))) if len(cards) > 7 else None,  # 8th card as active
-        bench=[PokemonInPlay(info=card.info, hp=int(card.info.get('hp', 0))) for card in cards[8:11]] if len(cards) > 11 else [],  # Next 3 cards on bench
-        prizeCards=cards[11:17] if len(cards) > 17 else [],  # Next 6 cards as prize cards
-        deck=cards[17:] if len(cards) > 17 else [],  # Remaining cards in deck
-        discard=[],
-        lostZone=[],
-        stadium=None
+        active=PokemonInPlay(info=active_card.info, hp=int(active_card.info.get('hp', 0))) if active_card else None,
+        bench=bench_pokemon,
+        prizeCards=cards[7:13] if len(cards) > 13 else [],  # Next 6 cards as prize cards
+        deck=cards[13:],  # Remaining cards in deck
+        discard=[cards[0]] if len(cards) > 0 else [],  # One card in discard
+        lostZone=[cards[1]] if len(cards) > 1 else [],  # One card in lost zone
+        stadium=stadium_card
     )
     
     # Create board state with same state for both players
