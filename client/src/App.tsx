@@ -4,6 +4,7 @@ import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import Agent from './components/Agent';
 import PlayerState from './components/PlayerState';
+import TurnConsole from './components/TurnConsole';
 import McFlex from './McFlex/McFlex';
 import McGrid from './McGrid/McGrid';
 import { BoardState, fetchGameState } from './services/api';
@@ -60,36 +61,39 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    const loadGameState = async () => {
-      try {
-        const state = await fetchGameState();
-        setGameState(state);
-        // Set the card map atom with the data from the state
-        if (state.cardMap) {
-          setCardMapState(state.cardMap);
-        }
-
-        // Handle highlighted card from backend
-        if (state.highlightedCard && state.cardMap[state.highlightedCard]) {
-          const cardInfo = state.cardMap[state.highlightedCard];
-          setHighlightedCardId(state.highlightedCard);
-          setSpotlightCard({
-            id: state.highlightedCard,
-            img: cardInfo.images.large,
-          });
-        } else if (state.highlightedCard === null) {
-          // If explicitly set to null, clear the spotlight
-          setHighlightedCardId(null);
-          setSpotlightCard(null);
-        }
-      } catch (error) {
-        console.error('Failed to load game state:', error);
+  // Function to load game state
+  const loadGameState = async () => {
+    try {
+      const state = await fetchGameState();
+      setGameState(state);
+      
+      // Set the card map atom with the data from the state
+      if (state.cardMap) {
+        setCardMapState(state.cardMap);
       }
-    };
 
-    void loadGameState();
-  }, [setCardMapState, setHighlightedCardId, setSpotlightCard]);
+      // Handle highlighted card from backend
+      if (state.highlightedCard && state.cardMap[state.highlightedCard]) {
+        const cardInfo = state.cardMap[state.highlightedCard];
+        setHighlightedCardId(state.highlightedCard);
+        setSpotlightCard({
+          id: state.highlightedCard,
+          img: cardInfo.images.large,
+        });
+      } else if (state.highlightedCard === null) {
+        // If explicitly set to null, clear the spotlight
+        setHighlightedCardId(null);
+        setSpotlightCard(null);
+      }
+    } catch (error) {
+      console.error('Failed to load game state:', error);
+    }
+  };
+
+  // Load game state on component mount
+  useEffect(() => {
+    loadGameState();
+  }, []);
 
   return (
     <>
@@ -164,12 +168,12 @@ function App() {
                     />
                   </Box>
                   <PlayerState playerState={gameState.playerOne} />
+                  <Box mt={4} width="100%">
+                    <TurnConsole onGameStateUpdated={loadGameState} />
+                  </Box>
                 </>
               )}
             </McFlex>
-            {/* <Agent agent="Brock" message="Let's get this battle rolling!" /> */}
-            {/* <Agent agent="Misty" message="I'm ready to battle!" /> */}
-            {/* <Agent agent="Ash" message="I'm ready to battle!" /> */}
             <Agent
               agent="Oak"
               message="Let's teach you the basics of the Pokemon Trading Card Game"
