@@ -1,0 +1,1596 @@
+[
+    {
+      "name": "Flying Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "190",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Lightning"
+          ],
+          "name": "Thunder Shock",
+          "damage": "20",
+          "text": "Flip a coin. If heads, your opponent's Active Pokémon is now Paralyzed.",
+          "convertedEnergyCost": 1
+        },
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "Fly",
+          "damage": "120",
+          "text": "Flip a coin. If tails, this attack does nothing. If heads, during your opponent's next turn, prevent all damage from and effects of attacks done to this Pokémon.",
+          "convertedEnergyCost": 3
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Lightning",
+          "value": "×2"
+        }
+      ],
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/cel25/6_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "190",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Charge",
+          "cost": [
+            "Lightning"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "",
+          "text": "Search your deck for up to 2 Lightning Energy cards and attach them to this Pokémon. Then, shuffle your deck."
+        },
+        {
+          "name": "Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "200",
+          "text": "Discard all Energy from this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swshp/SWSH061_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "190",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Charge",
+          "cost": [
+            "Lightning"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "",
+          "text": "Search your deck for up to 2 Lightning Energy cards and attach them to this Pokémon. Then, shuffle your deck."
+        },
+        {
+          "name": "Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "200",
+          "text": "Discard all Energy from this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh4/43_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "200",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Tail Whap",
+          "cost": [
+            "Colorless"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "20",
+          "text": ""
+        },
+        {
+          "name": "Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "100",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh8/86_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu-EX",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "EX"
+      ],
+      "hp": "130",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Thunder Shock",
+          "cost": [
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "30",
+          "text": "Flip a coin. If heads your opponent's Active Pokémon is now Paralyzed."
+        },
+        {
+          "name": "Mega Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "160",
+          "text": "Discard all Energy attached to this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "Pokémon-EX rule: When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xyp/XY174_hires.png"
+      }
+    },
+    {
+      "name": "Basic Lightning Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/257_hires.png"
+      }
+    },
+    {
+      "name": "Basic Lightning Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/257_hires.png"
+      }
+    },
+    {
+      "name": "Basic Lightning Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/257_hires.png"
+      }
+    },
+    {
+      "name": "Basic Lightning Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/257_hires.png"
+      }
+    },
+    {
+      "name": "Basic Lightning Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/257_hires.png"
+      }
+    },
+    {
+      "name": "Basic Lightning Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv1/257_hires.png"
+      }
+    },
+    {
+      "name": "Cheren",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/bw5/91_hires.png"
+      }
+    },
+    {
+      "name": "Cheren",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/bw5/91_hires.png"
+      }
+    },
+    {
+      "name": "Cheren",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/bw5/91_hires.png"
+      }
+    },
+    {
+      "name": "Cheren",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/bw5/91_hires.png"
+      }
+    },
+    {
+      "name": "Nest Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/84_hires.png"
+      }
+    },
+    {
+      "name": "Nest Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/84_hires.png"
+      }
+    },
+    {
+      "name": "Nest Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/84_hires.png"
+      }
+    },
+    {
+      "name": "Nest Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Search your deck for a Basic Pokémon and put it onto your Bench. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sv4pt5/84_hires.png"
+      }
+    },
+    {
+      "name": "Flash Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Special"
+      ],
+      "rules": [
+        "This card can only be attached to Lightning Pokémon. This card provides Lightning Energy only while this card is attached to a Lightning Pokémon.",
+        "The Lightning Pokémon this card is attached to has no Weakness.",
+        "(If this card is attached to anything other than a Lightning Pokémon, discard this card.)"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy7/83_hires.png"
+      }
+    },
+    {
+      "name": "Flash Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Special"
+      ],
+      "rules": [
+        "This card can only be attached to Lightning Pokémon. This card provides Lightning Energy only while this card is attached to a Lightning Pokémon.",
+        "The Lightning Pokémon this card is attached to has no Weakness.",
+        "(If this card is attached to anything other than a Lightning Pokémon, discard this card.)"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy7/83_hires.png"
+      }
+    },
+    {
+      "name": "Flash Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Special"
+      ],
+      "rules": [
+        "This card can only be attached to Lightning Pokémon. This card provides Lightning Energy only while this card is attached to a Lightning Pokémon.",
+        "The Lightning Pokémon this card is attached to has no Weakness.",
+        "(If this card is attached to anything other than a Lightning Pokémon, discard this card.)"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy7/83_hires.png"
+      }
+    },
+    {
+      "name": "Charmander",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic"
+      ],
+      "hp": "70",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Gnaw",
+          "cost": [
+            "Fire"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": ""
+        },
+        {
+          "name": "Flare",
+          "cost": [
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "20",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Charmeleon"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm115/7_hires.png"
+      }
+    },
+    {
+      "name": "Charmander",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic"
+      ],
+      "hp": "70",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Gnaw",
+          "cost": [
+            "Fire"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": ""
+        },
+        {
+          "name": "Flare",
+          "cost": [
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "20",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Charmeleon"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm115/7_hires.png"
+      }
+    },
+    {
+      "name": "Charmander",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic"
+      ],
+      "hp": "70",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Gnaw",
+          "cost": [
+            "Fire"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": ""
+        },
+        {
+          "name": "Flare",
+          "cost": [
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "20",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Charmeleon"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm115/7_hires.png"
+      }
+    },
+    {
+      "name": "Charmander",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic"
+      ],
+      "hp": "70",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Gnaw",
+          "cost": [
+            "Fire"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": ""
+        },
+        {
+          "name": "Flare",
+          "cost": [
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "20",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Charmeleon"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm115/7_hires.png"
+      }
+    },
+    {
+      "name": "Charmander",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic"
+      ],
+      "hp": "70",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Gnaw",
+          "cost": [
+            "Fire"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "10",
+          "text": ""
+        },
+        {
+          "name": "Flare",
+          "cost": [
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "20",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Charmeleon"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm115/7_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    },
+    {
+      "name": "Hau",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm7/132_hires.png"
+      }
+    },
+    {
+      "name": "Hau",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm7/132_hires.png"
+      }
+    },
+    {
+      "name": "Hau",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm7/132_hires.png"
+      }
+    },
+    {
+      "name": "Hau",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Supporter"
+      ],
+      "rules": [
+        "Draw 3 cards.",
+        "You may play only 1 Supporter card during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/sm7/132_hires.png"
+      }
+    },
+    {
+      "name": "Quick Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "You can play this card only if you discard another card from your hand.",
+        "Search your deck for a Basic Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh1/179_hires.png"
+      }
+    },
+    {
+      "name": "Quick Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "You can play this card only if you discard another card from your hand.",
+        "Search your deck for a Basic Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh1/179_hires.png"
+      }
+    },
+    {
+      "name": "Quick Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "You can play this card only if you discard another card from your hand.",
+        "Search your deck for a Basic Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh1/179_hires.png"
+      }
+    },
+    {
+      "name": "Quick Ball",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "You can play this card only if you discard another card from your hand.",
+        "Search your deck for a Basic Pokémon, reveal it, and put it into your hand. Then, shuffle your deck.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh1/179_hires.png"
+      }
+    },
+    {
+      "name": "Flying Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "190",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Lightning"
+          ],
+          "name": "Thunder Shock",
+          "damage": "20",
+          "text": "Flip a coin. If heads, your opponent's Active Pokémon is now Paralyzed.",
+          "convertedEnergyCost": 1
+        },
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "Fly",
+          "damage": "120",
+          "text": "Flip a coin. If tails, this attack does nothing. If heads, during your opponent's next turn, prevent all damage from and effects of attacks done to this Pokémon.",
+          "convertedEnergyCost": 3
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Lightning",
+          "value": "×2"
+        }
+      ],
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/cel25/6_hires.png"
+      }
+    },
+    {
+      "name": "Flying Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "190",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Lightning"
+          ],
+          "name": "Thunder Shock",
+          "damage": "20",
+          "text": "Flip a coin. If heads, your opponent's Active Pokémon is now Paralyzed.",
+          "convertedEnergyCost": 1
+        },
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "Fly",
+          "damage": "120",
+          "text": "Flip a coin. If tails, this attack does nothing. If heads, during your opponent's next turn, prevent all damage from and effects of attacks done to this Pokémon.",
+          "convertedEnergyCost": 3
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Lightning",
+          "value": "×2"
+        }
+      ],
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/cel25/6_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "200",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Tail Whap",
+          "cost": [
+            "Colorless"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "20",
+          "text": ""
+        },
+        {
+          "name": "Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "100",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh8/86_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "190",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Charge",
+          "cost": [
+            "Lightning"
+          ],
+          "convertedEnergyCost": 1,
+          "damage": "",
+          "text": "Search your deck for up to 2 Lightning Energy cards and attach them to this Pokémon. Then, shuffle your deck."
+        },
+        {
+          "name": "Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "200",
+          "text": "Discard all Energy from this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh4/43_hires.png"
+      }
+    },
+    {
+      "name": "Pikachu-EX",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "EX"
+      ],
+      "hp": "130",
+      "types": [
+        "Lightning"
+      ],
+      "attacks": [
+        {
+          "name": "Thunder Shock",
+          "cost": [
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 2,
+          "damage": "30",
+          "text": "Flip a coin. If heads your opponent's Active Pokémon is now Paralyzed."
+        },
+        {
+          "name": "Mega Thunderbolt",
+          "cost": [
+            "Lightning",
+            "Lightning",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "160",
+          "text": "Discard all Energy attached to this Pokémon."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Fighting",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless"
+      ],
+      "convertedRetreatCost": 1,
+      "evolvesTo": [
+        "Raichu"
+      ],
+      "rules": [
+        "Pokémon-EX rule: When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xyp/XY174_hires.png"
+      }
+    },
+    {
+      "name": "Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 30 damage from 1 of your Pokémon.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/139_hires.png"
+      }
+    },
+    {
+      "name": "Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 30 damage from 1 of your Pokémon.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/139_hires.png"
+      }
+    },
+    {
+      "name": "Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 30 damage from 1 of your Pokémon.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/139_hires.png"
+      }
+    },
+    {
+      "name": "Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 30 damage from 1 of your Pokémon.",
+        "You may play any number of Item cards during your turn."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/139_hires.png"
+      }
+    },
+    {
+      "name": "Super Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 60 damage from 1 of your Pokémon. If you do, discard an Energy attached to that Pokémon.",
+        "You may play as many Item cards as you like during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy1/128_hires.png"
+      }
+    },
+    {
+      "name": "Super Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 60 damage from 1 of your Pokémon. If you do, discard an Energy attached to that Pokémon.",
+        "You may play as many Item cards as you like during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy1/128_hires.png"
+      }
+    },
+    {
+      "name": "Super Potion",
+      "supertype": "Trainer",
+      "subtypes": [
+        "Item"
+      ],
+      "rules": [
+        "Heal 60 damage from 1 of your Pokémon. If you do, discard an Energy attached to that Pokémon.",
+        "You may play as many Item cards as you like during your turn (before your attack)."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy1/128_hires.png"
+      }
+    },
+    {
+      "name": "Charizard V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "220",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Incinerate",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "90",
+          "text": "Before doing damage, discard all Pokémon Tools from your opponent's Active Pokémon."
+        },
+        {
+          "name": "Heat Blast",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 4,
+          "damage": "180",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless",
+        "Colorless"
+      ],
+      "convertedRetreatCost": 2,
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/18_hires.png"
+      }
+    },
+    {
+      "name": "Charizard V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "220",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Incinerate",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "90",
+          "text": "Before doing damage, discard all Pokémon Tools from your opponent's Active Pokémon."
+        },
+        {
+          "name": "Heat Blast",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 4,
+          "damage": "180",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless",
+        "Colorless"
+      ],
+      "convertedRetreatCost": 2,
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/18_hires.png"
+      }
+    },
+    {
+      "name": "Charizard V",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "V"
+      ],
+      "hp": "220",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Incinerate",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "90",
+          "text": "Before doing damage, discard all Pokémon Tools from your opponent's Active Pokémon."
+        },
+        {
+          "name": "Heat Blast",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Fire",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 4,
+          "damage": "180",
+          "text": ""
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless",
+        "Colorless"
+      ],
+      "convertedRetreatCost": 2,
+      "rules": [
+        "V rule: When your Pokémon V is Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/18_hires.png"
+      }
+    },
+    {
+      "name": "Charizard-EX",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "EX"
+      ],
+      "hp": "180",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Wing Attack",
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "60",
+          "text": ""
+        },
+        {
+          "name": "Combustion Blast",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 4,
+          "damage": "150",
+          "text": "This Pokémon can't use Combustion Blast during your next turn."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless",
+        "Colorless"
+      ],
+      "convertedRetreatCost": 2,
+      "evolvesTo": [
+        "M Charizard-EX"
+      ],
+      "rules": [
+        "Pokémon-EX rule: When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy2/12_hires.png"
+      }
+    },
+    {
+      "name": "Charizard-EX",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "EX"
+      ],
+      "hp": "180",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Wing Attack",
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "60",
+          "text": ""
+        },
+        {
+          "name": "Combustion Blast",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 4,
+          "damage": "150",
+          "text": "This Pokémon can't use Combustion Blast during your next turn."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless",
+        "Colorless"
+      ],
+      "convertedRetreatCost": 2,
+      "evolvesTo": [
+        "M Charizard-EX"
+      ],
+      "rules": [
+        "Pokémon-EX rule: When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy2/12_hires.png"
+      }
+    },
+    {
+      "name": "Charizard-EX",
+      "supertype": "Pokémon",
+      "subtypes": [
+        "Basic",
+        "EX"
+      ],
+      "hp": "180",
+      "types": [
+        "Fire"
+      ],
+      "attacks": [
+        {
+          "name": "Wing Attack",
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 3,
+          "damage": "60",
+          "text": ""
+        },
+        {
+          "name": "Combustion Blast",
+          "cost": [
+            "Fire",
+            "Fire",
+            "Colorless",
+            "Colorless"
+          ],
+          "convertedEnergyCost": 4,
+          "damage": "150",
+          "text": "This Pokémon can't use Combustion Blast during your next turn."
+        }
+      ],
+      "weaknesses": [
+        {
+          "type": "Water",
+          "value": "×2"
+        }
+      ],
+      "retreatCost": [
+        "Colorless",
+        "Colorless"
+      ],
+      "convertedRetreatCost": 2,
+      "evolvesTo": [
+        "M Charizard-EX"
+      ],
+      "rules": [
+        "Pokémon-EX rule: When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/xy2/12_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    },
+    {
+      "name": "Fire Energy",
+      "supertype": "Energy",
+      "subtypes": [
+        "Basic"
+      ],
+      "images": {
+        "large": "https://images.pokemontcg.io/swsh12pt5/153_hires.png"
+      }
+    }
+  ]

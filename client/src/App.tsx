@@ -1,19 +1,19 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Box, Image } from '@chakra-ui/react';
+import { Box, Divider, Image } from '@chakra-ui/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
+import wallpaper from './assets/wallpaper.jpg';
 import Agent from './components/Agent';
 import PlayerState from './components/PlayerState';
-import TurnConsole from './components/TurnConsole';
 import McFlex from './McFlex/McFlex';
 import McGrid from './McGrid/McGrid';
 import { BoardState, fetchGameState } from './services/api';
-import wallpaper from './assets/wallpaper.jpg';
 
 const cardMapAtom = atom<Record<number, any>>({});
 const scaleFactorAtom = atom<number>(1);
 const spotlightCardAtom = atom<{ id: number; img: string } | null>(null);
 const highlightedCardIdAtom = atom<number | null>(null);
+const activePlayerAtom = atom<1 | 2>(1);
 
 // Create custom hooks
 export const useCardMap = () => useAtomValue(cardMapAtom);
@@ -24,6 +24,8 @@ export const useSpotlightCard = () => useAtomValue(spotlightCardAtom);
 export const useSetSpotlightCard = () => useSetAtom(spotlightCardAtom);
 export const useHighlightedCardId = () => useAtomValue(highlightedCardIdAtom);
 export const useSetHighlightedCardId = () => useSetAtom(highlightedCardIdAtom);
+export const useActivePlayer = () => useAtomValue(activePlayerAtom);
+export const useSetActivePlayer = () => useSetAtom(activePlayerAtom);
 
 // Default window dimensions for scaling
 const desktopWindowWidth = 1300;
@@ -37,6 +39,7 @@ function App() {
   const spotlightCard = useSpotlightCard();
   const setSpotlightCard = useSetSpotlightCard();
   const setHighlightedCardId = useSetHighlightedCardId();
+  const activePlayer = useActivePlayer();
 
   const calculateScaleFactor = () => {
     const appWrapper = document.getElementById('AppWrapper');
@@ -125,7 +128,7 @@ function App() {
           height={`${desktopWindowHeight}px`}
         >
           <McGrid templateColumns="1fr auto" position="relative">
-            <McFlex col position="relative">
+            <McFlex col position="relative" ml="10px">
               {gameState && (
                 <>
                   {spotlightCard && (
@@ -156,25 +159,41 @@ function App() {
                     </Box>
                   )}
                   <Box
-                    width="175%"
+                    width="167%"
                     transform="scale(0.6)"
                     transformOrigin="center"
                     my="-70px"
                   >
                     <PlayerState
                       isOpponent={true}
-                      playerState={gameState.playerTwo}
+                      playerState={
+                        activePlayer === 1
+                          ? gameState.playerTwo
+                          : gameState.playerOne
+                      }
                       style={{ transform: 'rotate(180deg)' }}
                     />
                   </Box>
-                  <PlayerState playerState={gameState.playerOne} />
-                  {/* <Box mt={4} width="100%">
-                    <TurnConsole onGameStateUpdated={loadGameState} />
-                  </Box> */}
+                  <Divider
+                    borderColor="gray.300"
+                    borderWidth="2px"
+                    my={3}
+                    opacity={0.8}
+                  />
+                  <PlayerState
+                    playerState={
+                      activePlayer === 1
+                        ? gameState.playerOne
+                        : gameState.playerTwo
+                    }
+                  />
                 </>
               )}
             </McFlex>
-            <Agent onGameStateUpdated={loadGameState} />
+            <Agent
+              onGameStateUpdated={loadGameState}
+              activePlayer={activePlayer}
+            />
           </McGrid>
         </Box>
       </Box>

@@ -15,7 +15,11 @@ interface PrizeCardsProps {
 
 const PrizeCards = ({ prizeCards, isOpponent = false }: PrizeCardsProps) => {
   return (
-    <McFlex orient="top" pt={5}>
+    <McFlex
+      orient={isOpponent ? 'top left' : 'top'}
+      pt={5}
+      pl={isOpponent ? '15px' : '0px'}
+    >
       <McGrid templateColumns="1fr 1fr" gap={1} auto>
         {prizeCards?.map((_, index) => (
           <MotionImage

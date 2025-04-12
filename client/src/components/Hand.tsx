@@ -19,7 +19,7 @@ const Hand = ({ hand, isOpponent = false }: HandProps) => {
   if (!hand || !cardMap[hand[0].id]) return <McFlex></McFlex>;
 
   return (
-    <McFlex gap={1} bg="rgba(128, 128, 128, 0.3)" p={3} borderRadius="md">
+    <McFlex gap={1} bg="rgba(128, 128, 128, 0.3)" p={2} borderRadius="md">
       {hand?.map((card, index) => {
         const cardInfo = cardMap[card.id];
         const cardImage = isOpponent ? cardBackImage : cardInfo.images.large;

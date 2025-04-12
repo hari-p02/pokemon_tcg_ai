@@ -5,15 +5,20 @@ import { FC, useEffect, useRef, useState, useCallback } from 'react';
 import ashImage from '../assets/ash.png';
 import brockImage from '../assets/brock.png';
 import oakImage from '../assets/oak.png';
+import rocketImage from '../assets/rocket.png';
+import meowthImage from '../assets/meowth.png';
+import jessieImage from '../assets/jessie.png';
 import McFlex from '../McFlex/McFlex';
 import mistImage from '../assets/misty.png';
 import { fetchGameState } from '../services/api';
+import { useSetActivePlayer } from '../App';
 
 interface AgentProps {
   onGameStateUpdated: () => void;
+  activePlayer: 1 | 2;
 }
 
-const Agent: FC<AgentProps> = ({ onGameStateUpdated }) => {
+const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   const [fullText, setFullText] = useState('');
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,6 +29,7 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated }) => {
   const eventSourceRef = useRef<EventSource | null>(null);
   const textBoxRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
+  const setActivePlayer = useSetActivePlayer();
 
   // Auto-scroll to bottom when text changes
   useEffect(() => {
@@ -67,6 +73,7 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated }) => {
     setFullText('');
     setDisplayedText('');
     setCurrentIndex(0);
+    setActivePlayer(playerNumber);
 
     try {
       const response = await fetch(
@@ -206,6 +213,33 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated }) => {
     50% { border-color: black }
   `;
 
+  // Update agent image based on current agent and active player
+  const getAgentImage = () => {
+    if (activePlayer === 1) {
+      switch (currentAgent) {
+        case 'Ash':
+          return ashImage;
+        case 'Oak':
+          return oakImage;
+        case 'Brock':
+          return brockImage;
+        default:
+          return oakImage;
+      }
+    } else {
+      switch (currentAgent) {
+        case 'Ash':
+          return rocketImage;
+        case 'Oak':
+          return meowthImage;
+        case 'Brock':
+          return jessieImage;
+        default:
+          return meowthImage;
+      }
+    }
+  };
+
   return (
     <McFlex position="relative" mx="20px" orient="bottom" w="300px" col>
       <VStack spacing={4} width="100%">
@@ -288,17 +322,7 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated }) => {
         </Box>
 
         <McFlex width="300px" autoH>
-          <Image
-            src={
-              currentAgent === 'Ash'
-                ? ashImage
-                : currentAgent === 'Brock'
-                  ? brockImage
-                  : oakImage
-            }
-            w="100%"
-            alt={currentAgent}
-          />
+          <Image src={getAgentImage()} w="100%" alt={currentAgent} />
         </McFlex>
       </VStack>
     </McFlex>

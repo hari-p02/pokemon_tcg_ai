@@ -23,7 +23,14 @@ const PlayerState = ({
   isOpponent = false,
 }: PlayerStateProps) => {
   return (
-    <McGrid templateColumns="0.5fr 2fr 0.5fr" gap={4} style={style} pb="5px">
+    <McGrid
+      templateColumns="0.5fr 2fr 0.5fr"
+      gap={4}
+      style={style}
+      pb="5px"
+      bg="rgba(128, 128, 128, 0.3)"
+      borderRadius="md"
+    >
       {/* First column - Prize Cards */}
       <PrizeCards prizeCards={playerState.prizeCards} isOpponent={isOpponent} />
 
