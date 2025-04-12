@@ -1,7 +1,16 @@
-from fastapi import APIRouter, Response
-from ..state import get_initial_state
+from fastapi import APIRouter, Response, BackgroundTasks
+from fastapi.responses import StreamingResponse
+import json
+import asyncio
+from ..state import get_initial_state, BoardState, PlayerState, PokemonInPlay, Card
+from pktcgai.graph.pokemon_tcg_graph import run_pokemon_tcg_turn, transform_game_state
+from typing import Dict, List, Any, Optional
+from dataclasses import asdict
 
 router = APIRouter()
+
+# Global state that will be updated by player actions
+state = None
 
 GARDEVOIR_DECK = [
   {
@@ -1324,26 +1333,6 @@ GARDEVOIR_DECK = [
     }
   },
   {
-    "name": "Basic Psychic Energy",
-    "supertype": "Energy",
-    "subtypes": [
-      "Basic"
-    ],
-    "images": {
-      "large": "https://images.pokemontcg.io/sve/5_hires.png"
-    }
-  },
-  {
-    "name": "Basic Psychic Energy",
-    "supertype": "Energy",
-    "subtypes": [
-      "Basic"
-    ],
-    "images": {
-      "large": "https://images.pokemontcg.io/sve/5_hires.png"
-    }
-  },
-  {
     "name": "Reversal Energy",
     "supertype": "Energy",
     "subtypes": [
@@ -1371,7 +1360,216 @@ GARDEVOIR_DECK = [
   }
 ]
 
+def dataclass_to_dict(obj):
+    """Convert a dataclass instance to a dictionary recursively."""
+    if hasattr(obj, "__dataclass_fields__"):
+        # For dataclass instances
+        result = {}
+        for field in obj.__dataclass_fields__:
+            value = getattr(obj, field)
+            result[field] = dataclass_to_dict(value)
+        return result
+    elif isinstance(obj, list):
+        # For lists
+        return [dataclass_to_dict(item) for item in obj]
+    elif isinstance(obj, dict):
+        # For dictionaries
+        return {key: dataclass_to_dict(value) for key, value in obj.items()}
+    else:
+        # For primitive types
+        return obj
+
+def prepare_game_state_for_player(current_state: BoardState, player_number: int):
+    """
+    Prepare the game state for the specified player.
+    
+    For player1, this means seeing player1's full hand and player2's limited information.
+    For player2, this means seeing player2's full hand and player1's limited information.
+    """
+    game_state = {"YOUR_HAND": {}, "OPPONENT_HAND": {}}
+    
+    # Convert BoardState to dictionary for easier manipulation
+    state_dict = dataclass_to_dict(current_state)
+    
+    if player_number == 1:
+        # Player1 sees their full hand
+        game_state["YOUR_HAND"] = state_dict["playerOne"]
+        
+        # Player1 sees limited information about player2
+        opponent_state = state_dict["playerTwo"]
+        game_state["OPPONENT_HAND"] = {
+            "active": opponent_state["active"],
+            "bench": opponent_state["bench"],
+            "discard": opponent_state["discard"],
+            "lostZone": opponent_state["lostZone"],
+            "deck": f"{len(opponent_state['deck'])} cards",
+            "hand": f"{len(opponent_state['hand'])} cards",
+            "stadium": opponent_state["stadium"],
+            "prizeCards": f"{len(opponent_state['prizeCards'])} cards"
+        }
+    else:
+        # Player2 sees their full hand
+        game_state["YOUR_HAND"] = state_dict["playerTwo"]
+        
+        # Player2 sees limited information about player1
+        opponent_state = state_dict["playerOne"]
+        game_state["OPPONENT_HAND"] = {
+            "active": opponent_state["active"],
+            "bench": opponent_state["bench"],
+            "discard": opponent_state["discard"],
+            "lostZone": opponent_state["lostZone"],
+            "deck": f"{len(opponent_state['deck'])} cards",
+            "hand": f"{len(opponent_state['hand'])} cards",
+            "stadium": opponent_state["stadium"],
+            "prizeCards": f"{len(opponent_state['prizeCards'])} cards"
+        }
+    
+    # Include the card mapping
+    game_state["card_mapping"] = state_dict["cardMap"]
+    
+    return game_state
+
+def dict_to_player_state(player_dict: Dict) -> PlayerState:
+    """Convert a dictionary to a PlayerState object."""
+    # Convert active Pokemon
+    active = None
+    if player_dict.get("active"):
+        active_dict = player_dict["active"]
+        attached_cards = None
+        if active_dict.get("attachedCards"):
+            attached_cards = [Card(id=card["id"]) for card in active_dict["attachedCards"]]
+        active = PokemonInPlay(
+            id=active_dict["id"],
+            hp=active_dict.get("hp", 0),
+            attachedCards=attached_cards
+        )
+    
+    # Convert bench Pokemon
+    bench = []
+    for pokemon_dict in player_dict.get("bench", []):
+        attached_cards = None
+        if pokemon_dict.get("attachedCards"):
+            attached_cards = [Card(id=card["id"]) for card in pokemon_dict["attachedCards"]]
+        bench.append(PokemonInPlay(
+            id=pokemon_dict["id"],
+            hp=pokemon_dict.get("hp", 0),
+            attachedCards=attached_cards
+        ))
+    
+    # Convert other card lists
+    discard = [Card(id=card["id"]) for card in player_dict.get("discard", [])]
+    lost_zone = [Card(id=card["id"]) for card in player_dict.get("lostZone", [])]
+    deck = [Card(id=card["id"]) for card in player_dict.get("deck", [])]
+    hand = [Card(id=card["id"]) for card in player_dict.get("hand", [])]
+    prize_cards = [Card(id=card["id"]) for card in player_dict.get("prizeCards", [])]
+    
+    # Convert stadium
+    stadium = None
+    if player_dict.get("stadium") and isinstance(player_dict["stadium"], dict):
+        stadium = Card(id=player_dict["stadium"]["id"])
+    
+    return PlayerState(
+        active=active,
+        bench=bench,
+        discard=discard,
+        lostZone=lost_zone,
+        deck=deck,
+        hand=hand,
+        stadium=stadium,
+        prizeCards=prize_cards
+    )
+
+def update_global_state(updated_game_state: Dict, player_number: int):
+    """Update the global state with the changes from a player's turn."""
+    global state
+    
+    # Extract the relevant parts from the updated game state
+    your_hand = updated_game_state.get("YOUR_HAND", {})
+    
+    # Convert dictionary back to PlayerState
+    player_state = dict_to_player_state(your_hand)
+    
+    # Update the appropriate player state
+    if player_number == 1:
+        state.playerOne = player_state
+    else:
+        state.playerTwo = player_state
+
+async def process_player_turn(player_number: int):
+    """Process a player's turn and yield updates as they occur."""
+    global state
+    
+    # Prepare game state for the specified player
+    game_state = prepare_game_state_for_player(state, player_number)
+    
+    # Run the player's turn
+    yield "Starting turn processing...\n"
+    
+    # Run the turn and get the results
+    result = run_pokemon_tcg_turn(game_state, state.cardMap)
+    
+    # Check if the action was legal
+    if result["is_legal"]:
+        yield f"Legal action: {result['action']}\n"
+        
+        # Update the global state with the changes
+        update_global_state(result["updated_game_state"], player_number)
+        yield "Game state updated.\n"
+    else:
+        yield f"Illegal action: {result['explanation']}\n"
+    
+    # Return the conversation history
+    for message in result["conversation"]:
+        role = message["role"].capitalize()
+        content = message["content"]
+        yield f"\n{role}:\n{content}\n"
+    
+    yield "\nTurn completed.\n"
+
 @router.get("/state")
 async def get_state():
-    state = get_initial_state(GARDEVOIR_DECK)
-    return state
+    global state
+    
+    # Initialize state if it hasn't been initialized yet
+    if state is None:
+        state = get_initial_state(GARDEVOIR_DECK)
+    
+    return dataclass_to_dict(state)
+
+@router.get("/player1/turn")
+async def player1_turn():
+    """
+    Endpoint for player1 to take their turn.
+    Returns a streaming response with updates.
+    """
+    global state
+    
+    # Initialize state if it hasn't been initialized yet
+    if state is None:
+        state = get_initial_state(GARDEVOIR_DECK)
+    
+    # Create an async generator for streaming the response
+    async def event_generator():
+        async for update in process_player_turn(1):
+            yield update
+    
+    return StreamingResponse(event_generator(), media_type="text/plain")
+
+@router.get("/player2/turn")
+async def player2_turn():
+    """
+    Endpoint for player2 to take their turn.
+    Returns a streaming response with updates.
+    """
+    global state
+    
+    # Initialize state if it hasn't been initialized yet
+    if state is None:
+        state = get_initial_state(GARDEVOIR_DECK)
+    
+    # Create an async generator for streaming the response
+    async def event_generator():
+        async for update in process_player_turn(2):
+            yield update
+    
+    return StreamingResponse(event_generator(), media_type="text/plain")

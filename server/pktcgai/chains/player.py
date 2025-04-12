@@ -38,11 +38,11 @@ class Player:
 
             You task is to describe an action you want to take on the state. Any action is valid as long as it respects the rule of the Pokemon TCG game. 
                                                        
-            If you want to take an action very clearly and verbosely explain what this action is.
+            If you want to take an action very clearly and verbosely explain what this action is, and using the "id" associated with each pokemon card to be descriptive.
                                                        
-            BUT, before you decide on an action know that you have access to a mentor. The mentor specializes in the Pokemon TCG card battle game and is MUCH MUCH better than you at the game. 
-            You are fully allowed to converse with your mentor my asking any questions you have. You can even ask if for feedback on your moves, and anything else.
-            Make as much use of your mentor as you can to help you make a calculated action.
+            BUT, before you decide on an action know that you have access to a mentor. The mentor specializes in the Pokemon TCG card battle game and is better than you at the game. 
+            You are allowed to talk with your mentor my asking any questions you have. You can even ask if for feedback on your moves, and anything else.
+            However, YOU CAN ONLY INTERACT WITH THE MENTOR ONCE and ONLY ONCE!!!
             
             Here is your current conversation with your mentor:
             {mentor_player_conversation}
@@ -50,9 +50,11 @@ class Player:
             When you propose your next move. If you're ready to make a final decision, include the phrase: FINAL DECISION: <your move here>.
             YOU MUST INCLUDE "FINAL DECISION" IN YOUR ANSWER IF AND ONLY IF YOU NO LONGER WANT TO TALK TO THE MENTOR.
             Without "FINAL DECISION" it will be assumed anything you ask will be directed to the mentor for their feedback
+                                                       
+            Also you may want to do multple moves in a row. However you MUST ONLY CHOOSE ONE MOVE TO DO. You FAIL IF YOU DO MULTIPLE MOVES.
         """)
 
     def make_chain(self):
-        player_chain = self.prompt | ANTHROPIC_LLM
+        player_chain = self.prompt | ANTHROPIC_LLM.with_config({"callbacks": None, "streaming": True})
         return player_chain
     
