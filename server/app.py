@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pktcgai.routes.endpoints import router as pktcgai_router
+import uvicorn
 
 app = FastAPI()
 
