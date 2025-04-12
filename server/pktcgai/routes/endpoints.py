@@ -3109,8 +3109,8 @@ class StreamingStdout:
         # Write to buffer for capturing
         self.buffer.write(text)
         # Add to stream queue for real-time updates
-        if text.strip():
-            stream_queue.put(text)
+        # if text.strip():
+        stream_queue.put(text)
     
     def flush(self):
         pass
@@ -3183,8 +3183,8 @@ async def process_player_turn(player_number: int):
                 break
                 
             # Send the message as SSE
-            if isinstance(message, str) and message.strip():
-                yield f"data: [DEBUG] {message}\n\n"
+            if isinstance(message, str):
+                yield f"data: {message}\n\n"
         except queue.Empty:
             # No messages in queue, continue waiting
             await asyncio.sleep(0.01)
