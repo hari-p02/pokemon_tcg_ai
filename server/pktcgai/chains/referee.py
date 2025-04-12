@@ -119,9 +119,9 @@ class Referee:
                 full_response += chunk_text
                 
                 # Check for JSON markers and accumulate text
-                if "```json" in chunk_text:
+                if "json" in chunk_text:
                     # Split the chunk at the JSON marker
-                    parts = chunk_text.split("```json", 1)
+                    parts = chunk_text.split("json", 1)
                     
                     # Print any text before the JSON marker
                     # if parts[0]:
@@ -129,7 +129,7 @@ class Referee:
                     #     visible_response += parts[0]
                     
                     # Start accumulating for JSON content
-                    accumulated_text = "```json" + (parts[1] if len(parts) > 1 else "")
+                    accumulated_text = "json" + (parts[1] if len(parts) > 1 else "")
                     in_json_block = True
                 elif in_json_block:
                     # Keep accumulating text while in JSON block
@@ -148,7 +148,7 @@ class Referee:
                             json_content += json_block
                             
                             # Print the text after the JSON block
-                            print(after_json, end="", flush=True)
+                            # print(after_json, end="", flush=True)
                             visible_response += after_json
                             
                             # Reset accumulation
@@ -164,7 +164,7 @@ class Referee:
                 # Extract any JSON content without printing
                 json_content += accumulated_text
             
-            print()  # Add a newline after the streaming response
+            # print()  # Add a newline after the streaming response
             
             # Process the full response after streaming is complete
             return self.process_response(full_response, game_state, visible_response)
