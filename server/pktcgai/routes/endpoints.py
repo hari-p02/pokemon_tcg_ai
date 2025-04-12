@@ -6,8 +6,16 @@ from ..state import get_initial_state, BoardState, PlayerState, PokemonInPlay, C
 from pktcgai.graph.pokemon_tcg_graph import run_pokemon_tcg_turn, transform_game_state
 from typing import Dict, List, Any, Optional
 from dataclasses import asdict
+import io
+import sys
+import contextlib
+import queue
+import threading
 
 router = APIRouter()
+
+# Create a thread-safe queue for real-time streaming
+stream_queue = queue.Queue()
 
 # Global state that will be updated by player actions
 state = None
@@ -1495,36 +1503,133 @@ def update_global_state(updated_game_state: Dict, player_number: int):
     else:
         state.playerTwo = player_state
 
+# Modify stdout to stream output in real-time
+class StreamingStdout:
+    def __init__(self):
+        self.buffer = io.StringIO()
+        
+    def write(self, text):
+        # Write to buffer for capturing
+        self.buffer.write(text)
+        # Add to stream queue for real-time updates
+        if text.strip():
+            stream_queue.put(text)
+    
+    def flush(self):
+        pass
+    
+    def getvalue(self):
+        return self.buffer.getvalue()
+
+@contextlib.contextmanager
+def capture_stdout():
+    """Capture stdout and return it as a string while streaming in real-time."""
+    stdout_buffer = StreamingStdout()
+    original_stdout = sys.stdout
+    sys.stdout = stdout_buffer
+    try:
+        yield stdout_buffer
+    finally:
+        sys.stdout = original_stdout
+
 async def process_player_turn(player_number: int):
     """Process a player's turn and yield updates as they occur."""
-    global state
+    global state, stream_queue
+    
+    # Clear any previous messages in the queue
+    while not stream_queue.empty():
+        try:
+            stream_queue.get_nowait()
+        except queue.Empty:
+            break
     
     # Prepare game state for the specified player
     game_state = prepare_game_state_for_player(state, player_number)
     
     # Run the player's turn
-    yield "Starting turn processing...\n"
+    yield "data: Starting turn processing...\n\n"
     
-    # Run the turn and get the results
-    result = run_pokemon_tcg_turn(game_state, state.cardMap)
+    # Create a synchronization event to signal when processing is complete
+    processing_complete = threading.Event()
+    result_container = {"result": None}
     
-    # Check if the action was legal
+    # Start a background thread to run the turn
+    def run_turn():
+        try:
+            # Use a context manager to capture stdout
+            with capture_stdout() as stdout:
+                # Run the turn and get the results - this will fill the stream_queue
+                result_container["result"] = run_pokemon_tcg_turn(game_state, state.cardMap)
+            # Signal completion
+            stream_queue.put(None)
+        except Exception as e:
+            print(f"Error in background thread: {e}")
+            stream_queue.put(f"ERROR: {str(e)}")
+            stream_queue.put(None)
+        finally:
+            # Set the event to signal that processing is complete
+            processing_complete.set()
+    
+    # Start the background thread
+    thread = threading.Thread(target=run_turn)
+    thread.daemon = True  # Make thread a daemon so it doesn't block program exit
+    thread.start()
+    
+    # Stream real-time updates from the queue
+    while True:
+        try:
+            # Try to get a message from the queue with timeout
+            message = await asyncio.to_thread(stream_queue.get, timeout=0.1)
+            
+            # None signals the end of the stream
+            if message is None:
+                break
+                
+            # Send the message as SSE
+            if isinstance(message, str) and message.strip():
+                yield f"data: [DEBUG] {message.strip()}\n\n"
+        except queue.Empty:
+            # No messages in queue, continue waiting
+            await asyncio.sleep(0.01)
+        except Exception as e:
+            # Handle any other exceptions
+            print(f"Error streaming: {e}")
+            yield f"data: [ERROR] {str(e)}\n\n"
+    
+    # Wait for the processing to complete before continuing
+    await asyncio.to_thread(processing_complete.wait)
+    
+    # Get the result from the container
+    result = result_container["result"]
+    
+    # Make sure result is not None before proceeding
+    if result is None:
+        yield "data: Error: Processing failed to produce a result\n\n"
+        yield "event: close\ndata: stream_complete\n\n"
+        return
+    
+    # Now that we have the result, continue with the rest of the processing
     if result["is_legal"]:
-        yield f"Legal action: {result['action']}\n"
+        yield f"data: Legal action: {result['action']}\n\n"
         
         # Update the global state with the changes
         update_global_state(result["updated_game_state"], player_number)
-        yield "Game state updated.\n"
+        yield "data: Game state updated.\n\n"
     else:
-        yield f"Illegal action: {result['explanation']}\n"
+        yield f"data: Illegal action: {result['explanation']}\n\n"
     
-    # Return the conversation history
+    # Return the conversation history one message at a time
     for message in result["conversation"]:
         role = message["role"].capitalize()
         content = message["content"]
-        yield f"\n{role}:\n{content}\n"
+        yield f"data: \n{role}:\n{content}\n\n"
+        # Add a small delay between messages
+        await asyncio.sleep(0.05)
     
-    yield "\nTurn completed.\n"
+    yield "data: \nTurn completed.\n\n"
+    
+    # Send close event to signal the end of the stream
+    yield "event: close\ndata: stream_complete\n\n"
 
 @router.get("/state")
 async def get_state():
@@ -1548,12 +1653,16 @@ async def player1_turn():
     if state is None:
         state = get_initial_state(GARDEVOIR_DECK)
     
-    # Create an async generator for streaming the response
-    async def event_generator():
-        async for update in process_player_turn(1):
-            yield update
-    
-    return StreamingResponse(event_generator(), media_type="text/plain")
+    return StreamingResponse(
+        process_player_turn(1), 
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+            "X-Accel-Buffering": "no"  # Disable nginx buffering
+        }
+    )
 
 @router.get("/player2/turn")
 async def player2_turn():
@@ -1567,9 +1676,13 @@ async def player2_turn():
     if state is None:
         state = get_initial_state(GARDEVOIR_DECK)
     
-    # Create an async generator for streaming the response
-    async def event_generator():
-        async for update in process_player_turn(2):
-            yield update
-    
-    return StreamingResponse(event_generator(), media_type="text/plain")
+    return StreamingResponse(
+        process_player_turn(2), 
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+            "X-Accel-Buffering": "no"  # Disable nginx buffering
+        }
+    )
