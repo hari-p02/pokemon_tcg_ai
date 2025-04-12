@@ -3211,7 +3211,7 @@ async def process_player_turn(player_number: int):
         
         # Update the global state with the changes
         update_global_state(result["updated_game_state"], player_number)
-        yield "data: Game state updated.\n\n"
+        # yield "data: Game state updated.\n\n"
     else:
         # yield f"data: Illegal action: {result['explanation']}\n\n"
         ...

@@ -83,6 +83,8 @@ class Master:
         Do NOT be very verbose, be straight to the point!!
                                                        
         Lastly, remember that you are talking to a human, so you must output your response in a conversational tone, and be very brief, do not be too verbose!!!
+                                                       
+        ONLY OUTPUT A PARAGRAPH OF 1 to 4 SENTENCES MAXIMUM!!!
         
         
         """)
