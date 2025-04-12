@@ -23,7 +23,7 @@ const PlayerState = ({
   isOpponent = false,
 }: PlayerStateProps) => {
   return (
-    <McGrid templateColumns="0.5fr 2fr 1fr" gap={4} style={style} pb="5px">
+    <McGrid templateColumns="0.5fr 2fr 0.5fr" gap={4} style={style} pb="5px">
       {/* First column - Prize Cards */}
       <PrizeCards prizeCards={playerState.prizeCards} isOpponent={isOpponent} />
 
@@ -39,7 +39,7 @@ const PlayerState = ({
       </McGrid>
 
       {/* Third column - Nested grid with 2 rows */}
-      <McFlex col orient="top">
+      <McFlex col orient={isOpponent ? 'top' : 'top right'}>
         <Deck deck={playerState.deck} isOpponent={isOpponent} />
         <Discard discard={playerState.discard} isOpponent={isOpponent} />
       </McFlex>

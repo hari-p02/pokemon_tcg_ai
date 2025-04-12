@@ -57,64 +57,62 @@ def get_initial_state(deck: List[dict]) -> BoardState:
             cards.remove(card)
             break
     
-    # Find basic Pokemon for bench
-    bench_cards = []
-    for card in cards[:]:
-        card_info = card_map[card.id]
-        if card_info.get('supertype') == 'Pokémon' and 'Basic' in card_info.get('subtypes', []):
-            bench_cards.append(card)
-            cards.remove(card)
-            if len(bench_cards) == 3:  # We want 3 Pokemon on bench
-                break
+    # If we didn't find a basic Pokemon, just use the first card (this is just for testing)
+    if active_card is None and cards:
+        active_card = cards[0]
+        cards.remove(active_card)
     
-    # Find energy cards to attach to bench Pokemon
-    energy_cards = []
-    for card in cards[:]:
-        card_info = card_map[card.id]
-        if card_info.get('supertype') == 'Energy':
-            energy_cards.append(card)
-            cards.remove(card)
-            if len(energy_cards) == 3:  # One energy per bench Pokemon
-                break
-    
-    # Attach energy to bench Pokemon
-    bench_pokemon = []
-    for i, pokemon in enumerate(bench_cards):
-        attached_energy = [energy_cards[i]] if i < len(energy_cards) else []
-        card_info = card_map[pokemon.id]
-        bench_pokemon.append(PokemonInPlay(
-            id=pokemon.id,
-            hp=int(card_info.get('hp', 0)),
-            attachedCards=attached_energy
-        ))
-    
-    # Find a stadium card
-    stadium_card = None
-    for card in cards[:]:
-        card_info = card_map[card.id]
-        if card_info.get('supertype') == 'Trainer' and 'Stadium' in card_info.get('subtypes', []):
-            stadium_card = card
-            cards.remove(card)
-            break
-    
-    # Initialize player state with the organized cards
+    # Initialize player state with simplified structure
     player_state = PlayerState(
-        hand=cards[:7],  # First 7 cards in hand
         active=PokemonInPlay(
             id=active_card.id, 
             hp=int(card_map[active_card.id].get('hp', 0))
         ) if active_card else None,
-        bench=bench_pokemon,
-        prizeCards=cards[7:13] if len(cards) > 13 else [],  # Next 6 cards as prize cards
-        deck=cards[13:],  # Remaining cards in deck
-        discard=[cards[0]] if len(cards) > 0 else [],  # One card in discard
-        lostZone=[cards[1]] if len(cards) > 1 else [],  # One card in lost zone
-        stadium=stadium_card
+        hand=cards[:6],  # First 6 cards in hand
+        prizeCards=cards[6:12] if len(cards) >= 12 else [],  # Next 6 cards as prize cards
+        deck=cards[12:],  # Remaining cards in deck
+        bench=[],  # Empty bench
+        discard=[],  # Empty discard pile
+        lostZone=[],  # Empty lost zone
+        stadium=None  # No stadium card
     )
     
-    # Create board state with same state for both players and include the card map
+    # Create player two state with a different shuffle
+    player_two_cards = [Card(id=i) for i in range(len(deck))]
+    random.shuffle(player_two_cards)
+    
+    # Find a basic Pokemon for active for player two
+    active_card_two = None
+    for card in player_two_cards:
+        card_info = card_map[card.id]
+        if card_info.get('supertype') == 'Pokémon' and 'Basic' in card_info.get('subtypes', []):
+            active_card_two = card
+            player_two_cards.remove(card)
+            break
+    
+    # If we didn't find a basic Pokemon, just use the first card (this is just for testing)
+    if active_card_two is None and player_two_cards:
+        active_card_two = player_two_cards[0]
+        player_two_cards.remove(active_card_two)
+    
+    # Initialize player two state with simplified structure
+    player_two_state = PlayerState(
+        active=PokemonInPlay(
+            id=active_card_two.id, 
+            hp=int(card_map[active_card_two.id].get('hp', 0))
+        ) if active_card_two else None,
+        hand=player_two_cards[:6],  # First 6 cards in hand
+        prizeCards=player_two_cards[6:12] if len(player_two_cards) >= 12 else [],  # Next 6 cards as prize cards
+        deck=player_two_cards[12:],  # Remaining cards in deck
+        bench=[],  # Empty bench
+        discard=[],  # Empty discard pile
+        lostZone=[],  # Empty lost zone
+        stadium=None  # No stadium card
+    )
+    
+    # Create board state with both player states and include the card map
     return BoardState(
         playerOne=player_state,
-        playerTwo=player_state,
+        playerTwo=player_two_state,
         cardMap=card_map
     ) 

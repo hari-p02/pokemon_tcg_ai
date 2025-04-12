@@ -2,6 +2,7 @@ import { Image } from '@chakra-ui/react';
 import McFlex from '../McFlex/McFlex';
 import { Card } from '../boardState';
 import sleeveImage from '../assets/sleeve.png';
+import cardBackImage from '../assets/cardback.png';
 import { motion } from 'framer-motion';
 
 const MotionImage = motion(Image);
@@ -13,10 +14,10 @@ interface DeckProps {
 
 const Deck = ({ deck, isOpponent = false }: DeckProps) => {
   return (
-    <McFlex p={2} autoH>
+    <McFlex p={2} auto>
       <MotionImage
         borderRadius="md"
-        src={sleeveImage}
+        src={isOpponent ? cardBackImage : sleeveImage}
         alt="Deck"
         height="100px"
         width="auto"

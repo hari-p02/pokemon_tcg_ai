@@ -17,7 +17,11 @@ interface BenchProps {
 const Bench = ({ bench, isOpponent = false }: BenchProps) => {
   const cardMap = useCardMap();
 
-  if (!bench || !cardMap[bench[0].id]) return <McFlex></McFlex>;
+  // Return empty flex when bench is empty or invalid
+  if (!bench || bench.length === 0) return <McFlex></McFlex>;
+
+  // Check if the first bench Pokémon exists in the card map
+  if (!cardMap[bench[0].id]) return <McFlex></McFlex>;
 
   return (
     <McFlex gap={1} mb={isOpponent ? '0px' : '80px'}>

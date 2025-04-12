@@ -23,7 +23,7 @@ const Discard = ({ discard, isOpponent = false }: DiscardProps) => {
   const cardImage = cardInfo.images.large;
 
   return (
-    <McFlex p={2} autoH>
+    <McFlex p={2} auto>
       <SpotlightableCard cardId={lastCard.id} cardImage={cardImage}>
         <MotionImage
           src={cardImage}

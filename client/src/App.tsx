@@ -7,28 +7,7 @@ import PlayerState from './components/PlayerState';
 import McFlex from './McFlex/McFlex';
 import McGrid from './McGrid/McGrid';
 import { BoardState, fetchGameState } from './services/api';
-
-// Add global styles for animations
-const globalStyles = `
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes cardZoomIn {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1.5); opacity: 1; }
-  }
-  
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 3px gold inset, 0 0 10px gold; }
-    50% { box-shadow: 0 0 0 3px gold inset, 0 0 20px gold; }
-    100% { box-shadow: 0 0 0 3px gold inset, 0 0 10px gold; }
-  }
-`;
-
-// Enable the demo component for testing
-const SHOW_DEMO = true;
+import wallpaper from './assets/wallpaper.jpg';
 
 const cardMapAtom = atom<Record<number, any>>({});
 const scaleFactorAtom = atom<number>(1);
@@ -122,6 +101,17 @@ function App() {
         position="relative"
         bg="gray.100"
       >
+        <Image
+          src={wallpaper}
+          alt="Wallpaper"
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          objectFit="cover"
+          opacity={0.15}
+        />
         <Box
           position="absolute"
           top="50%"
@@ -162,11 +152,10 @@ function App() {
                     </Box>
                   )}
                   <Box
-                    width="150%"
+                    width="175%"
                     transform="scale(0.6)"
                     transformOrigin="center"
                     my="-70px"
-                    ml="-240px"
                   >
                     <PlayerState
                       isOpponent={true}
@@ -187,8 +176,6 @@ function App() {
             />
           </McGrid>
         </Box>
-
-        {/* Spotlight overlay */}
       </Box>
     </>
   );
