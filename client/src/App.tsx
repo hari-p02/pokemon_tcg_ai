@@ -66,7 +66,7 @@ function App() {
     try {
       const state = await fetchGameState();
       setGameState(state);
-      
+
       // Set the card map atom with the data from the state
       if (state.cardMap) {
         setCardMapState(state.cardMap);
@@ -168,16 +168,13 @@ function App() {
                     />
                   </Box>
                   <PlayerState playerState={gameState.playerOne} />
-                  <Box mt={4} width="100%">
+                  {/* <Box mt={4} width="100%">
                     <TurnConsole onGameStateUpdated={loadGameState} />
-                  </Box>
+                  </Box> */}
                 </>
               )}
             </McFlex>
-            <Agent
-              agent="Oak"
-              message="Let's teach you the basics of the Pokemon Trading Card Game"
-            />
+            <Agent onGameStateUpdated={loadGameState} />
           </McGrid>
         </Box>
       </Box>

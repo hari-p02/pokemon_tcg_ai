@@ -1547,7 +1547,7 @@ async def process_player_turn(player_number: int):
     game_state = prepare_game_state_for_player(state, player_number)
     
     # Run the player's turn
-    yield "data: Starting turn processing...\n\n"
+    # yield "data: Starting turn processing...\n\n"
     
     # Create a synchronization event to signal when processing is complete
     processing_complete = threading.Event()

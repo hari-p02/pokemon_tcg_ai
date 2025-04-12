@@ -1,100 +1,205 @@
-import { Box, Image, Text } from '@chakra-ui/react';
+import { Box, Image, Text, Button, VStack, useToast } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import axios from 'axios';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState, useCallback } from 'react';
 import ashImage from '../assets/ash.png';
 import brockImage from '../assets/brock.png';
 import oakImage from '../assets/oak.png';
 import McFlex from '../McFlex/McFlex';
 import mistImage from '../assets/misty.png';
+import { fetchGameState } from '../services/api';
 
 interface AgentProps {
-  agent: string;
-  message: string;
+  onGameStateUpdated: () => void;
 }
 
-const Agent: FC<AgentProps> = ({ agent, message }) => {
+const Agent: FC<AgentProps> = ({ onGameStateUpdated }) => {
+  const [fullText, setFullText] = useState('');
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentAgent, setCurrentAgent] = useState('Oak');
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const toast = useToast();
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const textBoxRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
 
+  // Auto-scroll to bottom when text changes
   useEffect(() => {
-    // Reset animation when message changes
+    if (textBoxRef.current) {
+      textBoxRef.current.scrollTop = textBoxRef.current.scrollHeight;
+    }
+  }, [displayedText]);
+
+  // Typewriter animation effect
+  useEffect(() => {
+    if (currentIndex < fullText.length) {
+      animationRef.current = window.requestAnimationFrame(() => {
+        setDisplayedText(fullText.substring(0, currentIndex + 1));
+        setCurrentIndex(currentIndex + 1);
+      });
+    }
+
+    return () => {
+      if (animationRef.current) {
+        window.cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [currentIndex, fullText]);
+
+  // Cleanup function for event source
+  useEffect(() => {
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
+  }, []);
+
+  const handlePlayerTurn = async (playerNumber: 1 | 2) => {
+    // Clean up any existing EventSource
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+
+    setIsLoading(true);
+    setFullText('');
     setDisplayedText('');
     setCurrentIndex(0);
 
-    if (message) {
-      // Generate audio when message changes
-      const voiceId =
-        agent === 'Ash'
-          ? // ? 'AZnzlk1XvdvUeBnXmlld'
-            'MF3mGyEYCl7XYWbV9V6O'
-          : agent === 'Brock'
-            ? 'SOYHLrjzK2X1ezoPC6cr'
-            : agent === 'Misty'
-              ? 'jBpfuIE2acCO8z3wKNLl'
-              : 'D38z5RcWu1voky8WS1ja';
+    try {
+      const response = await fetch(
+        `http://localhost:8000/player${playerNumber}/turn`
+      );
 
-      // Create audio element if it doesn't exist
-      if (!audioRef.current) {
-        audioRef.current = new Audio();
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
       }
 
-      // Direct API call to ElevenLabs
-      const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY;
-      const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
+      if (!response.body) {
+        throw new Error('Response has no body');
+      }
 
-      // Make the API call
-      axios({
-        method: 'post',
-        url: apiUrl,
-        data: {
-          text: message,
-          model_id: 'eleven_turbo_v2',
-          output_format: 'mp3',
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          'xi-api-key': apiKey,
-        },
-        responseType: 'arraybuffer',
-      })
-        .then((response) => {
-          // Convert array buffer to blob
-          const blob = new Blob([response.data], { type: 'audio/mpeg' });
-          const url = URL.createObjectURL(blob);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
 
-          if (audioRef.current) {
-            audioRef.current.src = url;
-            audioRef.current
-              .play()
-              .catch((err) => console.error('Error playing audio:', err));
-          }
-        })
-        .catch((error) => {
-          console.error('Error generating audio:', error);
-        });
+      while (true) {
+        const { done, value } = await reader.read();
 
-      // Clean up audio on unmount
-      return () => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.src = '';
+        if (done) {
+          break;
         }
-      };
-    }
-  }, [message, agent]);
 
-  useEffect(() => {
-    if (currentIndex < message.length) {
-      const typingTimer = setTimeout(() => {
-        setDisplayedText((prev) => prev + message[currentIndex]);
-        setCurrentIndex(currentIndex + 1);
-      }, 30); // Typing speed (milliseconds per character)
+        const text = decoder.decode(value, { stream: true });
+        buffer += text;
 
-      return () => clearTimeout(typingTimer);
+        let startIndex = 0;
+        let endIndex;
+
+        while ((endIndex = buffer.indexOf('\n\n', startIndex)) !== -1) {
+          const message = buffer.substring(startIndex, endIndex);
+          const dataMatch = message.match(/^data: (.*)$/m);
+
+          if (dataMatch) {
+            const data = dataMatch[1];
+
+            if (message.includes('event: close')) {
+              try {
+                setFullText(
+                  (prev) => prev + 'Fetching updated game state...\n'
+                );
+                await fetchGameState();
+                onGameStateUpdated();
+                setIsLoading(false);
+                setFullText((prev) => prev + 'State updated successfully\n');
+              } catch (error) {
+                console.error('Error fetching final state:', error);
+                setFullText(
+                  (prev) => prev + `Error fetching state: ${error}\n`
+                );
+                setIsLoading(false);
+              }
+            } else {
+              const displayText = data.startsWith('[DEBUG]')
+                ? data.substring(7).trim()
+                : data;
+
+              // Check for node patterns and switch agent accordingly
+              if (
+                displayText.includes(
+                  '-------------MASTER NODE STARTED-------------------'
+                )
+              ) {
+                setCurrentAgent('Oak');
+                setFullText('');
+                setDisplayedText('');
+                setCurrentIndex(0);
+                if (animationRef.current) {
+                  window.cancelAnimationFrame(animationRef.current);
+                  animationRef.current = null;
+                }
+              } else if (
+                displayText.includes(
+                  '-------------PLAYER NODE STARTED-------------------'
+                )
+              ) {
+                setCurrentAgent('Ash');
+                setFullText('');
+                setDisplayedText('');
+                setCurrentIndex(0);
+                if (animationRef.current) {
+                  window.cancelAnimationFrame(animationRef.current);
+                  animationRef.current = null;
+                }
+              } else if (
+                displayText.includes(
+                  '-------------REFEREE NODE STARTED-------------------'
+                )
+              ) {
+                setCurrentAgent('Brock');
+                setFullText('');
+                setDisplayedText('');
+                setCurrentIndex(0);
+                if (animationRef.current) {
+                  window.cancelAnimationFrame(animationRef.current);
+                  animationRef.current = null;
+                }
+              } else if (displayText) {
+                setFullText((prev) => prev + displayText + '\n');
+              }
+            }
+          }
+
+          startIndex = endIndex + 2;
+        }
+
+        buffer = buffer.substring(startIndex);
+      }
+
+      setIsLoading(false);
+
+      toast({
+        title: 'Turn completed',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Error during turn:', error);
+      setFullText((prev) => prev + `Error: ${error}\n`);
+      setIsLoading(false);
+
+      toast({
+        title: 'Error',
+        description: 'Failed to process turn',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     }
-  }, [currentIndex, message]);
+  };
 
   const blinkAnimation = keyframes`
     from, to { border-color: transparent }
@@ -103,59 +208,99 @@ const Agent: FC<AgentProps> = ({ agent, message }) => {
 
   return (
     <McFlex position="relative" mx="20px" orient="bottom" w="300px" col>
-      <Box
-        bg="white"
-        borderRadius="20px"
-        padding="15px"
-        boxShadow="md"
-        width="250px"
-        minHeight="80px"
-        mb="20px"
-        position="relative"
-        _after={{
-          content: '""',
-          position: 'absolute',
-          bottom: '-20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '0',
-          height: '0',
-          borderLeft: '20px solid transparent',
-          borderRight: '20px solid transparent',
-          borderTop: '20px solid white',
-        }}
-      >
-        <Text fontFamily="monospace" fontSize="md" color="black">
-          {displayedText}
-          <Box
-            as="span"
-            borderRight="2px solid black"
-            display="inline-block"
-            sx={{
-              animation:
-                currentIndex < message.length
-                  ? `${blinkAnimation} 0.75s step-end infinite`
-                  : 'none',
-            }}
-          />
-        </Text>
-      </Box>
+      <VStack spacing={4} width="100%">
+        <Box display="flex" width="100%" justifyContent="space-between">
+          <Button
+            colorScheme="blue"
+            onClick={() => handlePlayerTurn(1)}
+            isDisabled={isLoading}
+            width="48%"
+          >
+            Player 1 Turn
+          </Button>
+          <Button
+            colorScheme="green"
+            onClick={() => handlePlayerTurn(2)}
+            isDisabled={isLoading}
+            width="48%"
+          >
+            Player 2 Turn
+          </Button>
+        </Box>
 
-      <McFlex width="300px" autoH>
-        <Image
-          src={
-            agent === 'Ash'
-              ? ashImage
-              : agent === 'Brock'
-                ? brockImage
-                : agent === 'Misty'
-                  ? mistImage
+        <Box
+          bg="white"
+          borderRadius="20px"
+          padding="15px"
+          boxShadow="md"
+          width="250px"
+          maxHeight="200px"
+          overflowY="auto"
+          mb="20px"
+          position="relative"
+          ref={textBoxRef}
+          css={{
+            '&::-webkit-scrollbar': {
+              width: '4px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: 'rgba(0, 0, 0, 0.2)',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: 'rgba(0, 0, 0, 0.3)',
+            },
+          }}
+          _after={{
+            content: '""',
+            position: 'absolute',
+            bottom: '-20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '0',
+            height: '0',
+            borderLeft: '20px solid transparent',
+            borderRight: '20px solid transparent',
+            borderTop: '20px solid white',
+          }}
+        >
+          <Text
+            fontFamily="monospace"
+            fontSize="md"
+            color="black"
+            whiteSpace="pre-wrap"
+          >
+            {displayedText}
+            {isLoading && (
+              <Box
+                as="span"
+                borderRight="2px solid black"
+                display="inline-block"
+                sx={{
+                  animation: `${blinkAnimation} 0.75s step-end infinite`,
+                }}
+              />
+            )}
+          </Text>
+        </Box>
+
+        <McFlex width="300px" autoH>
+          <Image
+            src={
+              currentAgent === 'Ash'
+                ? ashImage
+                : currentAgent === 'Brock'
+                  ? brockImage
                   : oakImage
-          }
-          w="100%"
-          alt={agent}
-        />
-      </McFlex>
+            }
+            w="100%"
+            alt={currentAgent}
+          />
+        </McFlex>
+      </VStack>
     </McFlex>
   );
 };
