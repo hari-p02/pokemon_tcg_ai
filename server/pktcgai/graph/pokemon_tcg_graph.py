@@ -80,7 +80,7 @@ def create_pokemon_tcg_graph():
     
     player_agent = Player().make_chain()
     mentor_agent = Mentor().make_chain()
-    referee_agent = Referee().make_chain()
+    referee_agent = Referee()  # Use the full Referee instance, not just the chain
     
     workflow = StateGraph(ConversationState)
     
@@ -201,89 +201,19 @@ def create_pokemon_tcg_graph():
         game_state_str = json.dumps(state["game_state"]) if isinstance(state["game_state"], dict) else state["game_state"]
         card_mapping_str = json.dumps(state["card_id_to_card_mapping"]) if isinstance(state["card_id_to_card_mapping"], dict) else state["card_id_to_card_mapping"]
         
-        # Get streaming response from referee agent
+        # Use referee's invoke method which handles JSON filtering
         try:
-            # Get the streaming response
-            response_chunks = referee_agent.stream({
+            result = referee_agent.invoke({
                 "game_state": game_state_str,
                 "player_action": state["player_action"],
                 "card_id_to_card_mapping": card_mapping_str
             })
             
-            # Process and collect streaming chunks
-            full_response = ""
-            in_json_block = False
-            json_content = ""
-            visible_response = ""
+            # Use the processed result from the invoke method
+            state["decision_is_legal"] = result["is_legal"]
+            state["decision_explanation"] = result["explanation"]
+            state["updated_game_state"] = result["updated_state"]
             
-            # Process each chunk as it comes in
-            for chunk in response_chunks:
-                # AIMessageChunk objects have a .content attribute to get the text
-                chunk_text = chunk.content if hasattr(chunk, 'content') else str(chunk)
-                full_response += chunk_text
-                
-                # Check if we're entering a JSON block
-                if "```json" in chunk_text and not in_json_block:
-                    parts = chunk_text.split("```json", 1)
-                    # Print the content before the JSON block
-                    if parts[0]:
-                        print(parts[0], end="", flush=True)
-                        visible_response += parts[0]
-                    # Start collecting JSON content
-                    in_json_block = True
-                    json_content += parts[1] if len(parts) > 1 else ""
-                    continue
-                
-                # Check if we're exiting a JSON block
-                if in_json_block and "```" in chunk_text:
-                    parts = chunk_text.split("```", 1)
-                    # Add the first part to JSON content
-                    json_content += parts[0]
-                    # Mark that we're no longer in a JSON block
-                    in_json_block = False
-                    # Print the content after the JSON block
-                    if len(parts) > 1 and parts[1]:
-                        print(parts[1], end="", flush=True)
-                        visible_response += parts[1]
-                    continue
-                
-                # If we're in a JSON block, add to JSON content, otherwise print normally
-                if in_json_block:
-                    json_content += chunk_text
-                else:
-                    print(chunk_text, end="", flush=True)
-                    visible_response += chunk_text
-            
-            print()  # Add a newline after the streaming response
-            
-            # Process the response after streaming
-            if "ILLEGAL" in full_response:
-                state["decision_is_legal"] = False
-                state["decision_explanation"] = visible_response  # Use visible_response for explanation
-                state["updated_game_state"] = state["game_state"]
-            else:
-                try:
-                    # Extract JSON from response
-                    start_index = full_response.find('```json')
-                    if start_index == -1:
-                        start_index = full_response.find('{')
-                        end_index = full_response.rfind('}') + 1
-                        json_data = full_response[start_index:end_index]
-                    else:
-                        end_index = full_response.find('```', start_index+7)
-                        json_data = full_response[start_index+7:end_index]
-                    
-                    # Attempt to parse JSON
-                    new_state = json.loads(json_data)
-                    state["decision_is_legal"] = True
-                    state["decision_explanation"] = visible_response  # Use visible_response for explanation
-                    state["updated_game_state"] = new_state
-                except json.JSONDecodeError as e:
-                    print(f"Error parsing JSON: {e}")
-                    print(f"JSON data attempted to parse: {json_data}")
-                    state["decision_is_legal"] = False
-                    state["decision_explanation"] = f"Error processing action: {visible_response}"  # Use visible_response
-                    state["updated_game_state"] = state["game_state"]
         except Exception as e:
             print(f"Error in referee node: {e}")
             state["decision_is_legal"] = False

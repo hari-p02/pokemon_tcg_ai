@@ -38,7 +38,7 @@ class Player:
 
             You task is to describe an action you want to take on the state. Any action is valid as long as it respects the rule of the Pokemon TCG game. 
                                                        
-            If you want to take an action very clearly and verbosely explain what this action is, and using the "id" associated with each pokemon card to be descriptive.
+            If you want to take an action very clearly and succinctly explain what this action is, and using the "id" associated with each pokemon card to be descriptive.
                                                        
             BUT, before you decide on an action know that you have access to a mentor. The mentor specializes in the Pokemon TCG card battle game and is better than you at the game. 
             You are allowed to talk with your mentor my asking any questions you have. You can even ask if for feedback on your moves, and anything else.
@@ -52,6 +52,8 @@ class Player:
             Without "FINAL DECISION" it will be assumed anything you ask will be directed to the mentor for their feedback
                                                        
             Also you may want to do multple moves in a row. However you MUST ONLY CHOOSE ONE MOVE TO DO. You FAIL IF YOU DO MULTIPLE MOVES.
+                                                       
+            Lastly, make sure the way you talk is conversational, do not output content like a pdf with headers and paragraphs, you are talking to humans so make it a conversational tone, and since you are talking ot humans be VERY VERY brief, do not be too verbose!!!
         """)
 
     def make_chain(self):

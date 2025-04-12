@@ -81,6 +81,8 @@ class Master:
         Though there may be many different actions that could be taken, you should only recommend one action. 
                                                        
         Do NOT be very verbose, be straight to the point!!
+                                                       
+        Lastly, remember that you are talking to a human, so you must output your response in a conversational tone, and be very brief, do not be too verbose!!!
         
         
         """)

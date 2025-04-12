@@ -3207,13 +3207,14 @@ async def process_player_turn(player_number: int):
     
     # Now that we have the result, continue with the rest of the processing
     if result["is_legal"]:
-        yield f"data: Legal action: {result['action']}\n\n"
+        # yield f"data: Legal action: {result['action']}\n\n"
         
         # Update the global state with the changes
         update_global_state(result["updated_game_state"], player_number)
         yield "data: Game state updated.\n\n"
     else:
-        yield f"data: Illegal action: {result['explanation']}\n\n"
+        # yield f"data: Illegal action: {result['explanation']}\n\n"
+        ...
     
     # Return the conversation history one message at a time
     for message in result["conversation"]:

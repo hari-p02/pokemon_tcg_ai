@@ -54,6 +54,10 @@ class Referee:
         ```
         
         Conclude by thanking the player for their action.
+                                                       
+        Lastly, remember that you are talking to a human, so you must output your response in a conversational tone, and be very brief, do not be too verbose!!! Though you can think, do not output thought process in your response, just output your conclusions.
+                                                       
+        YOU ALSO FAIL YOUR TASK IF YOU OUTPUT THE PLAYERS DECISION IN YOUR RESPONSE, ONLY OUTPUT YOUR CONCLUSIONS WITH NO THOUGHT PROCESSING/EXPLANATIONS WITHIN 1 to 2 SENTENCES!!!
         """)
     
     def make_chain(self):
@@ -90,7 +94,7 @@ class Referee:
         chain = self.make_chain()
         
         # Print info about the referee's analysis
-        print("--------------REFEREE ANALYZING ACTION-----------------")
+        # print("--------------REFEREE ANALYZING ACTION-----------------")
         
         try:
             # Get the streaming response
@@ -102,16 +106,68 @@ class Referee:
             
             # Process and collect streaming chunks
             full_response = ""
-            # Print each chunk as it comes in for real-time display
+            visible_response = ""
+            json_content = ""
+            in_json_block = False
+            
+            # Collect chunks and only print non-JSON content
+            accumulated_text = ""
+            
+            # Process each chunk as it comes in
             for chunk in response_chunks:
-                # AIMessageChunk objects have a .content attribute to get the text
                 chunk_text = chunk.content if hasattr(chunk, 'content') else str(chunk)
-                print(chunk_text, end="", flush=True)
                 full_response += chunk_text
+                
+                # Check for JSON markers and accumulate text
+                if "```json" in chunk_text:
+                    # Split the chunk at the JSON marker
+                    parts = chunk_text.split("```json", 1)
+                    
+                    # Print any text before the JSON marker
+                    if parts[0]:
+                        print(parts[0], end="", flush=True)
+                        visible_response += parts[0]
+                    
+                    # Start accumulating for JSON content
+                    accumulated_text = "```json" + (parts[1] if len(parts) > 1 else "")
+                    in_json_block = True
+                elif in_json_block:
+                    # Keep accumulating text while in JSON block
+                    accumulated_text += chunk_text
+                    
+                    # Check if we're exiting the JSON block
+                    if "```" in chunk_text:
+                        # Find the position of the closing marker
+                        parts = accumulated_text.split("```", 1)
+                        if len(parts) > 1:
+                            # We have text after the closing marker
+                            json_block = parts[0]
+                            after_json = parts[1]
+                            
+                            # Store the JSON content without printing
+                            json_content += json_block
+                            
+                            # Print the text after the JSON block
+                            print(after_json, end="", flush=True)
+                            visible_response += after_json
+                            
+                            # Reset accumulation
+                            accumulated_text = ""
+                            in_json_block = False
+                else:
+                    # Normal text outside of JSON block, print it
+                    print(chunk_text, end="", flush=True)
+                    visible_response += chunk_text
+            
+            # Handle any remaining accumulated text
+            if in_json_block:
+                # Extract any JSON content without printing
+                json_content += accumulated_text
+            
             print()  # Add a newline after the streaming response
             
             # Process the full response after streaming is complete
-            return self.process_response(full_response, game_state)
+            return self.process_response(full_response, game_state, visible_response)
             
         except Exception as e:
             print(f"Error in referee invoke method: {e}")
@@ -123,13 +179,13 @@ class Referee:
                 "raw_response": "Error"
             }
     
-    def process_response(self, result, game_state):
+    def process_response(self, result, game_state, visible_response):
         """Process the response from the LLM to extract the necessary information"""
         try:
-            print(f"Processing referee response of length: {len(result)}")
+            # print(f"Processing referee response of length: {len(result)}")
             
             # Parse the result to extract the JSON game state
-            is_illegal = result.startswith("ILLEGAL ACTION:")
+            is_illegal = "ILLEGAL ACTION" in result or (visible_response and "ILLEGAL ACTION" in visible_response)
             
             # Extract the updated game state JSON
             json_match = re.search(r'```json\n(.*?)\n```', result, re.DOTALL)
@@ -138,7 +194,7 @@ class Referee:
             if json_match:
                 try:
                     updated_state = json.loads(json_match.group(1))
-                    print("Successfully parsed JSON from referee response")
+                    # print("Successfully parsed JSON from referee response")
                 except json.JSONDecodeError as e:
                     print(f"JSON parsing error: {e}")
                     print(f"JSON content that failed to parse: {json_match.group(1)[:100]}...")
@@ -147,17 +203,22 @@ class Referee:
             else:
                 print("No JSON block found in referee response")
             
+            # Use visible_response for explanation if available
+            explanation_text = visible_response if visible_response else result
+            
             explanation = ""
-            if "Explanation:" in result:
+            if "Explanation:" in explanation_text:
                 explanation_pattern = r'Explanation:\s*(.*?)(?=\n\n|$)'
-                explanation_match = re.search(explanation_pattern, result, re.DOTALL)
+                explanation_match = re.search(explanation_pattern, explanation_text, re.DOTALL)
                 if explanation_match:
                     explanation = explanation_match.group(1).strip()
-                    print(f"Found explanation: {explanation[:50]}...")
+                    # print(f"Found explanation: {explanation[:50]}...")
                 else:
-                    print("Explanation pattern matched but couldn't extract content")
+                    # print("Explanation pattern matched but couldn't extract content")
+                    explanation = explanation_text  # Fallback to using the whole visible text
             else:
-                print("No Explanation section found in response")
+                # print("No Explanation section found in response")
+                explanation = explanation_text  # Use the whole visible text as explanation
             
             return {
                 "is_legal": not is_illegal,
