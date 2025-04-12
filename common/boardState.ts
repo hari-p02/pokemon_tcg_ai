@@ -1,10 +1,9 @@
 interface Card {
-  id: string;
-  details: any;
+  info: any;
 }
 
 interface PokemonInPlay {
-  id: string;
+  info: any;
   hp: number;
   attachedCards?: Card[];
 }
@@ -26,6 +25,3 @@ interface BoardState {
 }
 
 export type { BoardState, PlayerState, PokemonInPlay as Pokemon, Card };
-
-
-
