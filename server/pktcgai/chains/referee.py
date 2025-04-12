@@ -211,7 +211,7 @@ class Referee:
                 explanation_pattern = r'Explanation:\s*(.*?)(?=\n\n|$)'
                 explanation_match = re.search(explanation_pattern, explanation_text, re.DOTALL)
                 if explanation_match:
-                    explanation = explanation_match.group(1).strip()
+                    explanation = explanation_match.group(1)#.strip()
                     # print(f"Found explanation: {explanation[:50]}...")
                 else:
                     # print("Explanation pattern matched but couldn't extract content")
