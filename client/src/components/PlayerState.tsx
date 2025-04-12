@@ -30,8 +30,8 @@ const PlayerState = ({
       gap={4}
       style={style}
       pb="5px"
-      bg={isPlayerTwo ? 'rgba(186, 186, 118, 0.3)' : 'rgba(112, 75, 112, 0.3)'}
-      borderRadius="md"
+      bg={isPlayerTwo ? 'rgba(186, 118, 118, 0.3)' : 'rgba(136, 88, 136, 0.3)'}
+      borderRadius={isOpponent ? '15px' : 'md'}
       mb={isOpponent ? '10px' : '20px'}
     >
       {/* First column - Prize Cards */}
