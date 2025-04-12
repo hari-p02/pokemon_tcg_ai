@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useCardMap } from '../App';
 import McFlex from '../McFlex/McFlex';
 import cardBackImage from '../assets/cardback.png';
+import sleeveImage from '../assets/sleeve.png';
 import { Card } from '../boardState';
 import SpotlightableCard from './SpotlightableCard';
 
@@ -11,9 +12,10 @@ const MotionImage = motion(Image);
 interface HandProps {
   hand: Card[] | null;
   isOpponent?: boolean;
+  isPlayerTwo?: boolean;
 }
 
-const Hand = ({ hand, isOpponent = false }: HandProps) => {
+const Hand = ({ hand, isOpponent = false, isPlayerTwo = false }: HandProps) => {
   const cardMap = useCardMap();
 
   if (!hand || !cardMap[hand[0].id]) return <McFlex></McFlex>;
@@ -22,13 +24,17 @@ const Hand = ({ hand, isOpponent = false }: HandProps) => {
     <McFlex gap={2} bg="rgba(128, 128, 128, 0.3)" p={2} borderRadius="md">
       {hand?.map((card, index) => {
         const cardInfo = cardMap[card.id];
-        const cardImage = isOpponent ? cardBackImage : cardInfo.images.large;
+        const cardImage = isOpponent
+          ? isPlayerTwo
+            ? cardBackImage
+            : sleeveImage
+          : cardInfo.images.large;
 
         return (
           <SpotlightableCard key={index} cardId={card.id} cardImage={cardImage}>
             <MotionImage
               src={cardImage}
-              alt={isOpponent ? 'Card Back' : cardInfo.name}
+              alt={isPlayerTwo ? 'Card Back' : cardInfo.name}
               height="100px"
               borderRadius="md"
               width="auto"

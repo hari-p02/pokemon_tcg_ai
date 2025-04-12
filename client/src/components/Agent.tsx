@@ -24,7 +24,7 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentAgent, setCurrentAgent] = useState('Oak');
+  const [currentAgent, setCurrentAgent] = useState('Ash');
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const toast = useToast();
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -244,76 +244,87 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   return (
     <McFlex position="relative" mx="20px" orient="bottom" w="300px" col>
       <VStack spacing={4} width="100%">
-        <Box display="flex" width="100%" justifyContent="space-between">
+        <McFlex gap={3}>
           <Button
-            colorScheme="blue"
+            bg="purple.500"
+            color="white"
             onClick={() => handlePlayerTurn(1)}
             isDisabled={isLoading}
-            width="48%"
+            width="35%"
+            size="lg"
+            fontWeight="bold"
+            _hover={{ transform: 'scale(1.02)', bg: 'purple.600' }}
+            transition="all 0.2s"
           >
-            Player 1 Turn
+            Ash
           </Button>
           <Button
-            colorScheme="green"
+            bg="yellow.400"
+            color="black"
             onClick={() => handlePlayerTurn(2)}
             isDisabled={isLoading}
-            width="48%"
+            width="50%"
+            size="lg"
+            fontWeight="bold"
+            _hover={{ transform: 'scale(1.02)', bg: 'yellow.500' }}
+            transition="all 0.2s"
           >
-            Player 2 Turn
+            Team Rocket
           </Button>
-        </Box>
-
-        <Box
-          bg="white"
-          borderRadius="20px"
-          padding="15px"
-          boxShadow="md"
-          width="250px"
-          maxHeight="200px"
-          overflowY="auto"
-          mb="20px"
-          position="relative"
-          ref={textBoxRef}
-          css={{
-            '&::-webkit-scrollbar': {
-              display: 'none',
-            },
-            '&': {
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-            },
-          }}
-          _after={{
-            content: '""',
-            position: 'absolute',
-            bottom: '-20px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '0',
-            height: '0',
-            borderLeft: '20px solid transparent',
-            borderRight: '20px solid transparent',
-            borderTop: '20px solid white',
-          }}
-        >
-          <Text
-            fontFamily="monospace"
-            fontSize="md"
-            color="black"
-            whiteSpace="pre-wrap"
+        </McFlex>
+        <Box position="relative" mb="20px">
+          <Box
+            bg="white"
+            borderRadius="20px"
+            padding="15px"
+            boxShadow="md"
+            width="250px"
+            maxHeight="200px"
+            overflowY="auto"
+            ref={textBoxRef}
+            css={{
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              '&': {
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              },
+            }}
+            display={displayedText ? 'block' : 'none'}
           >
-            {displayedText}
-            {isLoading && (
-              <Box
-                as="span"
-                borderRight="2px solid black"
-                display="inline-block"
-                sx={{
-                  animation: `${blinkAnimation} 0.75s step-end infinite`,
-                }}
-              />
-            )}
-          </Text>
+            <Text
+              fontFamily="monospace"
+              fontSize="md"
+              color="black"
+              whiteSpace="pre-wrap"
+            >
+              {displayedText}
+              {isLoading && (
+                <Box
+                  as="span"
+                  borderRight="2px solid black"
+                  display="inline-block"
+                  sx={{
+                    animation: `${blinkAnimation} 0.75s step-end infinite`,
+                  }}
+                />
+              )}
+            </Text>
+          </Box>
+          {displayedText && (
+            <Box
+              position="absolute"
+              bottom="-20px"
+              left="50%"
+              transform="translateX(-50%)"
+              width="0"
+              height="0"
+              borderLeft="20px solid transparent"
+              borderRight="20px solid transparent"
+              borderTop="20px solid white"
+            />
+          )}
         </Box>
 
         <McFlex width="300px" autoH>

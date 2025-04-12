@@ -14,13 +14,15 @@ import McFlex from '../McFlex/McFlex';
 interface PlayerStateProps {
   playerState: PlayerStateType;
   style?: CSSProperties;
-  isOpponent?: boolean;
+  isInactive?: boolean;
+  isPlayerTwo?: boolean;
 }
 
 const PlayerState = ({
   playerState,
   style,
-  isOpponent = false,
+  isInactive: isOpponent = false,
+  isPlayerTwo = false,
 }: PlayerStateProps) => {
   return (
     <McGrid
@@ -28,11 +30,16 @@ const PlayerState = ({
       gap={4}
       style={style}
       pb="5px"
-      bg="rgba(128, 128, 128, 0.3)"
+      bg={isPlayerTwo ? 'rgba(186, 186, 118, 0.3)' : 'rgba(112, 75, 112, 0.3)'}
       borderRadius="md"
+      mb={isOpponent ? '0px' : '20px'}
     >
       {/* First column - Prize Cards */}
-      <PrizeCards prizeCards={playerState.prizeCards} isOpponent={isOpponent} />
+      <PrizeCards
+        prizeCards={playerState.prizeCards}
+        isOpponent={isOpponent}
+        isPlayerTwo={isPlayerTwo}
+      />
 
       {/* Second column - Nested grid with 3 rows */}
       <McGrid templateRows="1fr auto auto" gap={2}>
@@ -42,12 +49,20 @@ const PlayerState = ({
           <LostZone lostZone={playerState.lostZone} isOpponent={isOpponent} />
         </McGrid>
         <Bench bench={playerState.bench} isOpponent={isOpponent} />
-        <Hand hand={playerState.hand} isOpponent={isOpponent} />
+        <Hand
+          hand={playerState.hand}
+          isOpponent={isOpponent}
+          isPlayerTwo={isPlayerTwo}
+        />
       </McGrid>
 
       {/* Third column - Nested grid with 2 rows */}
       <McFlex col orient={isOpponent ? 'top' : 'top right'}>
-        <Deck deck={playerState.deck} isOpponent={isOpponent} />
+        <Deck
+          deck={playerState.deck}
+          isOpponent={isOpponent}
+          isPlayerTwo={isPlayerTwo}
+        />
         <Discard discard={playerState.discard} isOpponent={isOpponent} />
       </McFlex>
     </McGrid>

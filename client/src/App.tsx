@@ -29,7 +29,7 @@ export const useSetActivePlayer = () => useSetAtom(activePlayerAtom);
 
 // Default window dimensions for scaling
 const desktopWindowWidth = 1300;
-const desktopWindowHeight = 720;
+const desktopWindowHeight = 750;
 
 function App() {
   const [gameState, setGameState] = useState<BoardState | null>(null);
@@ -121,9 +121,10 @@ function App() {
         />
         <Box
           position="absolute"
-          top="50%"
+          bottom="0"
           left="50%"
-          transform={`translate(-50%, -50%) scale(${scaleFactor})`}
+          transform={`translate(-50%, 0) scale(${scaleFactor})`}
+          transformOrigin="bottom center"
           width={`${desktopWindowWidth}px`}
           height={`${desktopWindowHeight}px`}
         >
@@ -165,13 +166,14 @@ function App() {
                     my="-70px"
                   >
                     <PlayerState
-                      isOpponent={true}
+                      isInactive={true}
                       playerState={
                         activePlayer === 1
                           ? gameState.playerTwo
                           : gameState.playerOne
                       }
                       style={{ transform: 'rotate(180deg)' }}
+                      isPlayerTwo={activePlayer === 1}
                     />
                   </Box>
                   <Divider
@@ -186,6 +188,7 @@ function App() {
                         ? gameState.playerOne
                         : gameState.playerTwo
                     }
+                    isPlayerTwo={activePlayer === 2}
                   />
                 </>
               )}

@@ -11,9 +11,14 @@ const MotionImage = motion(Image);
 interface PrizeCardsProps {
   prizeCards: Card[] | null;
   isOpponent?: boolean;
+  isPlayerTwo?: boolean;
 }
 
-const PrizeCards = ({ prizeCards, isOpponent = false }: PrizeCardsProps) => {
+const PrizeCards = ({
+  prizeCards,
+  isOpponent = false,
+  isPlayerTwo = false,
+}: PrizeCardsProps) => {
   return (
     <McFlex
       orient={isOpponent ? 'top left' : 'top'}
@@ -24,7 +29,7 @@ const PrizeCards = ({ prizeCards, isOpponent = false }: PrizeCardsProps) => {
         {prizeCards?.map((_, index) => (
           <MotionImage
             key={index}
-            src={isOpponent ? cardBackImage : sleeveImage}
+            src={isPlayerTwo ? cardBackImage : sleeveImage}
             alt="Prize Card"
             style={{
               width: 'auto',

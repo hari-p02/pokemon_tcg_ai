@@ -10,9 +10,10 @@ const MotionBox = motion(Box);
 interface DeckProps {
   deck: Card[] | null;
   isOpponent?: boolean;
+  isPlayerTwo?: boolean;
 }
 
-const Deck = ({ deck, isOpponent = false }: DeckProps) => {
+const Deck = ({ deck, isOpponent = false, isPlayerTwo = false }: DeckProps) => {
   // Number of visible cards in the stack
   const stackSize = 5;
 
@@ -45,7 +46,7 @@ const Deck = ({ deck, isOpponent = false }: DeckProps) => {
           >
             <Image
               borderRadius="md"
-              src={isOpponent ? cardBackImage : sleeveImage}
+              src={isPlayerTwo ? cardBackImage : sleeveImage}
               alt="Deck"
               width="75px"
               height="100px"
