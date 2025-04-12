@@ -1,13 +1,16 @@
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
+
+# Global card mapping dictionary
+CARD_MAP: Dict[int, dict] = {}
 
 @dataclass
 class Card:
-    info: dict
+    id: int
 
 @dataclass
 class PokemonInPlay:
-    info: dict
+    id: int
     hp: int
     attachedCards: Optional[List[Card]] = None
 
@@ -26,10 +29,20 @@ class PlayerState:
 class BoardState:
     playerOne: PlayerState
     playerTwo: PlayerState
+    cardMap: Dict[int, dict]  # Include the card map in the board state
+
+def get_card_map(deck: List[dict]) -> Dict[int, dict]:
+    card_map = {}
+    for i, card_info in enumerate(deck):
+        card_map[i] = card_info
+    return card_map
 
 def get_initial_state(deck: List[dict]) -> BoardState:
-    # Convert deck to Card objects
-    cards = [Card(info=card) for card in deck]
+    # Create a mapping of card IDs to card info
+    card_map = get_card_map(deck)
+
+    # Convert deck to Card objects with IDs
+    cards = [Card(id=i) for i in range(len(deck))]
     
     # Shuffle the deck
     import random
@@ -38,7 +51,8 @@ def get_initial_state(deck: List[dict]) -> BoardState:
     # Find a basic Pokemon for active
     active_card = None
     for card in cards:
-        if card.info.get('supertype') == 'Pokémon' and 'Basic' in card.info.get('subtypes', []):
+        card_info = card_map[card.id]
+        if card_info.get('supertype') == 'Pokémon' and 'Basic' in card_info.get('subtypes', []):
             active_card = card
             cards.remove(card)
             break
@@ -46,7 +60,8 @@ def get_initial_state(deck: List[dict]) -> BoardState:
     # Find basic Pokemon for bench
     bench_cards = []
     for card in cards[:]:
-        if card.info.get('supertype') == 'Pokémon' and 'Basic' in card.info.get('subtypes', []):
+        card_info = card_map[card.id]
+        if card_info.get('supertype') == 'Pokémon' and 'Basic' in card_info.get('subtypes', []):
             bench_cards.append(card)
             cards.remove(card)
             if len(bench_cards) == 3:  # We want 3 Pokemon on bench
@@ -55,7 +70,8 @@ def get_initial_state(deck: List[dict]) -> BoardState:
     # Find energy cards to attach to bench Pokemon
     energy_cards = []
     for card in cards[:]:
-        if card.info.get('supertype') == 'Energy':
+        card_info = card_map[card.id]
+        if card_info.get('supertype') == 'Energy':
             energy_cards.append(card)
             cards.remove(card)
             if len(energy_cards) == 3:  # One energy per bench Pokemon
@@ -65,16 +81,18 @@ def get_initial_state(deck: List[dict]) -> BoardState:
     bench_pokemon = []
     for i, pokemon in enumerate(bench_cards):
         attached_energy = [energy_cards[i]] if i < len(energy_cards) else []
+        card_info = card_map[pokemon.id]
         bench_pokemon.append(PokemonInPlay(
-            info=pokemon.info,
-            hp=int(pokemon.info.get('hp', 0)),
+            id=pokemon.id,
+            hp=int(card_info.get('hp', 0)),
             attachedCards=attached_energy
         ))
     
     # Find a stadium card
     stadium_card = None
     for card in cards[:]:
-        if card.info.get('supertype') == 'Trainer' and 'Stadium' in card.info.get('subtypes', []):
+        card_info = card_map[card.id]
+        if card_info.get('supertype') == 'Trainer' and 'Stadium' in card_info.get('subtypes', []):
             stadium_card = card
             cards.remove(card)
             break
@@ -82,7 +100,10 @@ def get_initial_state(deck: List[dict]) -> BoardState:
     # Initialize player state with the organized cards
     player_state = PlayerState(
         hand=cards[:7],  # First 7 cards in hand
-        active=PokemonInPlay(info=active_card.info, hp=int(active_card.info.get('hp', 0))) if active_card else None,
+        active=PokemonInPlay(
+            id=active_card.id, 
+            hp=int(card_map[active_card.id].get('hp', 0))
+        ) if active_card else None,
         bench=bench_pokemon,
         prizeCards=cards[7:13] if len(cards) > 13 else [],  # Next 6 cards as prize cards
         deck=cards[13:],  # Remaining cards in deck
@@ -91,8 +112,9 @@ def get_initial_state(deck: List[dict]) -> BoardState:
         stadium=stadium_card
     )
     
-    # Create board state with same state for both players
+    # Create board state with same state for both players and include the card map
     return BoardState(
         playerOne=player_state,
-        playerTwo=player_state
+        playerTwo=player_state,
+        cardMap=card_map
     ) 

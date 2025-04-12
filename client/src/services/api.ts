@@ -26,6 +26,7 @@ export interface PlayerState {
 export interface BoardState {
   playerOne: PlayerState;
   playerTwo: PlayerState;
+  cardMap: Record<number, any>;
 }
 
 export const fetchGameState = async (): Promise<BoardState> => {
