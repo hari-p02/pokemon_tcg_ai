@@ -1,0 +1,8 @@
+{
+  "name": "pokemon-ai",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "./run-dev-tmux.sh",
+    "stop": "tmux kill-session -t pokemon-ai"
+  }
+} 
