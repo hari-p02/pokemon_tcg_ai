@@ -50,7 +50,7 @@ class Referee:
         
         Updated Game State:
         ```json
-        {{Updated game state JSON if legal, or original game state if illegal}}
+        {{Updated game state JSON if and only if the action is legal}}
         ```
         
         Conclude by thanking the player for their action.
@@ -188,7 +188,7 @@ class Referee:
             is_illegal = "ILLEGAL ACTION" in result or (visible_response and "ILLEGAL ACTION" in visible_response)
             
             # Extract the updated game state JSON
-            json_match = re.search(r'```json\n(.*?)\n```', result, re.DOTALL)
+            json_match = re.search(r"```json\n(.*?)\n```", result, re.DOTALL)
             updated_state = None
             
             if json_match:
