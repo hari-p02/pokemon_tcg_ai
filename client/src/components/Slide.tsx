@@ -1,29 +1,16 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Image } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import logo from '../assets/logo.png';
 
 const MotionBox = motion(Box);
 
 interface SlideProps {
   children: React.ReactNode;
   onNext: () => void;
-  isLastSlide?: boolean;
+  showLogo?: boolean;
 }
 
-const Slide = ({ children, onNext, isLastSlide = false }: SlideProps) => {
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        onNext();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [onNext]);
-
+const Slide = ({ children, onNext, showLogo = true }: SlideProps) => {
   return (
     <Box
       w="100vw"
@@ -35,6 +22,19 @@ const Slide = ({ children, onNext, isLastSlide = false }: SlideProps) => {
       position="relative"
       overflow="hidden"
     >
+      {showLogo && (
+        <Image
+          src={logo}
+          alt="logo"
+          width="125px"
+          height="125px"
+          position="absolute"
+          top="0"
+          left="0"
+          opacity="0.5"
+        />
+      )}
+
       <MotionBox
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

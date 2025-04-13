@@ -14,7 +14,7 @@ import intromusic from './audio/intromusic.mp3';
 import battleMusic from './audio/battlemusic.mp3';
 import hackdemo from './video/hackdemo.mov';
 import diagram from './assets/diagram.jpeg';
-
+import logo from './assets/logo.png';
 export const cardMapAtom = atom<Record<number, any>>({});
 export const scaleFactorAtom = atom<number>(1);
 export const spotlightCardAtom = atom<{ id: number; img: string } | null>(null);
@@ -51,7 +51,7 @@ function App() {
 
   // Effect to determine which audio should play based on view
   useEffect(() => {
-    if (currentView === 'slide2') {
+    if (currentView === 'home') {
       setCurrentAudio('intro');
     } else if (currentView === 'game') {
       setCurrentAudio('battle');
@@ -88,19 +88,32 @@ function App() {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === 'h') {
-        setShowHari(true);
-        setShowSecondColumn(true);
+      if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevious();
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+  }, [currentView, showHari, showSecondColumn]);
 
   const handleNext = () => {
+    // Handle special cases for slide2 and slide3
+    if (currentView === 'slide2' && !showHari) {
+      setShowHari(true);
+      return;
+    }
+    if (currentView === 'slide3' && !showSecondColumn) {
+      setShowSecondColumn(true);
+      return;
+    }
+
+    // Reset states for next slide
     setShowSecondColumn(false);
     setShowHari(false);
+
     switch (currentView) {
       case 'slide1':
         setCurrentView('slide2');
@@ -128,33 +141,85 @@ function App() {
     }
   };
 
+  const handlePrevious = () => {
+    // Handle special cases for slide2 and slide3
+    if (currentView === 'slide2' && showHari) {
+      setShowHari(false);
+      return;
+    }
+    if (currentView === 'slide3' && showSecondColumn) {
+      setShowSecondColumn(false);
+      return;
+    }
+
+    // Reset states for previous slide
+    setShowSecondColumn(false);
+    setShowHari(false);
+
+    switch (currentView) {
+      case 'slide1':
+        setCurrentView('slide5');
+        break;
+      case 'slide2':
+        setCurrentView('slide1');
+        break;
+      case 'slide3':
+        setCurrentView('slide2');
+        break;
+      case 'slide4':
+        setCurrentView('slide3');
+        break;
+      case 'home':
+        setCurrentView('slide4');
+        break;
+      case 'game':
+        setCurrentView('home');
+        break;
+      case 'slide5':
+        setCurrentView('game');
+        break;
+      default:
+        break;
+    }
+  };
+
   const renderView = () => {
     switch (currentView) {
       case 'home':
         return <HomePage onNext={handleNext} />;
       case 'slide1':
         return (
-          <Slide onNext={handleNext}>
+          <Slide onNext={handleNext} showLogo={false}>
             <McFlex col>
-              <Text
-                fontFamily="'Press Start 2P', monospace"
-                fontSize="100px"
-                fontWeight="900"
-                color="white"
-                textAlign="center"
-                textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
-                letterSpacing="3px"
-                mb="40px"
-              >
-                pok
-                <Text as="span" fontSize="100px">
-                  é
+              <McFlex gap={6}>
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width="200px"
+                  height="200px"
+                  mb="40px"
+                />
+
+                <Text
+                  fontFamily="'Press Start 2P', monospace"
+                  fontSize="100px"
+                  fontWeight="900"
+                  color="white"
+                  textAlign="center"
+                  textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
+                  letterSpacing="3px"
+                  mb="40px"
+                >
+                  pok
+                  <Text as="span" fontSize="100px">
+                    é
+                  </Text>
+                  play
+                  <Text as="span" fontSize="60px" color="#FFD700">
+                    .ai
+                  </Text>
                 </Text>
-                play
-                <Text as="span" fontSize="60px" color="#FFD700">
-                  .ai
-                </Text>
-              </Text>
+              </McFlex>
               <Text
                 fontFamily="'Press Start 2P', monospace"
                 fontSize="20px"
@@ -295,7 +360,7 @@ function App() {
                 textAlign="center"
                 textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
                 letterSpacing="3px"
-                my="40px"
+                mt="40px"
               >
                 MOTIVATION
               </Text>

@@ -1,6 +1,5 @@
-import { Box, Button, Text, VStack, Image } from '@chakra-ui/react';
+import { Box, Button, Image, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 
 const MotionBox = motion(Box);
 
@@ -9,20 +8,6 @@ interface HomePageProps {
 }
 
 const HomePage = ({ onNext }: HomePageProps) => {
-  // Add keyboard event listener for Enter key
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        onNext();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [onNext]);
-
   return (
     <Box
       w="100vw"
@@ -389,10 +374,10 @@ const HomePage = ({ onNext }: HomePageProps) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut', delay: 0.5 }}
       >
-        <VStack spacing={8}>
+        <VStack spacing={2}>
           <Text
             fontFamily="'Press Start 2P', monospace"
-            fontSize="48px"
+            fontSize="50px"
             fontWeight="900"
             color="white"
             textAlign="center"
@@ -400,7 +385,14 @@ const HomePage = ({ onNext }: HomePageProps) => {
             letterSpacing="3px"
             mb="40px"
           >
-            POKEPLAY.AI
+            pok
+            <Text as="span" fontSize="50px">
+              é
+            </Text>
+            play
+            <Text as="span" fontSize="30px" color="#FFD700">
+              .ai
+            </Text>
           </Text>
           <Button
             bg="linear-gradient(135deg, #48BB78 0%, #2F855A 100%)"
