@@ -57,12 +57,16 @@ const Hand = ({ hand, isOpponent = false, isPlayerTwo = false }: HandProps) => {
                 borderRadius: 'md',
                 backdropFilter: 'brightness(1.1)',
               }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.4,
-                delay: index * 0.1,
-                ease: 'easeOut',
+              initial={{ scale: 0, y: 20 }}
+              animate={{
+                scale: 1,
+                y: 0,
+                transition: {
+                  type: 'spring',
+                  damping: 15,
+                  stiffness: 200,
+                  delay: index * 0.2,
+                },
               }}
               whileHover={{
                 y: -10,

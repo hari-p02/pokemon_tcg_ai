@@ -33,6 +33,7 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
               type: 'spring',
               damping: 15,
               stiffness: 200,
+              delay: 0.5,
             },
           }}
         >
@@ -41,7 +42,7 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
               <Box
                 position="absolute"
                 top="-8px"
-                right="-8px"
+                right="-2px"
                 zIndex={1}
                 width="30px"
                 height="30px"
@@ -55,9 +56,12 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
               >
                 <Text
                   color="white"
-                  fontWeight="bold"
-                  fontSize="12px"
-                  textShadow="0 1px 2px rgba(0,0,0,0.5)"
+                  fontWeight="900"
+                  fontFamily="'Press Start 2P', monospace"
+                  fontSize="6px"
+                  letterSpacing="1px"
+                  textTransform="uppercase"
+                  textShadow="2px 2px 0 rgba(0, 0, 0, 0.5)"
                 >
                   {active.hp}
                 </Text>

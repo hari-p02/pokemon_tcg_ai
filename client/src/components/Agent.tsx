@@ -387,15 +387,12 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
       }
     }
   }, [audioQueue, isAudioPlaying]);
-
-  // Cleanup audio resources
   useEffect(() => {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
       }
-      // Clean up object URLs
       messageQueue.forEach((item) => {
         if (item.audioUrl) {
           URL.revokeObjectURL(item.audioUrl);
@@ -414,8 +411,9 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
             onClick={() => handlePlayerTurn(1)}
             width="35%"
             size="lg"
-            fontWeight="extrabold"
-            fontSize="12px"
+            fontWeight="900"
+            fontFamily="'Press Start 2P', monospace"
+            fontSize="10px"
             letterSpacing="1px"
             textTransform="uppercase"
             transition="all 0.2s"
@@ -446,8 +444,9 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
             onClick={() => handlePlayerTurn(2)}
             width="50%"
             size="lg"
-            fontWeight="extrabold"
-            fontSize="12px"
+            fontWeight="900"
+            fontFamily="'Press Start 2P', monospace"
+            fontSize="10px"
             letterSpacing="1px"
             textTransform="uppercase"
             transition="all 0.2s"
@@ -475,10 +474,10 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
         </McFlex>
         <Box position="relative" mb="20px">
           <Box
-            bg="white"
-            borderRadius="20px"
+            bg="rgba(0, 0, 0, 0.7)"
+            borderRadius="8px"
             padding="15px"
-            boxShadow="md"
+            boxShadow="0 4px 0 rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.4)"
             width="250px"
             maxHeight="240px"
             overflowY="auto"
@@ -493,18 +492,29 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
               },
             }}
             display={displayedText ? 'block' : 'none'}
+            border="2px solid rgba(255, 255, 255, 0.1)"
           >
             <Text
-              fontFamily="monospace"
-              fontSize="md"
-              color="black"
+              fontFamily="'Press Start 2P', monospace"
+              fontSize="10px"
+              color="white"
               whiteSpace="pre-wrap"
+              lineHeight="1.8"
+              letterSpacing="0.5px"
+              textShadow="2px 2px 0 rgba(0, 0, 0, 0.5)"
+              css={{
+                fontFeatureSettings: '"tnum"',
+                fontVariantNumeric: 'tabular-nums',
+                textRendering: 'optimizeLegibility',
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+              }}
             >
               {displayedText}
               {isLoading && (
                 <Box
                   as="span"
-                  borderRight="2px solid black"
+                  borderRight="2px solid white"
                   display="inline-block"
                   sx={{
                     animation: `${blinkAnimation} 0.75s step-end infinite`,
@@ -517,30 +527,36 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
             <Box
               position="absolute"
               zIndex="10"
-              bottom="-15px"
+              bottom="-24px"
               left="50%"
               transform="translateX(-50%)"
               width="0"
               height="0"
               borderLeft="20px solid transparent"
               borderRight="20px solid transparent"
-              borderTop="20px solid white"
+              borderTop="20px solid rgba(0, 0, 0, 0.326)"
             />
           )}
         </Box>
 
         <McFlex width="300px" autoH>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${currentAgent}-${activePlayer}`}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-            >
-              <Image src={getAgentImage()} w="100%" alt={currentAgent} />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, ease: 'easeInOut', delay: 2 }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`${currentAgent}-${activePlayer}`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+              >
+                <Image src={getAgentImage()} w="100%" alt={currentAgent} />
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         </McFlex>
       </VStack>
     </McFlex>

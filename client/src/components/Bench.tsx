@@ -35,7 +35,7 @@ const Bench = ({ bench, isOpponent = false }: BenchProps) => {
             position="relative"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
+            transition={{ duration: 0.5, delay: index * 0.2 }}
           >
             <SpotlightableCard cardId={pokemon.id} cardImage={pokemonImage}>
               {pokemon.hp > 0 && (
@@ -56,9 +56,12 @@ const Bench = ({ bench, isOpponent = false }: BenchProps) => {
                 >
                   <Text
                     color="white"
-                    fontWeight="bold"
-                    fontSize="9px"
-                    textShadow="0 1px 2px rgba(0,0,0,0.5)"
+                    fontWeight="900"
+                    fontFamily="'Press Start 2P', monospace"
+                    fontSize="6px"
+                    letterSpacing="1px"
+                    textTransform="uppercase"
+                    textShadow="2px 2px 0 rgba(0, 0, 0, 0.5)"
                   >
                     {pokemon.hp}
                   </Text>
