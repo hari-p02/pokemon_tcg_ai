@@ -10,9 +10,14 @@ const MotionImage = motion(Image);
 interface StadiumProps {
   stadium: Card | null;
   isOpponent?: boolean;
+  activePlayer?: number;
 }
 
-const Stadium = ({ stadium, isOpponent = false }: StadiumProps) => {
+const Stadium = ({
+  stadium,
+  isOpponent = false,
+  activePlayer,
+}: StadiumProps) => {
   const cardMap = useCardMap();
 
   if (!stadium || !cardMap[stadium.id]) return <McFlex></McFlex>;
@@ -24,6 +29,7 @@ const Stadium = ({ stadium, isOpponent = false }: StadiumProps) => {
     <McFlex>
       <SpotlightableCard cardId={stadium.id} cardImage={cardImage}>
         <MotionImage
+          key={activePlayer}
           src={cardImage}
           alt={stadiumInfo.name || 'Stadium Card'}
           style={{

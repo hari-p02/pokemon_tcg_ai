@@ -11,9 +11,10 @@ const MotionImage = motion(Image);
 interface ActiveProps {
   active: Pokemon | null;
   isOpponent?: boolean;
+  activePlayer?: number;
 }
 
-const Active = ({ active, isOpponent = false }: ActiveProps) => {
+const Active = ({ active, isOpponent = false, activePlayer }: ActiveProps) => {
   const cardMap = useCardMap();
 
   if (!active || !cardMap[active.id]) return <McFlex></McFlex>;
@@ -36,6 +37,7 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
               delay: 0.5,
             },
           }}
+          key={activePlayer}
         >
           <SpotlightableCard cardId={active.id} cardImage={cardImage}>
             {active.hp > 0 && (
@@ -102,7 +104,7 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
               }}
             />
             {active.attachedCards && active.attachedCards.length > 0 && (
-              <Flex position="absolute" top="0" left="0" direction="column">
+              <Flex position="absolute" top="0" left="-12px" direction="column">
                 {active.attachedCards.map((card, cardIndex) => {
                   const attachedCardInfo = cardMap[card.id];
                   const attachedCardImage = attachedCardInfo.images.large;

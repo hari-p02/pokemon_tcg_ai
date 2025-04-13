@@ -10,9 +10,14 @@ const MotionImage = motion(Image);
 interface DiscardProps {
   discard: Card[] | null;
   isOpponent?: boolean;
+  activePlayer?: number;
 }
 
-const Discard = ({ discard, isOpponent = false }: DiscardProps) => {
+const Discard = ({
+  discard,
+  isOpponent = false,
+  activePlayer,
+}: DiscardProps) => {
   const cardMap = useCardMap();
   const lastCard =
     discard && discard.length > 0 ? discard[discard.length - 1] : null;
@@ -26,6 +31,7 @@ const Discard = ({ discard, isOpponent = false }: DiscardProps) => {
     <McFlex p={2} auto>
       <SpotlightableCard cardId={lastCard.id} cardImage={cardImage}>
         <MotionImage
+          key={activePlayer}
           src={cardImage}
           alt={cardInfo.name || 'Discard Card'}
           height="100px"

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response, BackgroundTasks
+from fastapi import APIRouter, Response, BackgroundTasks, Query
 from fastapi.responses import StreamingResponse
 import json
 import asyncio
@@ -3372,12 +3372,12 @@ async def process_player_turn(player_number: int):
     yield "event: close\ndata: stream_complete\n\n"
 
 @router.get("/state")
-async def get_state():
+async def get_state(preset: bool = Query(False, description="Whether to use the preset state")):
     global state
     
     # Initialize state if it hasn't been initialized yet
     if state is None:
-        state = get_initial_state(GARDEVOIR_DECK, PIKACHU_DECK)
+        state = get_initial_state(GARDEVOIR_DECK, PIKACHU_DECK, isPreset=preset)
     
     return dataclass_to_dict(state)
 

@@ -11,15 +11,22 @@ interface DeckProps {
   deck: Card[] | null;
   isOpponent?: boolean;
   isPlayerTwo?: boolean;
+  activePlayer?: number;
 }
 
-const Deck = ({ deck, isOpponent = false, isPlayerTwo = false }: DeckProps) => {
+const Deck = ({
+  deck,
+  isOpponent = false,
+  isPlayerTwo = false,
+  activePlayer,
+}: DeckProps) => {
   // Number of visible cards in the stack
   const stackSize = 5;
 
   return (
     <McFlex p={2} auto>
       <MotionBox
+        key={activePlayer}
         position="relative"
         width="75px"
         height="100px"

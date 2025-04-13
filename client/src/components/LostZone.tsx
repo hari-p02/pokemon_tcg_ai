@@ -10,9 +10,14 @@ const MotionImage = motion(Image);
 interface LostZoneProps {
   lostZone: Card[] | null;
   isOpponent?: boolean;
+  activePlayer?: number;
 }
 
-const LostZone = ({ lostZone, isOpponent = false }: LostZoneProps) => {
+const LostZone = ({
+  lostZone,
+  isOpponent = false,
+  activePlayer,
+}: LostZoneProps) => {
   const cardMap = useCardMap();
   const lastCard =
     lostZone && lostZone.length > 0 ? lostZone[lostZone.length - 1] : null;
@@ -25,6 +30,7 @@ const LostZone = ({ lostZone, isOpponent = false }: LostZoneProps) => {
     <McFlex p={2}>
       <SpotlightableCard cardId={lastCard.id} cardImage={cardInfo.images.large}>
         <MotionImage
+          key={activePlayer}
           src={cardInfo.images.large}
           alt={cardInfo.name || 'Lost Zone Card'}
           height="100px"

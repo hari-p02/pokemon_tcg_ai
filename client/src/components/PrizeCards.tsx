@@ -12,12 +12,14 @@ interface PrizeCardsProps {
   prizeCards: Card[] | null;
   isOpponent?: boolean;
   isPlayerTwo?: boolean;
+  activePlayer?: number;
 }
 
 const PrizeCards = ({
   prizeCards,
   isOpponent = false,
   isPlayerTwo = false,
+  activePlayer,
 }: PrizeCardsProps) => {
   return (
     <McFlex
@@ -28,7 +30,7 @@ const PrizeCards = ({
       <McGrid templateColumns="1fr 1fr" gap={1} auto>
         {prizeCards?.map((_, index) => (
           <MotionImage
-            key={index}
+            key={`${index}-${activePlayer}`}
             src={isPlayerTwo ? cardBackImage : sleeveImage}
             alt="Prize Card"
             style={{

@@ -12,9 +12,10 @@ const MotionImage = motion(Image);
 interface BenchProps {
   bench: Pokemon[] | null;
   isOpponent?: boolean;
+  activePlayer?: number;
 }
 
-const Bench = ({ bench, isOpponent = false }: BenchProps) => {
+const Bench = ({ bench, isOpponent = false, activePlayer }: BenchProps) => {
   const cardMap = useCardMap();
 
   // Return empty flex when bench is empty or invalid
@@ -31,7 +32,7 @@ const Bench = ({ bench, isOpponent = false }: BenchProps) => {
 
         return (
           <MotionBox
-            key={index}
+            key={activePlayer ?? '' + index}
             position="relative"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

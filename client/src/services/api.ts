@@ -30,9 +30,13 @@ export interface BoardState {
   highlightedCard?: number | null;
 }
 
-export const fetchGameState = async (): Promise<BoardState> => {
+export const fetchGameState = async (
+  preset: boolean = false
+): Promise<BoardState> => {
   try {
-    const response = await axios.get<BoardState>(`${API_BASE_URL}/state`);
+    const response = await axios.get<BoardState>(
+      `${API_BASE_URL}/state?preset=${preset}`
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching game state:', error);

@@ -13,9 +13,15 @@ interface HandProps {
   hand: Card[] | null;
   isOpponent?: boolean;
   isPlayerTwo?: boolean;
+  activePlayer?: number;
 }
 
-const Hand = ({ hand, isOpponent = false, isPlayerTwo = false }: HandProps) => {
+const Hand = ({
+  hand,
+  isOpponent = false,
+  isPlayerTwo = false,
+  activePlayer,
+}: HandProps) => {
   const cardMap = useCardMap();
 
   if (!hand || hand.length === 0 || !cardMap[hand[0].id])
@@ -34,9 +40,11 @@ const Hand = ({ hand, isOpponent = false, isPlayerTwo = false }: HandProps) => {
         return (
           <SpotlightableCard key={index} cardId={card.id} cardImage={cardImage}>
             <MotionImage
+              key={activePlayer ?? '' + index}
               src={cardImage}
               alt={isPlayerTwo ? 'Card Back' : cardInfo.name}
-              height="100px"
+              height="100%"
+              maxHeight="100px"
               borderRadius="md"
               width="auto"
               filter="drop-shadow(0 8px 12px rgba(0,0,0,0.4)) drop-shadow(0 16px 24px rgba(0,0,0,0.25))"

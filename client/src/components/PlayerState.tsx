@@ -16,6 +16,7 @@ interface PlayerStateProps {
   style?: CSSProperties;
   isInactive?: boolean;
   isPlayerTwo?: boolean;
+  activePlayer?: number;
 }
 
 const PlayerState = ({
@@ -23,6 +24,7 @@ const PlayerState = ({
   style,
   isInactive: isOpponent = false,
   isPlayerTwo = false,
+  activePlayer,
 }: PlayerStateProps) => {
   return (
     <McGrid
@@ -39,20 +41,38 @@ const PlayerState = ({
         prizeCards={playerState.prizeCards}
         isOpponent={isOpponent}
         isPlayerTwo={isPlayerTwo}
+        activePlayer={activePlayer}
       />
 
       {/* Second column - Nested grid with 3 rows */}
       <McGrid templateRows="1fr auto auto" gap={2}>
         <McGrid templateColumns="1fr 1fr 1fr">
-          <Stadium stadium={playerState.stadium} isOpponent={isOpponent} />
-          <Active active={playerState.active} isOpponent={isOpponent} />
-          <LostZone lostZone={playerState.lostZone} isOpponent={isOpponent} />
+          <Stadium
+            stadium={playerState.stadium}
+            isOpponent={isOpponent}
+            activePlayer={activePlayer}
+          />
+          <Active
+            active={playerState.active}
+            isOpponent={isOpponent}
+            activePlayer={activePlayer}
+          />
+          <LostZone
+            lostZone={playerState.lostZone}
+            isOpponent={isOpponent}
+            activePlayer={activePlayer}
+          />
         </McGrid>
-        <Bench bench={playerState.bench} isOpponent={isOpponent} />
+        <Bench
+          bench={playerState.bench}
+          isOpponent={isOpponent}
+          activePlayer={activePlayer}
+        />
         <Hand
           hand={playerState.hand}
           isOpponent={isOpponent}
           isPlayerTwo={isPlayerTwo}
+          activePlayer={activePlayer}
         />
       </McGrid>
 
@@ -62,8 +82,13 @@ const PlayerState = ({
           deck={playerState.deck}
           isOpponent={isOpponent}
           isPlayerTwo={isPlayerTwo}
+          activePlayer={activePlayer}
         />
-        <Discard discard={playerState.discard} isOpponent={isOpponent} />
+        <Discard
+          discard={playerState.discard}
+          isOpponent={isOpponent}
+          activePlayer={activePlayer}
+        />
       </McFlex>
     </McGrid>
   );
