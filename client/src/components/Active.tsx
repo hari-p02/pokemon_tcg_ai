@@ -112,7 +112,7 @@ const Active = ({ active, isOpponent = false }: ActiveProps) => {
                       <MotionImage
                         src={attachedCardImage}
                         alt={attachedCardInfo.name || 'Attached card'}
-                        height="30px"
+                        height="40px"
                         width="auto"
                         transform="rotate(15deg)"
                         border="1px solid white"
