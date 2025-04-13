@@ -1,5 +1,6 @@
-import { Box, Button, Image, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Image, Text, VStack } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
+import axios from 'axios';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useSetActivePlayer } from '../App';
@@ -17,6 +18,14 @@ interface AgentProps {
   activePlayer: 1 | 2;
 }
 
+interface MessageQueueItem {
+  agent: string;
+  message: string;
+  audioUrl?: string;
+  isGenerating?: boolean;
+  isReadyForAudioGeneration?: boolean;
+}
+
 const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   const [fullText, setFullText] = useState('');
   const [displayedText, setDisplayedText] = useState('');
@@ -24,17 +33,13 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentAgent, setCurrentAgent] = useState('Ash');
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const toast = useToast();
   const eventSourceRef = useRef<EventSource | null>(null);
   const textBoxRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
   const setActivePlayer = useSetActivePlayer();
-  const [messageQueue, setMessageQueue] = useState<
-    {
-      agent: string;
-      message: string;
-    }[]
-  >([]);
+  const [messageQueue, setMessageQueue] = useState<MessageQueueItem[]>([]);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [audioQueue, setAudioQueue] = useState<MessageQueueItem[]>([]);
 
   useEffect(() => {
     if (messageQueue.length <= 0) {
@@ -63,18 +68,6 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
     setCurrentIndex(0);
   }, [currentAgent]);
 
-  useEffect(() => {
-    if (messageQueue.length <= 1) {
-      return;
-    }
-    if (displayedText === messageQueue[0].message && displayedText !== '') {
-      console.log('message finished. starting next message in 5 seconds');
-      setTimeout(() => {
-        setMessageQueue((prev) => prev.slice(1));
-      }, 5000);
-    }
-  }, [displayedText]);
-
   // Auto-scroll to bottom when text changes
   useEffect(() => {
     if (textBoxRef.current) {
@@ -98,11 +91,15 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
     };
   }, [currentIndex, fullText]);
 
-  // Cleanup function for event source
+  // Cleanup function for event source and audio
   useEffect(() => {
     return () => {
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
       }
     };
   }, []);
@@ -158,7 +155,10 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
 
             if (message.includes('event: close')) {
               setMessageQueue((prev) => [
-                ...prev,
+                ...prev.map((msg) => ({
+                  ...msg,
+                  isReadyForAudioGeneration: true,
+                })),
                 { agent: 'close', message: '' },
               ]);
             } else {
@@ -170,7 +170,10 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
                 )
               ) {
                 setMessageQueue((prev) => [
-                  ...prev,
+                  ...prev.map((msg) => ({
+                    ...msg,
+                    isReadyForAudioGeneration: true,
+                  })),
                   { agent: 'Oak', message: '' },
                 ]);
               } else if (
@@ -179,7 +182,10 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
                 )
               ) {
                 setMessageQueue((prev) => [
-                  ...prev,
+                  ...prev.map((msg) => ({
+                    ...msg,
+                    isReadyForAudioGeneration: true,
+                  })),
                   { agent: 'Ash', message: '' },
                 ]);
               } else if (
@@ -188,7 +194,10 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
                 )
               ) {
                 setMessageQueue((prev) => [
-                  ...prev,
+                  ...prev.map((msg) => ({
+                    ...msg,
+                    isReadyForAudioGeneration: true,
+                  })),
                   { agent: 'Brock', message: '' },
                 ]);
               } else if (displayText) {
@@ -198,7 +207,10 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
                   }
                   const lastMessage = prev[prev.length - 1];
                   return [
-                    ...prev.slice(0, -1),
+                    ...prev.slice(0, -1).map((msg) => ({
+                      ...msg,
+                      isReadyForAudioGeneration: true,
+                    })),
                     {
                       ...lastMessage,
                       message: lastMessage.message + displayText,
@@ -208,32 +220,14 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
               }
             }
           }
-
           startIndex = endIndex + 2;
         }
-
         buffer = buffer.substring(startIndex);
       }
-
       setIsLoading(false);
-
-      toast({
-        title: 'Turn completed',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
-      });
     } catch (error) {
       console.error('Error during turn:', error);
       setIsLoading(false);
-
-      toast({
-        title: 'Error',
-        description: 'Failed to process turn',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
     }
   };
 
@@ -268,6 +262,143 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
       }
     }
   };
+
+  const generateAudio = async (
+    agent: string,
+    message: string
+  ): Promise<string> => {
+    const voiceId =
+      agent === 'Ash'
+        ? 'MF3mGyEYCl7XYWbV9V6O'
+        : agent === 'Brock'
+          ? 'SOYHLrjzK2X1ezoPC6cr'
+          : agent === 'Misty'
+            ? 'jBpfuIE2acCO8z3wKNLl'
+            : 'D38z5RcWu1voky8WS1ja';
+
+    const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY as string;
+    if (!apiKey) {
+      console.error('No ElevenLabs API key found');
+      throw new Error('No API key');
+    }
+
+    const apiUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: apiUrl,
+        data: {
+          text: message,
+          model_id: 'eleven_turbo_v2',
+          output_format: 'mp3',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+            speed: 1.2,
+            style: 0.0,
+            use_speaker_boost: true,
+          },
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'xi-api-key': apiKey,
+        },
+        responseType: 'arraybuffer',
+      });
+
+      const blob = new Blob([response.data], { type: 'audio/mpeg' });
+      return URL.createObjectURL(blob);
+    } catch (error) {
+      console.error('Error generating audio:', error);
+      throw error;
+    }
+  };
+
+  // Handle audio generation for messages that are ready
+  useEffect(() => {
+    const processAudioGeneration = async () => {
+      const messagesNeedingAudio = messageQueue.filter(
+        (msg) =>
+          msg.isReadyForAudioGeneration && !msg.audioUrl && !msg.isGenerating
+      );
+
+      for (const message of messagesNeedingAudio) {
+        const currentMessage = message;
+        try {
+          setMessageQueue((prev) =>
+            prev.map((msg) =>
+              msg === currentMessage ? { ...msg, isGenerating: true } : msg
+            )
+          );
+
+          const audioUrl = await generateAudio(
+            currentMessage.agent,
+            currentMessage.message
+          );
+
+          setAudioQueue((prev) => [...prev, { ...currentMessage, audioUrl }]);
+
+          setMessageQueue((prev) =>
+            prev.map((msg) =>
+              msg === currentMessage ? { ...msg, isGenerating: false } : msg
+            )
+          );
+        } catch (error) {
+          console.error('Error in audio generation process:', error);
+          setMessageQueue((prev) =>
+            prev.map((msg) =>
+              msg === currentMessage ? { ...msg, isGenerating: false } : msg
+            )
+          );
+        }
+      }
+    };
+
+    processAudioGeneration();
+  }, [messageQueue]);
+
+  useEffect(() => {
+    if (audioQueue.length > 0 && !isAudioPlaying) {
+      const firstAudio = audioQueue[0];
+      if (firstAudio.audioUrl) {
+        setIsAudioPlaying(true);
+        if (!audioRef.current) {
+          audioRef.current = new Audio();
+        }
+        audioRef.current.src = firstAudio.audioUrl;
+
+        audioRef.current.onended = () => {
+          setIsAudioPlaying(false);
+          setAudioQueue((prev) => {
+            const newQueue = prev.slice(1);
+            return newQueue;
+          });
+          setMessageQueue((prev) => prev.slice(1));
+        };
+        audioRef.current.play().catch((error) => {
+          console.error('Error playing audio:', error);
+          setIsAudioPlaying(false);
+        });
+      }
+    }
+  }, [audioQueue, isAudioPlaying]);
+
+  // Cleanup audio resources
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+      // Clean up object URLs
+      messageQueue.forEach((item) => {
+        if (item.audioUrl) {
+          URL.revokeObjectURL(item.audioUrl);
+        }
+      });
+    };
+  }, []);
 
   return (
     <McFlex position="relative" mx="20px" orient="bottom" w="300px" col>
