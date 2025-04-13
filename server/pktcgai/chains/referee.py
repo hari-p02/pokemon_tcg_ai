@@ -59,7 +59,7 @@ class Referee:
             - If a prize card is taken, update the game state to reflect the prize card being taken.
             - If a pokemon is knocked out, update the ids in the discard pile to reflect the pokemon being knocked out. This applies for both players.
             - As part of the players action if they want to look for a card in the deck and place it in their hand, you must update the "hand" key in the game state to reflect the ids of the card being drawn.
-            - If the player is not specific enough, for example the player simply states they want to draw a basic card then you can choose which basic pokemon card they drew to their hand and update the game state accordingly. The same applies for other vague actions in you are able to reason about it.
+            - If the player is not specific enough, for example the player simply states they want to search for a basic card to add to their hand then you MUST ABSOLUTELY MUST choose which basic pokemon card they draw to their hand and update the game state accordingly. The same applies for other vague actions in you are able to reason about it.
             - And so on....
         2. Return the new game state as a valid JSON object
 

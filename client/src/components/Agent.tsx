@@ -161,6 +161,13 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
                 })),
                 { agent: 'close', message: '' },
               ]);
+            } else if (message.includes('event: state_update')) {
+              // When we receive a state_update event, fetch the latest state
+              fetchGameState().then(() => {
+                onGameStateUpdated();
+              }).catch(error => {
+                console.error('Error fetching updated state:', error);
+              });
             } else {
               const displayText = data;
 

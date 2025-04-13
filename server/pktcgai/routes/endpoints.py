@@ -2992,15 +2992,15 @@ def prepare_game_state_for_player(current_state: BoardState, player_number: int)
     For player2, this means seeing player2's full hand and player1's limited information.
     """
     game_state = {"YOUR_HAND": {}, "OPPONENT_HAND": {}, "REAL_OPPONENT_HAND": {}}
-    
+    # print("HERE 10", game_state)
     # Convert BoardState to dictionary for easier manipulation
     state_dict = dataclass_to_dict(current_state)
-    
+    # print("HERE 11", state_dict)
     if player_number == 1:
         # Player1 sees their full hand
         game_state["YOUR_HAND"] = state_dict["playerOne"]
         game_state["REAL_OPPONENT_HAND"] = state_dict["playerTwo"]
-        
+        # print("HERE 12", game_state)
         # Player1 sees limited information about player2
         opponent_state = state_dict["playerTwo"]
         game_state["OPPONENT_HAND"] = {
@@ -3013,6 +3013,7 @@ def prepare_game_state_for_player(current_state: BoardState, player_number: int)
             "stadium": opponent_state["stadium"],
             "prizeCards": f"{len(opponent_state['prizeCards'])} cards"
         }
+        # print("HERE 13", game_state)
     else:
         # Player2 sees their full hand
         game_state["YOUR_HAND"] = state_dict["playerTwo"]
@@ -3126,18 +3127,22 @@ def update_global_state(result: Dict, player_number: int):
     your_hand = result['updated_game_state']['YOUR_HAND']
     # opponent_hand = result.get("REAL_OPPONENT_HAND", {})
     opponent_hand = result['game_state']['REAL_OPPONENT_HAND']
-    print("THIS IS THE YOUR HAND", your_hand)
+    # print("THIS IS THE YOUR HAND", your_hand)
     
     # Convert dictionary back to PlayerState
     player_state = dict_to_player_state(your_hand)
     other_player_state = dict_to_player_state(opponent_hand)
-    print("THIS IS THE PLAYER STATE", player_state)
+    # print("THIS IS THE PLAYER STATE", player_state)
     
     # Update the appropriate player state
     if player_number == 1:
         state.playerOne = player_state
         state.playerTwo = other_player_state
         state.playerTwo.active = dict_to_pokemon_card(result['game_state']['OPPONENT_HAND']['active'])
+
+        print("THIS IS THE PLAYER ONE STATE", state.playerOne)
+        print("THIS IS THE PLAYER TWO STATE", state.playerTwo)
+        print("THIS IS THE PLAYER TWO HAND, active", state.playerTwo.active)
         
         # Update opponent's visible information (player 2)
         # Only update what's visible to player 1 (active, bench, discard, etc.)
@@ -3216,43 +3221,48 @@ async def process_player_turn(player_number: int):
     # Prepare game state for the specified player
     game_state, card_mapping = prepare_game_state_for_player(state, player_number)
     
-    # # Draw a card from the deck to the player's hand at the beginning of turn (classic Pokémon TCG rule)
-    # card_drawn = False
-    # try:
-    #     # Identify which player's state to update
-    #     player_state = state.playerOne if player_number == 1 else state.playerTwo
-        
-    #     # Check if the deck has cards to draw
-    #     if player_state.deck and len(player_state.deck) > 0:
-    #         # Draw the top card from the deck
-    #         top_card = player_state.deck.pop(0)
-    #         # Add the card to the player's hand
-    #         if player_state.hand is None:
-    #             player_state.hand = []
-    #         player_state.hand.append(top_card)
-    #         card_drawn = True
+    # Draw a card from the deck to the player's hand at the beginning of turn (classic Pokémon TCG rule)
+    card_drawn = False
+    try:
+        # Identify which player's state to update
+        player_state = state.playerOne if player_number == 1 else state.playerTwo
+        # print("HERE")
+        # Check if the deck has cards to draw
+        if player_state.deck and len(player_state.deck) > 0:
+            # print("HERE 2")
+            # Draw the top card from the deck
+            top_card = player_state.deck.pop(0)
+            # Add the card to the player's hand
+            if player_state.hand is None:
+                player_state.hand = []
+            player_state.hand.append(top_card)
+            card_drawn = True
+            # print("HERE 3")
+            # Display message about card being drawn
+            card_id = top_card.id
+            card_info = state.cardMap.get(card_id, {})
+            card_name = card_info.get("name", f"Card ID: {card_id}")
+            print(f"data: Drew {card_name} from the deck at the beginning of the turn.\n\n")
+            yield f"data: Drew {card_name} from the deck at the beginning of the turn.\n\n"
             
-    #         # Display message about card being drawn
-    #         card_id = top_card.id
-    #         card_info = state.cardMap.get(card_id, {})
-    #         card_name = card_info.get("name", f"Card ID: {card_id}")
-    #         yield f"data: Drew {card_name} from the deck at the beginning of the turn.\n\n"
-            
-    #         # Update the game state to reflect the drawn card
-    #         game_state = prepare_game_state_for_player(state, player_number)
-    #     else:
-    #         yield f"data: Cannot draw a card: deck is empty.\n\n"
-    # except Exception as e:
-    #     print(f"Error drawing card at turn start: {e}")
-    #     yield f"data: Error drawing card: {str(e)}\n\n"
+            # Update the game state to reflect the drawn card
+            game_state, card_mapping = prepare_game_state_for_player(state, player_number)
+            # print("HERE 4")
+        else:
+            yield f"data: Cannot draw a card: deck is empty.\n\n"
+    except Exception as e:
+        print(f"Error drawing card at turn start: {e}")
+        yield f"data: Error drawing card: {str(e)}\n\n"
     
-    # # If we successfully drew a card, send a state update event to trigger the frontend to refresh
-    # if card_drawn:
-    #     # Send the current state as a special event
-    #     current_state = dataclass_to_dict(state)
-    #     yield f"event: state_update\ndata: {json.dumps(current_state)}\n\n"
-    #     # Add a small delay to ensure the frontend can process the state update
-    #     await asyncio.sleep(0.1)
+    # If we successfully drew a card, send a state update event to trigger the frontend to refresh
+    if card_drawn:
+        # Send the current state as a special event
+        # print("HERE 5")
+        current_state = dataclass_to_dict(state)
+        # print("HERE 6")
+        yield f"event: state_update\ndata: {json.dumps(current_state)}\n\n"
+        # Add a small delay to ensure the frontend can process the state update
+        await asyncio.sleep(0.1)
     
     # Run the player's turn
     # yield "data: Starting turn processing...\n\n"
@@ -3260,9 +3270,10 @@ async def process_player_turn(player_number: int):
     # Create a synchronization event to signal when processing is complete
     processing_complete = threading.Event()
     result_container = {"result": None}
-    
+    # print("HERE 7")
     # Start a background thread to run the turn
     def run_turn():
+        # print("HERE 8", game_state)
         try:
             # Use a context manager to capture stdout
             with capture_stdout() as stdout:
@@ -3346,7 +3357,7 @@ async def process_player_turn(player_number: int):
         yield "data: Error: Processing failed to produce a result\n\n"
         yield "event: close\ndata: stream_complete\n\n"
         return
-    
+    # print("HERE 9")
     # Now that we have the result, continue with the rest of the processing
     if result["is_legal"]:
         # yield f"data: Legal action: {result['action']}\n\n"
