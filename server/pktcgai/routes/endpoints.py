@@ -2991,7 +2991,7 @@ def prepare_game_state_for_player(current_state: BoardState, player_number: int)
     For player1, this means seeing player1's full hand and player2's limited information.
     For player2, this means seeing player2's full hand and player1's limited information.
     """
-    game_state = {"YOUR_HAND": {}, "OPPONENT_HAND": {}}
+    game_state = {"YOUR_HAND": {}, "OPPONENT_HAND": {}, "REAL_OPPONENT_HAND": {}}
     
     # Convert BoardState to dictionary for easier manipulation
     state_dict = dataclass_to_dict(current_state)
@@ -2999,6 +2999,7 @@ def prepare_game_state_for_player(current_state: BoardState, player_number: int)
     if player_number == 1:
         # Player1 sees their full hand
         game_state["YOUR_HAND"] = state_dict["playerOne"]
+        game_state["REAL_OPPONENT_HAND"] = state_dict["playerTwo"]
         
         # Player1 sees limited information about player2
         opponent_state = state_dict["playerTwo"]
@@ -3015,6 +3016,7 @@ def prepare_game_state_for_player(current_state: BoardState, player_number: int)
     else:
         # Player2 sees their full hand
         game_state["YOUR_HAND"] = state_dict["playerTwo"]
+        game_state["REAL_OPPONENT_HAND"] = state_dict["playerOne"]
         
         # Player2 sees limited information about player1
         opponent_state = state_dict["playerOne"]
@@ -3030,9 +3032,10 @@ def prepare_game_state_for_player(current_state: BoardState, player_number: int)
         }
     
     # Include the card mapping
-    game_state["card_mapping"] = state_dict["cardMap"]
+    # game_state["card_mapping"] = state_dict["cardMap"]
+    card_mapping = state_dict["cardMap"]
     
-    return game_state
+    return game_state, card_mapping
 
 def dict_to_player_state(player_dict: Dict) -> PlayerState:
     """Convert a dictionary to a PlayerState object."""
@@ -3107,59 +3110,68 @@ def dict_to_pokemon_card(card_dict: Dict):
     # Fallback for unknown card types
     return None
 
-def update_global_state(updated_game_state: Dict, player_number: int):
+def update_global_state(result: Dict, player_number: int):
     """Update the global state with the changes from a player's turn."""
     global state
-    print("THIS IS THE UPDATED GAME STATE", type(updated_game_state), updated_game_state)
+    # print("THIS IS THE UPDATED GAME STATE", type(result), result)
 
-    if isinstance(updated_game_state, str):
-        updated_game_state = json.loads(updated_game_state)
-        print("THIS IS THE UPDATED GAME STATE AFTER PARSING", type(updated_game_state), updated_game_state)
+    if isinstance(result['updated_game_state']['YOUR_HAND'], str):
+        result['updated_game_state']['YOUR_HAND'] = json.loads(result['updated_game_state']['YOUR_HAND'])
+        # print("THIS IS THE UPDATED GAME STATE AFTER PARSING", type(result), result)
+    
+    if isinstance(result['game_state']['REAL_OPPONENT_HAND'], str):
+        result['game_state']['REAL_OPPONENT_HAND'] = json.loads(result['game_state']['REAL_OPPONENT_HAND'])
 
     # Extract the relevant parts from the updated game state
-    your_hand = updated_game_state.get("YOUR_HAND", {})
-    opponent_hand = updated_game_state.get("OPPONENT_HAND", {})
+    your_hand = result['updated_game_state']['YOUR_HAND']
+    # opponent_hand = result.get("REAL_OPPONENT_HAND", {})
+    opponent_hand = result['game_state']['REAL_OPPONENT_HAND']
     print("THIS IS THE YOUR HAND", your_hand)
     
     # Convert dictionary back to PlayerState
     player_state = dict_to_player_state(your_hand)
+    other_player_state = dict_to_player_state(opponent_hand)
     print("THIS IS THE PLAYER STATE", player_state)
     
     # Update the appropriate player state
     if player_number == 1:
         state.playerOne = player_state
+        state.playerTwo = other_player_state
+        state.playerTwo.active = dict_to_pokemon_card(result['game_state']['OPPONENT_HAND']['active'])
         
         # Update opponent's visible information (player 2)
         # Only update what's visible to player 1 (active, bench, discard, etc.)
-        if opponent_hand.get("active"):
-            state.playerTwo.active = dict_to_pokemon_card(opponent_hand["active"])
-        if opponent_hand.get("bench"):
-            state.playerTwo.bench = [dict_to_pokemon_card(card) for card in opponent_hand["bench"]]
-        if opponent_hand.get("discard"):
-            state.playerTwo.discard = [dict_to_pokemon_card(card) for card in opponent_hand["discard"]]
-        if opponent_hand.get("lostZone"):
-            state.playerTwo.lostZone = [dict_to_pokemon_card(card) for card in opponent_hand["lostZone"]]
-        if opponent_hand.get("stadium") and opponent_hand["stadium"] is not None:
-            state.playerTwo.stadium = dict_to_pokemon_card(opponent_hand["stadium"])
-        elif opponent_hand.get("stadium") is None:
-            state.playerTwo.stadium = None
+        # if opponent_hand.get("active"):
+        #     state.playerTwo.active = dict_to_pokemon_card(opponent_hand["active"])
+        # if opponent_hand.get("bench"):
+        #     state.playerTwo.bench = [dict_to_pokemon_card(card) for card in opponent_hand["bench"]]
+        # if opponent_hand.get("discard"):
+        #     state.playerTwo.discard = [dict_to_pokemon_card(card) for card in opponent_hand["discard"]]
+        # if opponent_hand.get("lostZone"):
+        #     state.playerTwo.lostZone = [dict_to_pokemon_card(card) for card in opponent_hand["lostZone"]]
+        # if opponent_hand.get("stadium") and opponent_hand["stadium"] is not None:
+        #     state.playerTwo.stadium = dict_to_pokemon_card(opponent_hand["stadium"])
+        # elif opponent_hand.get("stadium") is None:
+        #     state.playerTwo.stadium = None
     else:
         state.playerTwo = player_state
+        state.playerOne = other_player_state
+        state.playerOne.active = dict_to_pokemon_card(result['game_state']['OPPONENT_HAND']['active'])
         
         # Update opponent's visible information (player 1)
         # Only update what's visible to player 2 (active, bench, discard, etc.)
-        if opponent_hand.get("active"):
-            state.playerOne.active = dict_to_pokemon_card(opponent_hand["active"])
-        if opponent_hand.get("bench"):
-            state.playerOne.bench = [dict_to_pokemon_card(card) for card in opponent_hand["bench"]]
-        if opponent_hand.get("discard"):
-            state.playerOne.discard = [dict_to_pokemon_card(card) for card in opponent_hand["discard"]]
-        if opponent_hand.get("lostZone"):
-            state.playerOne.lostZone = [dict_to_pokemon_card(card) for card in opponent_hand["lostZone"]]
-        if opponent_hand.get("stadium") and opponent_hand["stadium"] is not None:
-            state.playerOne.stadium = dict_to_pokemon_card(opponent_hand["stadium"])
-        elif opponent_hand.get("stadium") is None:
-            state.playerOne.stadium = None
+        # if opponent_hand.get("active"):
+        #     state.playerOne.active = dict_to_pokemon_card(opponent_hand["active"])
+        # if opponent_hand.get("bench"):
+        #     state.playerOne.bench = [dict_to_pokemon_card(card) for card in opponent_hand["bench"]]
+        # if opponent_hand.get("discard"):
+        #     state.playerOne.discard = [dict_to_pokemon_card(card) for card in opponent_hand["discard"]]
+        # if opponent_hand.get("lostZone"):
+        #     state.playerOne.lostZone = [dict_to_pokemon_card(card) for card in opponent_hand["lostZone"]]
+        # if opponent_hand.get("stadium") and opponent_hand["stadium"] is not None:
+        #     state.playerOne.stadium = dict_to_pokemon_card(opponent_hand["stadium"])
+        # elif opponent_hand.get("stadium") is None:
+        #     state.playerOne.stadium = None
 
 # Modify stdout to stream output in real-time
 class StreamingStdout:
@@ -3202,45 +3214,45 @@ async def process_player_turn(player_number: int):
             break
     
     # Prepare game state for the specified player
-    game_state = prepare_game_state_for_player(state, player_number)
+    game_state, card_mapping = prepare_game_state_for_player(state, player_number)
     
-    # Draw a card from the deck to the player's hand at the beginning of turn (classic Pokémon TCG rule)
-    card_drawn = False
-    try:
-        # Identify which player's state to update
-        player_state = state.playerOne if player_number == 1 else state.playerTwo
+    # # Draw a card from the deck to the player's hand at the beginning of turn (classic Pokémon TCG rule)
+    # card_drawn = False
+    # try:
+    #     # Identify which player's state to update
+    #     player_state = state.playerOne if player_number == 1 else state.playerTwo
         
-        # Check if the deck has cards to draw
-        if player_state.deck and len(player_state.deck) > 0:
-            # Draw the top card from the deck
-            top_card = player_state.deck.pop(0)
-            # Add the card to the player's hand
-            if player_state.hand is None:
-                player_state.hand = []
-            player_state.hand.append(top_card)
-            card_drawn = True
+    #     # Check if the deck has cards to draw
+    #     if player_state.deck and len(player_state.deck) > 0:
+    #         # Draw the top card from the deck
+    #         top_card = player_state.deck.pop(0)
+    #         # Add the card to the player's hand
+    #         if player_state.hand is None:
+    #             player_state.hand = []
+    #         player_state.hand.append(top_card)
+    #         card_drawn = True
             
-            # Display message about card being drawn
-            card_id = top_card.id
-            card_info = state.cardMap.get(card_id, {})
-            card_name = card_info.get("name", f"Card ID: {card_id}")
-            yield f"data: Drew {card_name} from the deck at the beginning of the turn.\n\n"
+    #         # Display message about card being drawn
+    #         card_id = top_card.id
+    #         card_info = state.cardMap.get(card_id, {})
+    #         card_name = card_info.get("name", f"Card ID: {card_id}")
+    #         yield f"data: Drew {card_name} from the deck at the beginning of the turn.\n\n"
             
-            # Update the game state to reflect the drawn card
-            game_state = prepare_game_state_for_player(state, player_number)
-        else:
-            yield f"data: Cannot draw a card: deck is empty.\n\n"
-    except Exception as e:
-        print(f"Error drawing card at turn start: {e}")
-        yield f"data: Error drawing card: {str(e)}\n\n"
+    #         # Update the game state to reflect the drawn card
+    #         game_state = prepare_game_state_for_player(state, player_number)
+    #     else:
+    #         yield f"data: Cannot draw a card: deck is empty.\n\n"
+    # except Exception as e:
+    #     print(f"Error drawing card at turn start: {e}")
+    #     yield f"data: Error drawing card: {str(e)}\n\n"
     
-    # If we successfully drew a card, send a state update event to trigger the frontend to refresh
-    if card_drawn:
-        # Send the current state as a special event
-        current_state = dataclass_to_dict(state)
-        yield f"event: state_update\ndata: {json.dumps(current_state)}\n\n"
-        # Add a small delay to ensure the frontend can process the state update
-        await asyncio.sleep(0.1)
+    # # If we successfully drew a card, send a state update event to trigger the frontend to refresh
+    # if card_drawn:
+    #     # Send the current state as a special event
+    #     current_state = dataclass_to_dict(state)
+    #     yield f"event: state_update\ndata: {json.dumps(current_state)}\n\n"
+    #     # Add a small delay to ensure the frontend can process the state update
+    #     await asyncio.sleep(0.1)
     
     # Run the player's turn
     # yield "data: Starting turn processing...\n\n"
@@ -3255,7 +3267,7 @@ async def process_player_turn(player_number: int):
             # Use a context manager to capture stdout
             with capture_stdout() as stdout:
                 # Run the turn and get the results - this will fill the stream_queue
-                result_container["result"] = run_pokemon_tcg_turn(game_state, state.cardMap)
+                result_container["result"] = run_pokemon_tcg_turn(game_state, card_mapping)
             # Signal completion
             stream_queue.put(None)
         except Exception as e:
@@ -3340,7 +3352,7 @@ async def process_player_turn(player_number: int):
         # yield f"data: Legal action: {result['action']}\n\n"
         
         # Update the global state with the changes
-        update_global_state(result["updated_game_state"], player_number)
+        update_global_state(result, player_number)
         # yield "data: Game state updated.\n\n"
     else:
         # yield f"data: Illegal action: {result['explanation']}\n\n"

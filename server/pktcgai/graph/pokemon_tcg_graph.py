@@ -26,7 +26,7 @@ def transform_game_state(game_state, card_id_to_card_mapping):
     """
     Transform the game state by:
     1. Removing all 'hp' keys
-    2. Replacing 'id' references with full card details from the mapping
+    2. Replacing any numeric values with full card details from the mapping if they exist as keys
     
     Args:
         game_state: The original game state
@@ -37,8 +37,6 @@ def transform_game_state(game_state, card_id_to_card_mapping):
     """
     # Create a deep copy of the game state to avoid modifying the original
     transformed_game_state = json.loads(json.dumps(game_state))
-    # print(f"Card mapping keys: {list(card_id_to_card_mapping.keys())[:5]}...")
-    # print(f"Number of cards in mapping: {len(card_id_to_card_mapping)}")
     
     # Helper function to recursively process the game state
     def process_game_state(obj):
@@ -47,26 +45,32 @@ def transform_game_state(game_state, card_id_to_card_mapping):
             if 'hp' in obj:
                 del obj['hp']
             
-            # Replace 'id' with card details
-            if 'id' in obj and str(obj['id']) in card_id_to_card_mapping:
-                # Get card details
-                card_id = str(obj['id'])
-                # print(f"Found card ID: {card_id} in mapping")
-                card_details = card_id_to_card_mapping[card_id]
-                # Merge card details into the object
-                for key, value in card_details.items():
-                    if key != 'hp':  # Skip adding hp back
-                        obj[key] = value
-            elif 'id' in obj and obj['id'] not in card_id_to_card_mapping:
-                print(f"Card ID not found in mapping: {obj['id']}")
-                
-            # Process nested dictionaries
+            # Process each key-value pair in the dictionary
             for key, value in list(obj.items()):
-                obj[key] = process_game_state(value)
+                # Special handling for 'id' key (maintain backward compatibility)
+                if key == 'id' and str(value) in card_id_to_card_mapping:
+                    card_id = str(value)
+                    card_details = card_id_to_card_mapping[card_id]
+                    # Merge card details into the object
+                    for detail_key, detail_value in card_details.items():
+                        if detail_key != 'hp':  # Skip adding hp back
+                            obj[detail_key] = detail_value
+                else:
+                    # Process the value recursively
+                    obj[key] = process_game_state(value)
             
         elif isinstance(obj, list):
             # Process items in lists
             return [process_game_state(item) for item in obj]
+        
+        # Check if this is a card ID (could be an int or string representation of an int)
+        elif (isinstance(obj, (int, str)) and 
+              str(obj) in card_id_to_card_mapping):
+            # Replace the ID with the full card details
+            card_id = str(obj)
+            card_details = card_id_to_card_mapping[card_id]
+            # Filter out hp from the returned card details
+            return {k: v for k, v in card_details.items() if k != 'hp'}
         
         return obj
     
@@ -101,18 +105,25 @@ def create_pokemon_tcg_graph():
             state["final_decision"] = False
 
         # Transform the game state for the player
-        transformed_game_state = transform_game_state(
-            state["game_state"], 
-            state["card_id_to_card_mapping"]
-        )
+        # transformed_game_state = transform_game_state(
+        #     state["game_state"], 
+        #     state["card_id_to_card_mapping"]
+        # )
 
         # print()
         # print("THIS IS THE TRANSFORMED STATE", transformed_game_state)
         # print()
-        
+
+        # print("THIS IS THE TRANSFORMED STATE TO THE PLAYER", transformed_game_state)
+        temp_game_state = {"YOUR_HAND": state["game_state"]["YOUR_HAND"], "OPPONENT_HAND": state["game_state"]["OPPONENT_HAND"]}
+
+        # print("THIS IS THE TEMP GAME STATE TO THE PLAYER", temp_game_state)
+        # print("THIS IS THE CARD ID TO CARD MAPPING TO THE PLAYER", state["card_id_to_card_mapping"])
+                
         # Get streaming response
         response_chunks = player_agent.stream({
-            "game_state": json.dumps(transformed_game_state),
+            "game_state": json.dumps(temp_game_state, indent=2),
+            "card_id_to_card_mapping": json.dumps(state["card_id_to_card_mapping"], indent=2),
             "mentor_player_conversation": formatted_conversation + additional_context
         })
         
@@ -157,10 +168,10 @@ def create_pokemon_tcg_graph():
         )
         
         # Transform the game state for the mentor
-        transformed_game_state = transform_game_state(
-            state["game_state"], 
-            state["card_id_to_card_mapping"]
-        )
+        # transformed_game_state = transform_game_state(
+        #     state["game_state"], 
+        #     state["card_id_to_card_mapping"]
+        # )
 
         formatted_conversation = ""
         for message in state["mentor_player_conversation"]:
@@ -169,9 +180,12 @@ def create_pokemon_tcg_graph():
             else:
                 formatted_conversation += f"Mentor: {message['content']}\n"
         
+        temp_game_state = {"YOUR_HAND": state["game_state"]["YOUR_HAND"], "OPPONENT_HAND": state["game_state"]["OPPONENT_HAND"]}
+        
         # Get streaming response
         response_chunks = mentor_agent.stream({
-            "game_state": json.dumps(transformed_game_state),
+            "game_state": json.dumps(temp_game_state),
+            "card_id_to_card_mapping": json.dumps(state["card_id_to_card_mapping"]),
             "mentor_player_conversation": formatted_conversation,
             "player_question": latest_player_message
         })
@@ -198,15 +212,15 @@ def create_pokemon_tcg_graph():
         print("-------------REFEREE NODE STARTED-------------------")
         
         # Convert game state and card mapping to strings if needed
-        game_state_str = json.dumps(state["game_state"]) if isinstance(state["game_state"], dict) else state["game_state"]
-        card_mapping_str = json.dumps(state["card_id_to_card_mapping"]) if isinstance(state["card_id_to_card_mapping"], dict) else state["card_id_to_card_mapping"]
-        
+        # game_state_str = json.dumps(state["game_state"]) if isinstance(state["game_state"], dict) else state["game_state"]
+        # card_mapping_str = json.dumps(state["card_id_to_card_mapping"]) if isinstance(state["card_id_to_card_mapping"], dict) else state["card_id_to_card_mapping"]
+        temp_game_state = {"YOUR_HAND": state["game_state"]["YOUR_HAND"], "OPPONENT_HAND": state["game_state"]["OPPONENT_HAND"]}
         # Use referee's invoke method which handles JSON filtering
         try:
             result = referee_agent.invoke({
-                "game_state": game_state_str,
+                "game_state": temp_game_state,
                 "player_action": state["player_action"],
-                "card_id_to_card_mapping": card_mapping_str
+                "card_id_to_card_mapping": state["card_id_to_card_mapping"]
             })
             
             # Use the processed result from the invoke method
@@ -305,5 +319,7 @@ def run_pokemon_tcg_turn(game_data, card_mapping, max_iterations=500) -> Dict[st
         "explanation": final_state["decision_explanation"],
         "updated_game_state": final_state["updated_game_state"],
         "conversation": final_state["mentor_player_conversation"],
+        "game_state": final_state["game_state"],
+        "card_id_to_card_mapping": final_state["card_id_to_card_mapping"],
         "hit_iteration_limit": hit_limit
     } 
