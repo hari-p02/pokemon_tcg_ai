@@ -3085,21 +3085,27 @@ def dict_to_player_state(player_dict: Dict) -> PlayerState:
     )
 
 def dict_to_pokemon_card(card_dict: Dict):
-    """Convert dictionary representation of a card back to a PokemonCard object."""
+    """Convert dictionary representation of a card back to a proper Pokemon card object."""
     if card_dict is None:
         return None
     
-    # Create a copy to avoid modifying the original dict
-    card = dict(card_dict)
-    
-    # Handle special fields like attached energies or tools if needed
-    if "attachedEnergies" in card and isinstance(card["attachedEnergies"], list):
-        card["attachedEnergies"] = [dict(energy) for energy in card["attachedEnergies"]]
-    
-    if "attachedTools" in card and isinstance(card["attachedTools"], list):
-        card["attachedTools"] = [dict(tool) for tool in card["attachedTools"]]
+    # For active and bench Pokemon (those with hp or attachedCards)
+    if isinstance(card_dict, dict) and "id" in card_dict and ("hp" in card_dict or "attachedCards" in card_dict):
+        attached_cards = None
+        if card_dict.get("attachedCards"):
+            attached_cards = [Card(id=card["id"]) for card in card_dict["attachedCards"]]
         
-    return card
+        return PokemonInPlay(
+            id=card_dict["id"],
+            hp=card_dict.get("hp", 0),
+            attachedCards=attached_cards
+        )
+    # For stadium and other simple cards, create a Card object
+    elif isinstance(card_dict, dict) and "id" in card_dict:
+        return Card(id=card_dict["id"])
+    
+    # Fallback for unknown card types
+    return None
 
 def update_global_state(updated_game_state: Dict, player_number: int):
     """Update the global state with the changes from a player's turn."""
