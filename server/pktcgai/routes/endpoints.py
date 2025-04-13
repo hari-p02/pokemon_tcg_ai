@@ -3087,13 +3087,18 @@ def dict_to_player_state(player_dict: Dict) -> PlayerState:
 def update_global_state(updated_game_state: Dict, player_number: int):
     """Update the global state with the changes from a player's turn."""
     global state
-    
+    print("THIS IS THE UPDATED GAME STATE", type(updated_game_state), updated_game_state)
+
+    if isinstance(updated_game_state, str):
+        updated_game_state = json.loads(updated_game_state)
+        print("THIS IS THE UPDATED GAME STATE AFTER PARSING", type(updated_game_state), updated_game_state)
+
     # Extract the relevant parts from the updated game state
     your_hand = updated_game_state.get("YOUR_HAND", {})
-    
+    print("THIS IS THE YOUR HAND", your_hand)
     # Convert dictionary back to PlayerState
     player_state = dict_to_player_state(your_hand)
-    
+    print("THIS IS THE PLAYER STATE", player_state)
     # Update the appropriate player state
     if player_number == 1:
         state.playerOne = player_state
