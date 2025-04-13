@@ -80,7 +80,9 @@ class Master:
                                                        
         Though there may be many different actions that could be taken, you should only recommend one action. 
                                                        
-        EXTREMELY IMPORTANT: Your entire response must be no more than 1-2 sentences total. Be direct and specific with your advice.
+        When referring to card IDs, you MUST use the format ( id: number ), including the parentheses. Any other format will fail. Double check your format before submitting your final decision.
+
+        EXTREMELY IMPORTANT: Your entire response must be no more than 1-2 sentences total. Be direct and concise with your advice.
         
         Do not include any explanations, greetings, or follow-up questions. Just provide a single, precise recommendation in 1-2 sentences.
         """)

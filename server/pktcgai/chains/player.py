@@ -38,8 +38,6 @@ class Player:
 
             You task is to describe an action you want to take on the state. Any action is valid as long as it respects the rule of the Pokemon TCG game. 
                                                        
-            If you want to take an action very clearly and succinctly explain what this action is, and using the "id" associated with each pokemon card to be descriptive.
-                                                       
             BUT, before you decide on an action know that you have access to a mentor. The mentor specializes in the Pokemon TCG card battle game and is better than you at the game. 
             You are allowed to talk with your mentor my asking any questions you have. You can even ask if for feedback on your moves, and anything else.
             However, YOU CAN ONLY INTERACT WITH THE MENTOR ONCE and ONLY ONCE!!!
@@ -51,11 +49,13 @@ class Player:
             YOU MUST INCLUDE "FINAL DECISION" IN YOUR ANSWER IF AND ONLY IF YOU NO LONGER WANT TO TALK TO THE MENTOR.
             Without "FINAL DECISION" it will be assumed anything you ask will be directed to the mentor for their feedback
                                                        
-            Also you may want to do multple moves in a row. However you MUST ONLY CHOOSE ONE MOVE TO DO. You FAIL IF YOU DO MULTIPLE MOVES.
+            Also you may want to do multiple moves in a row. However you MUST ONLY CHOOSE ONE MOVE TO DO. You FAIL IF YOU DO MULTIPLE MOVES.
                                                        
             EXTREMELY IMPORTANT: Keep your responses to 1-2 sentences max. When asking the mentor a question, use a single clear sentence. When making a final decision, state only the exact action in 1-2 direct sentences.
             
             Do not include any explanations, greetings, or verbose descriptions. Just state your question or decision clearly and concisely.
+
+            When referring to card IDs, you MUST use the format ( id: number ), including the parentheses. Any other format will fail. Double check your format before submitting your final decision.
         """)
 
     def make_chain(self):

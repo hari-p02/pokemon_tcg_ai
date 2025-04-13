@@ -3,6 +3,7 @@ import { Box, Divider, Image } from '@chakra-ui/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import wallpaper from './assets/wallpaper.jpg';
+import background from './assets/background.jpg';
 import Agent from './components/Agent';
 import PlayerState from './components/PlayerState';
 import McFlex from './McFlex/McFlex';
@@ -109,7 +110,8 @@ function App() {
         bg="gray.100"
       >
         <Image
-          src={wallpaper}
+          // src={wallpaper}
+          src={background}
           alt="Wallpaper"
           position="absolute"
           top="0"
@@ -117,7 +119,7 @@ function App() {
           width="100%"
           height="100%"
           objectFit="cover"
-          opacity={0.15}
+          opacity={0.5}
         />
         <Box
           position="absolute"
@@ -163,7 +165,7 @@ function App() {
                     width="167%"
                     transform="scale(0.6)"
                     transformOrigin="center"
-                    my="-70px"
+                    my="-60px"
                   >
                     <PlayerState
                       isInactive={true}

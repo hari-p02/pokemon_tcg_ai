@@ -18,7 +18,8 @@ interface HandProps {
 const Hand = ({ hand, isOpponent = false, isPlayerTwo = false }: HandProps) => {
   const cardMap = useCardMap();
 
-  if (!hand || !cardMap[hand[0].id]) return <McFlex></McFlex>;
+  if (!hand || hand.length === 0 || !cardMap[hand[0].id])
+    return <McFlex h="40px"></McFlex>;
 
   return (
     <McFlex gap={2} bg="rgba(128, 128, 128, 0.3)" p={2} borderRadius="md">

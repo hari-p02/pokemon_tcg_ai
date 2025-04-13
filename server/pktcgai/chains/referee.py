@@ -69,8 +69,9 @@ class Referee:
         YOU FAIL YOUR TASK IF YOU DO NOT FOLLOW THIS INSTRUCTION.
                                                        
         NEVER OUTPUT THE CARD ID MAPPING IN YOUR RESPONSE, ONLY THE GAME STATE!!!
-    
-        
+
+        When referring to card IDs, you MUST use the format ( id: number ), including the parentheses. Any other format will fail. Double check your format before submitting your final decision.
+ 
         Updated Game State:
         ```json
         {{Updated game state JSON if the action is legal or the original game state if the action is illegal}}

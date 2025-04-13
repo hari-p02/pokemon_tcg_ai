@@ -3189,14 +3189,45 @@ async def process_player_turn(player_number: int):
                 
             # Send the message as SSE
             if isinstance(message, str):
-                yield f"data: {message}\n\n"
+                # Track if we're inside brackets and build filtered message
+                inside_brackets = False
+                filtered_message = []
+                current_chunk = []
+                
+                for i, char in enumerate(message):
+                    if char == '(':
+                        # If we see an opening bracket, mark as inside brackets
+                        # and don't include the opening bracket
+                        inside_brackets = True
+                        if current_chunk:
+                            filtered_message.extend(current_chunk)
+                            current_chunk = []
+                    elif char == ')':
+                        # If we see a closing bracket, mark as outside brackets
+                        # and don't include the closing bracket or the following space
+                        inside_brackets = False
+                        current_chunk = []
+                        # Skip the next character if it's a space
+                        if i + 1 < len(message) and message[i + 1] == ' ':
+                            continue
+                    elif not inside_brackets:
+                        # Only add characters when we're not inside brackets
+                        current_chunk.append(char)
+                
+                # Add any remaining non-bracketed content
+                if current_chunk:
+                    filtered_message.extend(current_chunk)
+                
+                # Only yield if we have content to stream
+                if filtered_message:
+                    yield f"data: {''.join(filtered_message)}\n\n"
         except queue.Empty:
             # No messages in queue, continue waiting
             await asyncio.sleep(0.01)
         except Exception as e:
             # Handle any other exceptions
             print(f"Error streaming: {e}")
-            yield f"data: [ERROR] {str(e)}\n\n"
+            yield f"data: ERROR: {str(e)}\n\n"
     
     # Wait for the processing to complete before continuing
     await asyncio.to_thread(processing_complete.wait)

@@ -268,13 +268,17 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
     message: string
   ): Promise<string> => {
     const voiceId =
-      agent === 'Ash'
-        ? 'MF3mGyEYCl7XYWbV9V6O'
-        : agent === 'Brock'
-          ? 'SOYHLrjzK2X1ezoPC6cr'
-          : agent === 'Misty'
-            ? 'jBpfuIE2acCO8z3wKNLl'
-            : 'D38z5RcWu1voky8WS1ja';
+      activePlayer === 1
+        ? agent === 'Ash'
+          ? 'MF3mGyEYCl7XYWbV9V6O'
+          : agent === 'Brock'
+            ? 'SOYHLrjzK2X1ezoPC6cr'
+            : 'D38z5RcWu1voky8WS1ja'
+        : agent === 'Ash'
+          ? 'TX3LPaxmHKxFdv7VOQHJ' // Team Rocket voice
+          : agent === 'Brock'
+            ? '21m00Tcm4TlvDq8ikWAM' // Jessie voice
+            : 'zcAOhNBS3c14rBihAFp1'; // Meowth voice
 
     const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY as string;
     if (!apiKey) {
