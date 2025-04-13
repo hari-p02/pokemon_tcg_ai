@@ -409,37 +409,65 @@ const Agent: FC<AgentProps> = ({ onGameStateUpdated, activePlayer }) => {
       <VStack spacing={4} width="100%" h="100%" pt="10px">
         <McFlex gap={3} orient="top">
           <Button
-            bg="purple.500"
+            bg="linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)"
             color="white"
             onClick={() => handlePlayerTurn(1)}
-            isDisabled={isLoading}
             width="35%"
             size="lg"
-            fontWeight="bold"
+            fontWeight="extrabold"
+            fontSize="12px"
+            letterSpacing="1px"
+            textTransform="uppercase"
             transition="all 0.2s"
-            boxShadow="0 4px 8px rgba(0, 0, 0, 0.2)"
+            boxShadow="0 4px 0 #4C1D95, 0 6px 8px rgba(0, 0, 0, 0.3)"
+            border="2px solid #4C1D95"
+            borderRadius="8px"
             _hover={{
-              transform: 'scale(1.02)',
-              bg: 'purple.600',
-              boxShadow: '0 8px 12px rgba(0, 0, 0, 0.25)',
+              transform: 'translateY(-0.5px)',
+              boxShadow: '0 6px 0 #4C1D95, 0 8px 12px rgba(0, 0, 0, 0.4)',
+              bg: 'linear-gradient(135deg, #9F7AEA 0%, #7C3AED 100%)',
+            }}
+            _active={{
+              transform: 'translateY(2px)',
+              boxShadow: '0 2px 0 #4C1D95, 0 4px 6px rgba(0, 0, 0, 0.3)',
+            }}
+            _disabled={{
+              bg: 'gray.400',
+              boxShadow: 'none',
+              transform: 'none',
+              cursor: 'not-allowed',
             }}
           >
             Ash
           </Button>
           <Button
-            bg="red.400"
-            color="black"
+            bg="linear-gradient(135deg, #F87171 0%, #DC2626 100%)"
+            color="white"
             onClick={() => handlePlayerTurn(2)}
-            isDisabled={isLoading}
             width="50%"
             size="lg"
-            fontWeight="bold"
+            fontWeight="extrabold"
+            fontSize="12px"
+            letterSpacing="1px"
+            textTransform="uppercase"
             transition="all 0.2s"
-            boxShadow="0 4px 8px rgba(0, 0, 0, 0.2)"
+            boxShadow="0 4px 0 #991B1B, 0 6px 8px rgba(0, 0, 0, 0.3)"
+            border="2px solid #991B1B"
+            borderRadius="8px"
             _hover={{
-              transform: 'scale(1.02)',
-              bg: 'red.500',
-              boxShadow: '0 8px 12px rgba(0, 0, 0, 0.25)',
+              transform: 'translateY(-0.5px)',
+              boxShadow: '0 6px 0 #991B1B, 0 8px 12px rgba(0, 0, 0, 0.4)',
+              bg: 'linear-gradient(135deg, #FCA5A5 0%, #EF4444 100%)',
+            }}
+            _active={{
+              transform: 'translateY(2px)',
+              boxShadow: '0 2px 0 #991B1B, 0 4px 6px rgba(0, 0, 0, 0.3)',
+            }}
+            _disabled={{
+              bg: 'gray.400',
+              boxShadow: 'none',
+              transform: 'none',
+              cursor: 'not-allowed',
             }}
           >
             Team Rocket
