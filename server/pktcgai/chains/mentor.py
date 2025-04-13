@@ -80,13 +80,9 @@ class Master:
                                                        
         Though there may be many different actions that could be taken, you should only recommend one action. 
                                                        
-        Do NOT be very verbose, be straight to the point!!
-                                                       
-        Lastly, remember that you are talking to a human, so you must output your response in a conversational tone, and be very brief, do not be too verbose!!!
-                                                       
-        ONLY OUTPUT A PARAGRAPH OF 1 to 4 SENTENCES MAXIMUM!!!
+        EXTREMELY IMPORTANT: Your entire response must be no more than 1-2 sentences total. Be direct and specific with your advice.
         
-        
+        Do not include any explanations, greetings, or follow-up questions. Just provide a single, precise recommendation in 1-2 sentences.
         """)
         
     # def _create_vector_store(self):

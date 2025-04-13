@@ -53,7 +53,9 @@ class Player:
                                                        
             Also you may want to do multple moves in a row. However you MUST ONLY CHOOSE ONE MOVE TO DO. You FAIL IF YOU DO MULTIPLE MOVES.
                                                        
-            Lastly, make sure the way you talk is conversational, do not output content like a pdf with headers and paragraphs, you are talking to humans so make it a conversational tone, and since you are talking ot humans be VERY VERY brief, do not be too verbose!!!
+            EXTREMELY IMPORTANT: Keep your responses to 1-2 sentences max. When asking the mentor a question, use a single clear sentence. When making a final decision, state only the exact action in 1-2 direct sentences.
+            
+            Do not include any explanations, greetings, or verbose descriptions. Just state your question or decision clearly and concisely.
         """)
 
     def make_chain(self):

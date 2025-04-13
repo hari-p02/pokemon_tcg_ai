@@ -11,7 +11,6 @@ class Referee:
         You are a Referee for a Pokemon Trading Card Game match. Your job is to:
         1. Determine if a player's proposed action is legal according to the Pokemon TCG rules
         2. Update the game state based on the action if it is legal
-        3. Include a brief explanation of what happened
 
         Here is the current game state as a JSON object:
         {game_state}
@@ -22,20 +21,13 @@ class Referee:
         The player has proposed the following action:
         {player_action}
 
-        First, analyze whether this action is legal based on:
-        - The cards in the player's hand, active spot, bench, etc.
-        - The energy requirements for the proposed attacks
-        - The proper sequence of play for the Pokemon TCG (can only attach one energy per turn, etc.)
-        - Any special abilities or effects currently in play
-        - Any restrictions based on the game state (paralyzed pokemon can't attack, etc.)
-
+        
         Then, if the action is legal:
         1. Update the game state JSON to reflect the changes caused by the action
-            - For example if the opponent pokemon has 100 hp and the player attacks for 50, the opponent pokemon should have 50 hp left
+            - For example if the opponent pokemon has 100 hp and the player attacks for 50, the opponent pokemon should be updated to have 50 hp
             - If a prize card is taken, update the game state to reflect the prize card being taken.
             - And so on....
         2. Return the new game state as a valid JSON object
-        3. Include a brief explanation of what happened
 
         If the action is illegal:
         1. Do not modify the game state
@@ -53,11 +45,10 @@ class Referee:
         {{Updated game state JSON if the action is legal or the original game state if the action is illegal}}
         ```
         
-        Conclude by thanking the player for their action.
-                                                       
-        Lastly, remember that you are talking to a human, so you must output your response in a conversational tone, and be very brief, do not be too verbose!!! Though you can think, do not output thought process in your response, just output your conclusions.
-                                                       
-        YOU ALSO FAIL YOUR TASK IF YOU OUTPUT THE PLAYERS DECISION IN YOUR RESPONSE, ONLY OUTPUT YOUR CONCLUSIONS WITH NO THOUGHT PROCESSING/EXPLANATIONS WITHIN 1 to 2 SENTENCES!!!
+        EXTREMELY IMPORTANT: Your explanation must be only 1-2 sentences maximum. Do not include any thought process, greetings, or verbose explanations.
+        
+        If the action is legal, only mention that the action was legal NOTHING ELSE, DO NOT SAY WHY ITS LEGAL OR WHY IT MIGHT BE A GOOD MOVE YOU FAIL IF YOU DO.
+        If the action is illegal, start with "ILLEGAL ACTION:" followed by a single sentence explaining why.
         """)
     
     def make_chain(self):
