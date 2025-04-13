@@ -1,13 +1,28 @@
 import { Box, Button, Text, VStack, Image } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 const MotionBox = motion(Box);
 
 interface HomePageProps {
-  onStartGame: () => void;
+  onNext: () => void;
 }
 
-const HomePage = ({ onStartGame }: HomePageProps) => {
+const HomePage = ({ onNext }: HomePageProps) => {
+  // Add keyboard event listener for Enter key
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        onNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [onNext]);
+
   return (
     <Box
       w="100vw"
@@ -390,7 +405,7 @@ const HomePage = ({ onStartGame }: HomePageProps) => {
           <Button
             bg="linear-gradient(135deg, #48BB78 0%, #2F855A 100%)"
             color="white"
-            onClick={onStartGame}
+            onClick={onNext}
             size="lg"
             fontWeight="900"
             fontFamily="'Press Start 2P', monospace"

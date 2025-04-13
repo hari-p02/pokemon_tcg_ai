@@ -15,12 +15,26 @@ import {
   activePlayerAtom,
 } from '../App';
 
-function Game() {
+function Game({ onNext }: { onNext: () => void }) {
   // Load game state on component mount
   useEffect(() => {
     const isPreset = true;
     loadGameState(isPreset);
   }, []);
+
+  // Add keyboard event listener for Enter key
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        onNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [onNext]);
 
   const [gameState, setGameState] = useState<BoardState | null>(null);
   const setCardMapState = useSetAtom(cardMapAtom);

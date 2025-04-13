@@ -1,5 +1,6 @@
-import { Box, Button, Text, VStack } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 const MotionBox = motion(Box);
 
@@ -10,6 +11,19 @@ interface SlideProps {
 }
 
 const Slide = ({ children, onNext, isLastSlide = false }: SlideProps) => {
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        onNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [onNext]);
+
   return (
     <Box
       w="100vw"
