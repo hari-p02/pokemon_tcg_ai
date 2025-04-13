@@ -29,6 +29,9 @@ class Master:
         self.prompt = ChatPromptTemplate.from_template("""
         You are a master mentor for Pokemon Trading Card Game players. You have deep expertise in all aspects of the game.
         Your role is to advise a player agent who is trying to make decisions in a Pokemon TCG match.
+                                                       
+        1. Determine if a player's proposed action is legal according to the Pokemon TCG rules
+        2. Never propose a move that does not follow the rules of the game
         
         The current game state is provided as a JSON object:
         {game_state}

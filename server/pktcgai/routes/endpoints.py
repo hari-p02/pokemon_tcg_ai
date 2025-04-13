@@ -3084,6 +3084,23 @@ def dict_to_player_state(player_dict: Dict) -> PlayerState:
         prizeCards=prize_cards
     )
 
+def dict_to_pokemon_card(card_dict: Dict):
+    """Convert dictionary representation of a card back to a PokemonCard object."""
+    if card_dict is None:
+        return None
+    
+    # Create a copy to avoid modifying the original dict
+    card = dict(card_dict)
+    
+    # Handle special fields like attached energies or tools if needed
+    if "attachedEnergies" in card and isinstance(card["attachedEnergies"], list):
+        card["attachedEnergies"] = [dict(energy) for energy in card["attachedEnergies"]]
+    
+    if "attachedTools" in card and isinstance(card["attachedTools"], list):
+        card["attachedTools"] = [dict(tool) for tool in card["attachedTools"]]
+        
+    return card
+
 def update_global_state(updated_game_state: Dict, player_number: int):
     """Update the global state with the changes from a player's turn."""
     global state
@@ -3095,15 +3112,48 @@ def update_global_state(updated_game_state: Dict, player_number: int):
 
     # Extract the relevant parts from the updated game state
     your_hand = updated_game_state.get("YOUR_HAND", {})
+    opponent_hand = updated_game_state.get("OPPONENT_HAND", {})
     print("THIS IS THE YOUR HAND", your_hand)
+    
     # Convert dictionary back to PlayerState
     player_state = dict_to_player_state(your_hand)
     print("THIS IS THE PLAYER STATE", player_state)
+    
     # Update the appropriate player state
     if player_number == 1:
         state.playerOne = player_state
+        
+        # Update opponent's visible information (player 2)
+        # Only update what's visible to player 1 (active, bench, discard, etc.)
+        if opponent_hand.get("active"):
+            state.playerTwo.active = dict_to_pokemon_card(opponent_hand["active"])
+        if opponent_hand.get("bench"):
+            state.playerTwo.bench = [dict_to_pokemon_card(card) for card in opponent_hand["bench"]]
+        if opponent_hand.get("discard"):
+            state.playerTwo.discard = [dict_to_pokemon_card(card) for card in opponent_hand["discard"]]
+        if opponent_hand.get("lostZone"):
+            state.playerTwo.lostZone = [dict_to_pokemon_card(card) for card in opponent_hand["lostZone"]]
+        if opponent_hand.get("stadium") and opponent_hand["stadium"] is not None:
+            state.playerTwo.stadium = dict_to_pokemon_card(opponent_hand["stadium"])
+        elif opponent_hand.get("stadium") is None:
+            state.playerTwo.stadium = None
     else:
         state.playerTwo = player_state
+        
+        # Update opponent's visible information (player 1)
+        # Only update what's visible to player 2 (active, bench, discard, etc.)
+        if opponent_hand.get("active"):
+            state.playerOne.active = dict_to_pokemon_card(opponent_hand["active"])
+        if opponent_hand.get("bench"):
+            state.playerOne.bench = [dict_to_pokemon_card(card) for card in opponent_hand["bench"]]
+        if opponent_hand.get("discard"):
+            state.playerOne.discard = [dict_to_pokemon_card(card) for card in opponent_hand["discard"]]
+        if opponent_hand.get("lostZone"):
+            state.playerOne.lostZone = [dict_to_pokemon_card(card) for card in opponent_hand["lostZone"]]
+        if opponent_hand.get("stadium") and opponent_hand["stadium"] is not None:
+            state.playerOne.stadium = dict_to_pokemon_card(opponent_hand["stadium"])
+        elif opponent_hand.get("stadium") is None:
+            state.playerOne.stadium = None
 
 # Modify stdout to stream output in real-time
 class StreamingStdout:
