@@ -4,18 +4,12 @@ import { motion } from 'framer-motion';
 const MotionBox = motion(Box);
 
 interface SlideProps {
-  heading: string;
   children: React.ReactNode;
   onNext: () => void;
   isLastSlide?: boolean;
 }
 
-const Slide = ({
-  heading,
-  children,
-  onNext,
-  isLastSlide = false,
-}: SlideProps) => {
+const Slide = ({ children, onNext, isLastSlide = false }: SlideProps) => {
   return (
     <Box
       w="100vw"
@@ -31,22 +25,13 @@ const Slide = ({
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
+        w="100%"
+        h="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
-        <VStack spacing={8}>
-          <Text
-            fontFamily="'Press Start 2P', monospace"
-            fontSize="48px"
-            fontWeight="900"
-            color="white"
-            textAlign="center"
-            textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
-            letterSpacing="3px"
-            mb="40px"
-          >
-            {heading}
-          </Text>
-          {children}
-        </VStack>
+        {children}
       </MotionBox>
 
       <Button

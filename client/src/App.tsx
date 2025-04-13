@@ -1,22 +1,29 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Box, Divider, Image, Text } from '@chakra-ui/react';
+import { Box, Divider, Image, Text, VStack } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import wallpaper from './assets/wallpaper.jpg';
 import background from './assets/background.jpg';
+import michael from './assets/michael.png';
+import hari from './assets/hari.jpg';
 import Agent from './components/Agent';
 import HomePage from './components/HomePage';
 import PlayerState from './components/PlayerState';
+import Slide from './components/Slide';
 import McFlex from './McFlex/McFlex';
 import McGrid from './McGrid/McGrid';
 import { BoardState, fetchGameState } from './services/api';
-import Slide from './components/Slide';
 
 const cardMapAtom = atom<Record<number, any>>({});
 const scaleFactorAtom = atom<number>(1);
 const spotlightCardAtom = atom<{ id: number; img: string } | null>(null);
 const highlightedCardIdAtom = atom<number | null>(null);
 const activePlayerAtom = atom<1 | 2>(1);
+
+const slideIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 // Create custom hooks
 export const useCardMap = () => useAtomValue(cardMapAtom);
@@ -208,7 +215,7 @@ function Game() {
 
 function App() {
   const [currentView, setCurrentView] = useState<
-    'home' | 'slide1' | 'slide2' | 'slide3' | 'game'
+    'home' | 'slide1' | 'slide2' | 'slide3' | 'slide4' | 'game'
   >('slide1');
 
   const handleNext = () => {
@@ -220,6 +227,9 @@ function App() {
         setCurrentView('slide3');
         break;
       case 'slide3':
+        setCurrentView('slide4');
+        break;
+      case 'slide4':
         setCurrentView('home');
         break;
       default:
@@ -233,27 +243,181 @@ function App() {
         return <HomePage onStartGame={() => setCurrentView('game')} />;
       case 'slide1':
         return (
-          <Slide heading="WELCOME TO POKEPLAY.AI" onNext={handleNext}>
-            <Text color="white" fontSize="24px" textAlign="center">
-              Get ready to experience the future of Pokémon TCG gameplay!
-            </Text>
+          <Slide onNext={handleNext}>
+            <McFlex col>
+              <Text
+                fontFamily="'Press Start 2P', monospace"
+                fontSize="100px"
+                fontWeight="900"
+                color="white"
+                textAlign="center"
+                textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
+                letterSpacing="3px"
+                mb="40px"
+              >
+                POKEPLAY.AI
+              </Text>
+              <Text
+                fontFamily="'Press Start 2P', monospace"
+                fontSize="20px"
+                fontWeight="900"
+                color="white"
+                textAlign="center"
+                textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
+                letterSpacing="3px"
+                mb="40px"
+              >
+                Team Kanto
+              </Text>
+            </McFlex>
           </Slide>
         );
       case 'slide2':
         return (
-          <Slide heading="AI-POWERED GAMEPLAY" onNext={handleNext}>
-            <Text color="white" fontSize="24px" textAlign="center">
-              Our advanced AI will help you master the game and make strategic
-              decisions
-            </Text>
+          <Slide onNext={handleNext}>
+            <McFlex col orient="top">
+              <Text
+                fontFamily="'Press Start 2P', monospace"
+                fontSize="100px"
+                fontWeight="900"
+                color="white"
+                textAlign="center"
+                textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
+                letterSpacing="3px"
+                my="40px"
+              >
+                WHO ARE WE?
+              </Text>
+              <McGrid templateColumns="1fr 1fr" gap={8}>
+                <McFlex col>
+                  <McFlex
+                    col
+                    orient="top"
+                    animation={`${slideIn} 1s ease-out forwards`}
+                  >
+                    <Image
+                      src={michael}
+                      alt="Michael"
+                      width="500px"
+                      height="500px"
+                      objectFit="cover"
+                      borderRadius="15px"
+                      boxShadow="0 4px 8px rgba(0,0,0,0.2)"
+                      mb={4}
+                    />
+                    <Text
+                      fontFamily="'Press Start 2P', monospace"
+                      fontSize="24px"
+                      fontWeight="900"
+                      color="white"
+                      textAlign="center"
+                      textShadow="4px 4px 0 rgba(0, 0, 0, 0.5)"
+                      mb="20px"
+                    >
+                      Michael
+                    </Text>
+                    <VStack spacing={2} align="center">
+                      <Text
+                        fontFamily="'Press Start 2P', monospace"
+                        fontSize="14px"
+                        color="white"
+                        textAlign="center"
+                        textShadow="2px 2px 0 rgba(0, 0, 0, 0.5)"
+                      >
+                        2-time Pokémon TCG International Champion
+                      </Text>
+                      <Text
+                        fontFamily="'Press Start 2P', monospace"
+                        fontSize="14px"
+                        color="white"
+                        textAlign="center"
+                        textShadow="2px 2px 0 rgba(0, 0, 0, 0.5)"
+                      >
+                        Former world number one ranked player
+                      </Text>
+                    </VStack>
+                  </McFlex>
+                </McFlex>
+                <McFlex col>
+                  <McFlex
+                    col
+                    animation={`${slideIn} 1s ease-out forwards`}
+                    style={{ animationDelay: '4s' }}
+                    opacity={0}
+                    orient="top"
+                  >
+                    <Image
+                      src={hari}
+                      alt="Hari"
+                      width="500px"
+                      height="500px"
+                      objectFit="cover"
+                      borderRadius="15px"
+                      boxShadow="0 4px 8px rgba(0,0,0,0.2)"
+                      mb={4}
+                    />
+                    <Text
+                      fontFamily="'Press Start 2P', monospace"
+                      fontSize="24px"
+                      fontWeight="900"
+                      color="white"
+                      textAlign="center"
+                      textShadow="4px 4px 0 rgba(0, 0, 0, 0.5)"
+                      mb="20px"
+                    >
+                      Hari
+                    </Text>
+                    <Text
+                      fontFamily="'Press Start 2P', monospace"
+                      fontSize="14px"
+                      color="white"
+                      textAlign="center"
+                      textShadow="2px 2px 0 rgba(0, 0, 0, 0.5)"
+                    >
+                      Michael's friend
+                    </Text>
+                  </McFlex>
+                </McFlex>
+              </McGrid>
+            </McFlex>
           </Slide>
         );
       case 'slide3':
         return (
-          <Slide heading="LET'S BEGIN!" onNext={handleNext} isLastSlide>
-            <Text color="white" fontSize="24px" textAlign="center">
-              Click START GAME to begin your journey
-            </Text>
+          <Slide onNext={handleNext}>
+            <McFlex col orient="top">
+              <Text
+                fontFamily="'Press Start 2P', monospace"
+                fontSize="100px"
+                fontWeight="900"
+                color="white"
+                textAlign="center"
+                textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
+                letterSpacing="3px"
+                my="40px"
+              >
+                MOTIVATION
+              </Text>
+            </McFlex>
+          </Slide>
+        );
+      case 'slide4':
+        return (
+          <Slide onNext={handleNext}>
+            <McFlex col orient="top">
+              <Text
+                fontFamily="'Press Start 2P', monospace"
+                fontSize="100px"
+                fontWeight="900"
+                color="white"
+                textAlign="center"
+                textShadow="6px 6px 0 rgba(0, 0, 0, 0.5)"
+                letterSpacing="3px"
+                my="40px"
+              >
+                THEORY
+              </Text>
+            </McFlex>
           </Slide>
         );
       case 'game':
