@@ -3204,6 +3204,44 @@ async def process_player_turn(player_number: int):
     # Prepare game state for the specified player
     game_state = prepare_game_state_for_player(state, player_number)
     
+    # Draw a card from the deck to the player's hand at the beginning of turn (classic Pokémon TCG rule)
+    card_drawn = False
+    try:
+        # Identify which player's state to update
+        player_state = state.playerOne if player_number == 1 else state.playerTwo
+        
+        # Check if the deck has cards to draw
+        if player_state.deck and len(player_state.deck) > 0:
+            # Draw the top card from the deck
+            top_card = player_state.deck.pop(0)
+            # Add the card to the player's hand
+            if player_state.hand is None:
+                player_state.hand = []
+            player_state.hand.append(top_card)
+            card_drawn = True
+            
+            # Display message about card being drawn
+            card_id = top_card.id
+            card_info = state.cardMap.get(card_id, {})
+            card_name = card_info.get("name", f"Card ID: {card_id}")
+            yield f"data: Drew {card_name} from the deck at the beginning of the turn.\n\n"
+            
+            # Update the game state to reflect the drawn card
+            game_state = prepare_game_state_for_player(state, player_number)
+        else:
+            yield f"data: Cannot draw a card: deck is empty.\n\n"
+    except Exception as e:
+        print(f"Error drawing card at turn start: {e}")
+        yield f"data: Error drawing card: {str(e)}\n\n"
+    
+    # If we successfully drew a card, send a state update event to trigger the frontend to refresh
+    if card_drawn:
+        # Send the current state as a special event
+        current_state = dataclass_to_dict(state)
+        yield f"event: state_update\ndata: {json.dumps(current_state)}\n\n"
+        # Add a small delay to ensure the frontend can process the state update
+        await asyncio.sleep(0.1)
+    
     # Run the player's turn
     # yield "data: Starting turn processing...\n\n"
     
@@ -3376,3 +3414,17 @@ async def player2_turn():
             "X-Accel-Buffering": "no"  # Disable nginx buffering
         }
     )
+
+@router.get("/refresh_state")
+async def refresh_state():
+    """
+    Endpoint to refresh the game state.
+    This can be called by the frontend after a card is drawn or when state changes.
+    """
+    global state
+    
+    # Initialize state if it hasn't been initialized yet
+    if state is None:
+        state = get_initial_state(GARDEVOIR_DECK, PIKACHU_DECK)
+    
+    return dataclass_to_dict(state)
