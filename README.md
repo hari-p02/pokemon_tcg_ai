@@ -2,6 +2,10 @@
 
 This project implements an AI agent system for playing the Pokemon Trading Card Game using LangChain and LangGraph.
 
+Check out the demo at the Anthropic/SPC Hackathon: https://x.com/finn_meeks/status/1911878251217039389
+
+Won "Best Interface" award!
+
 ## Architecture
 
 The system consists of three primary agents:
