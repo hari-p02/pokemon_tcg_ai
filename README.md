@@ -44,7 +44,8 @@ Referee
 1. Install dependencies:
 
 ```bash
-pip install -e .
+cd ./server
+uv sync
 ```
 
 2. Set up environment variables:
@@ -67,7 +68,7 @@ To visualize the LangGraph workflow:
 python examples/visualize_graph.py
 ```
 
-## Directory Structure
+## Directory Structure (in server)
 
 - `pktcgai/chains/`: Individual agent implementations
   - `player.py`: Player agent
